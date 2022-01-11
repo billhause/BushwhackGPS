@@ -1,0 +1,611 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		28817B7C278E490E004B7C4B /* BushwhackGPSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28817B7B278E490E004B7C4B /* BushwhackGPSApp.swift */; };
+		28817B7E278E490E004B7C4B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28817B7D278E490E004B7C4B /* ContentView.swift */; };
+		28817B80278E490E004B7C4B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 28817B7F278E490E004B7C4B /* Assets.xcassets */; };
+		28817B83278E490E004B7C4B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 28817B82278E490E004B7C4B /* Preview Assets.xcassets */; };
+		28817B85278E490E004B7C4B /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28817B84278E490E004B7C4B /* Persistence.swift */; };
+		28817B88278E490E004B7C4B /* BushwhackGPS.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 28817B86278E490E004B7C4B /* BushwhackGPS.xcdatamodeld */; };
+		28817B92278E490F004B7C4B /* BushwhackGPSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28817B91278E490F004B7C4B /* BushwhackGPSTests.swift */; };
+		28817B9C278E490F004B7C4B /* BushwhackGPSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28817B9B278E490F004B7C4B /* BushwhackGPSUITests.swift */; };
+		28817B9E278E490F004B7C4B /* BushwhackGPSUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28817B9D278E490F004B7C4B /* BushwhackGPSUITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		28817B8E278E490F004B7C4B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 28817B70278E490D004B7C4B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 28817B77278E490E004B7C4B;
+			remoteInfo = BushwhackGPS;
+		};
+		28817B98278E490F004B7C4B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 28817B70278E490D004B7C4B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 28817B77278E490E004B7C4B;
+			remoteInfo = BushwhackGPS;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		28817B78278E490E004B7C4B /* BushwhackGPS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BushwhackGPS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		28817B7B278E490E004B7C4B /* BushwhackGPSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BushwhackGPSApp.swift; sourceTree = "<group>"; };
+		28817B7D278E490E004B7C4B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		28817B7F278E490E004B7C4B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		28817B82278E490E004B7C4B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		28817B84278E490E004B7C4B /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		28817B87278E490E004B7C4B /* BushwhackGPS.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = BushwhackGPS.xcdatamodel; sourceTree = "<group>"; };
+		28817B8D278E490F004B7C4B /* BushwhackGPSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BushwhackGPSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		28817B91278E490F004B7C4B /* BushwhackGPSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BushwhackGPSTests.swift; sourceTree = "<group>"; };
+		28817B97278E490F004B7C4B /* BushwhackGPSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BushwhackGPSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		28817B9B278E490F004B7C4B /* BushwhackGPSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BushwhackGPSUITests.swift; sourceTree = "<group>"; };
+		28817B9D278E490F004B7C4B /* BushwhackGPSUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BushwhackGPSUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		28817B75278E490E004B7C4B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		28817B8A278E490F004B7C4B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		28817B94278E490F004B7C4B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		28817B6F278E490D004B7C4B = {
+			isa = PBXGroup;
+			children = (
+				28817B7A278E490E004B7C4B /* BushwhackGPS */,
+				28817B90278E490F004B7C4B /* BushwhackGPSTests */,
+				28817B9A278E490F004B7C4B /* BushwhackGPSUITests */,
+				28817B79278E490E004B7C4B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		28817B79278E490E004B7C4B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				28817B78278E490E004B7C4B /* BushwhackGPS.app */,
+				28817B8D278E490F004B7C4B /* BushwhackGPSTests.xctest */,
+				28817B97278E490F004B7C4B /* BushwhackGPSUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		28817B7A278E490E004B7C4B /* BushwhackGPS */ = {
+			isa = PBXGroup;
+			children = (
+				28817B7B278E490E004B7C4B /* BushwhackGPSApp.swift */,
+				28817B7D278E490E004B7C4B /* ContentView.swift */,
+				28817B7F278E490E004B7C4B /* Assets.xcassets */,
+				28817B84278E490E004B7C4B /* Persistence.swift */,
+				28817B86278E490E004B7C4B /* BushwhackGPS.xcdatamodeld */,
+				28817B81278E490E004B7C4B /* Preview Content */,
+			);
+			path = BushwhackGPS;
+			sourceTree = "<group>";
+		};
+		28817B81278E490E004B7C4B /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				28817B82278E490E004B7C4B /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		28817B90278E490F004B7C4B /* BushwhackGPSTests */ = {
+			isa = PBXGroup;
+			children = (
+				28817B91278E490F004B7C4B /* BushwhackGPSTests.swift */,
+			);
+			path = BushwhackGPSTests;
+			sourceTree = "<group>";
+		};
+		28817B9A278E490F004B7C4B /* BushwhackGPSUITests */ = {
+			isa = PBXGroup;
+			children = (
+				28817B9B278E490F004B7C4B /* BushwhackGPSUITests.swift */,
+				28817B9D278E490F004B7C4B /* BushwhackGPSUITestsLaunchTests.swift */,
+			);
+			path = BushwhackGPSUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		28817B77278E490E004B7C4B /* BushwhackGPS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 28817BA1278E490F004B7C4B /* Build configuration list for PBXNativeTarget "BushwhackGPS" */;
+			buildPhases = (
+				28817B74278E490E004B7C4B /* Sources */,
+				28817B75278E490E004B7C4B /* Frameworks */,
+				28817B76278E490E004B7C4B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = BushwhackGPS;
+			productName = BushwhackGPS;
+			productReference = 28817B78278E490E004B7C4B /* BushwhackGPS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		28817B8C278E490F004B7C4B /* BushwhackGPSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 28817BA4278E490F004B7C4B /* Build configuration list for PBXNativeTarget "BushwhackGPSTests" */;
+			buildPhases = (
+				28817B89278E490F004B7C4B /* Sources */,
+				28817B8A278E490F004B7C4B /* Frameworks */,
+				28817B8B278E490F004B7C4B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				28817B8F278E490F004B7C4B /* PBXTargetDependency */,
+			);
+			name = BushwhackGPSTests;
+			productName = BushwhackGPSTests;
+			productReference = 28817B8D278E490F004B7C4B /* BushwhackGPSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		28817B96278E490F004B7C4B /* BushwhackGPSUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 28817BA7278E490F004B7C4B /* Build configuration list for PBXNativeTarget "BushwhackGPSUITests" */;
+			buildPhases = (
+				28817B93278E490F004B7C4B /* Sources */,
+				28817B94278E490F004B7C4B /* Frameworks */,
+				28817B95278E490F004B7C4B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				28817B99278E490F004B7C4B /* PBXTargetDependency */,
+			);
+			name = BushwhackGPSUITests;
+			productName = BushwhackGPSUITests;
+			productReference = 28817B97278E490F004B7C4B /* BushwhackGPSUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		28817B70278E490D004B7C4B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1320;
+				LastUpgradeCheck = 1320;
+				TargetAttributes = {
+					28817B77278E490E004B7C4B = {
+						CreatedOnToolsVersion = 13.2.1;
+					};
+					28817B8C278E490F004B7C4B = {
+						CreatedOnToolsVersion = 13.2.1;
+						TestTargetID = 28817B77278E490E004B7C4B;
+					};
+					28817B96278E490F004B7C4B = {
+						CreatedOnToolsVersion = 13.2.1;
+						TestTargetID = 28817B77278E490E004B7C4B;
+					};
+				};
+			};
+			buildConfigurationList = 28817B73278E490D004B7C4B /* Build configuration list for PBXProject "BushwhackGPS" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 28817B6F278E490D004B7C4B;
+			productRefGroup = 28817B79278E490E004B7C4B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				28817B77278E490E004B7C4B /* BushwhackGPS */,
+				28817B8C278E490F004B7C4B /* BushwhackGPSTests */,
+				28817B96278E490F004B7C4B /* BushwhackGPSUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		28817B76278E490E004B7C4B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28817B83278E490E004B7C4B /* Preview Assets.xcassets in Resources */,
+				28817B80278E490E004B7C4B /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		28817B8B278E490F004B7C4B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		28817B95278E490F004B7C4B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		28817B74278E490E004B7C4B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28817B85278E490E004B7C4B /* Persistence.swift in Sources */,
+				28817B7E278E490E004B7C4B /* ContentView.swift in Sources */,
+				28817B7C278E490E004B7C4B /* BushwhackGPSApp.swift in Sources */,
+				28817B88278E490E004B7C4B /* BushwhackGPS.xcdatamodeld in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		28817B89278E490F004B7C4B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28817B92278E490F004B7C4B /* BushwhackGPSTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		28817B93278E490F004B7C4B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28817B9E278E490F004B7C4B /* BushwhackGPSUITestsLaunchTests.swift in Sources */,
+				28817B9C278E490F004B7C4B /* BushwhackGPSUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		28817B8F278E490F004B7C4B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 28817B77278E490E004B7C4B /* BushwhackGPS */;
+			targetProxy = 28817B8E278E490F004B7C4B /* PBXContainerItemProxy */;
+		};
+		28817B99278E490F004B7C4B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 28817B77278E490E004B7C4B /* BushwhackGPS */;
+			targetProxy = 28817B98278E490F004B7C4B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		28817B9F278E490F004B7C4B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		28817BA0278E490F004B7C4B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		28817BA2278E490F004B7C4B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"BushwhackGPS/Preview Content\"";
+				DEVELOPMENT_TEAM = XXF7Y2ZTA7;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.TinyPurpleGrapes.BushwhackGPS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		28817BA3278E490F004B7C4B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"BushwhackGPS/Preview Content\"";
+				DEVELOPMENT_TEAM = XXF7Y2ZTA7;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.TinyPurpleGrapes.BushwhackGPS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		28817BA5278E490F004B7C4B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XXF7Y2ZTA7;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.TinyPurpleGrapes.BushwhackGPSTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BushwhackGPS.app/BushwhackGPS";
+			};
+			name = Debug;
+		};
+		28817BA6278E490F004B7C4B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XXF7Y2ZTA7;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.TinyPurpleGrapes.BushwhackGPSTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BushwhackGPS.app/BushwhackGPS";
+			};
+			name = Release;
+		};
+		28817BA8278E490F004B7C4B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XXF7Y2ZTA7;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.TinyPurpleGrapes.BushwhackGPSUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = BushwhackGPS;
+			};
+			name = Debug;
+		};
+		28817BA9278E490F004B7C4B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XXF7Y2ZTA7;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.TinyPurpleGrapes.BushwhackGPSUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = BushwhackGPS;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		28817B73278E490D004B7C4B /* Build configuration list for PBXProject "BushwhackGPS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				28817B9F278E490F004B7C4B /* Debug */,
+				28817BA0278E490F004B7C4B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		28817BA1278E490F004B7C4B /* Build configuration list for PBXNativeTarget "BushwhackGPS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				28817BA2278E490F004B7C4B /* Debug */,
+				28817BA3278E490F004B7C4B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		28817BA4278E490F004B7C4B /* Build configuration list for PBXNativeTarget "BushwhackGPSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				28817BA5278E490F004B7C4B /* Debug */,
+				28817BA6278E490F004B7C4B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		28817BA7278E490F004B7C4B /* Build configuration list for PBXNativeTarget "BushwhackGPSUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				28817BA8278E490F004B7C4B /* Debug */,
+				28817BA9278E490F004B7C4B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		28817B86278E490E004B7C4B /* BushwhackGPS.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				28817B87278E490E004B7C4B /* BushwhackGPS.xcdatamodel */,
+			);
+			currentVersion = 28817B87278E490E004B7C4B /* BushwhackGPS.xcdatamodel */;
+			path = BushwhackGPS.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 28817B70278E490D004B7C4B /* Project object */;
+}
