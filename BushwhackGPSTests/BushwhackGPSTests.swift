@@ -18,6 +18,26 @@ class BushwhackGPSTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
+    //
+    // MARK: ID_GeneratorEntity
+    //
+    func testID_GeneratorEntity() throws {
+        let id1 = ID_GeneratorEntity.getNextID()
+        let id2 = ID_GeneratorEntity.getNextID()
+        print("NextID: \(id2)")
+        XCTAssertEqual(id1, id2-1, "ID_Generator Failed to increment by 1")
+    }
+    func testPerformanceID_GeneratorEntity() throws {
+        self.measure {
+            // Put the code you want to measure the time of here.
+            for _ in 1..<100 {
+                _ = ID_GeneratorEntity.getNextID()
+            }
+        }
+    }
+
+    
+    
     func testExample() throws {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.

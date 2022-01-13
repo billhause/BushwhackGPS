@@ -16,6 +16,7 @@
 		28817B92278E490F004B7C4B /* BushwhackGPSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28817B91278E490F004B7C4B /* BushwhackGPSTests.swift */; };
 		28817B9C278E490F004B7C4B /* BushwhackGPSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28817B9B278E490F004B7C4B /* BushwhackGPSUITests.swift */; };
 		28817B9E278E490F004B7C4B /* BushwhackGPSUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28817B9D278E490F004B7C4B /* BushwhackGPSUITestsLaunchTests.swift */; };
+		28817BAE2790AB21004B7C4B /* ID_GeneratorEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28817BAD2790AB21004B7C4B /* ID_GeneratorEntity.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +49,7 @@
 		28817B97278E490F004B7C4B /* BushwhackGPSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BushwhackGPSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		28817B9B278E490F004B7C4B /* BushwhackGPSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BushwhackGPSUITests.swift; sourceTree = "<group>"; };
 		28817B9D278E490F004B7C4B /* BushwhackGPSUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BushwhackGPSUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		28817BAD2790AB21004B7C4B /* ID_GeneratorEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ID_GeneratorEntity.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,7 +101,9 @@
 			isa = PBXGroup;
 			children = (
 				28817B7B278E490E004B7C4B /* BushwhackGPSApp.swift */,
-				28817B7D278E490E004B7C4B /* ContentView.swift */,
+				28817BAC278F727F004B7C4B /* ViewModel */,
+				28817BAB278F7272004B7C4B /* Model */,
+				28817BAA278F7264004B7C4B /* View */,
 				28817B7F278E490E004B7C4B /* Assets.xcassets */,
 				28817B84278E490E004B7C4B /* Persistence.swift */,
 				28817B86278E490E004B7C4B /* BushwhackGPS.xcdatamodeld */,
@@ -131,6 +135,29 @@
 				28817B9D278E490F004B7C4B /* BushwhackGPSUITestsLaunchTests.swift */,
 			);
 			path = BushwhackGPSUITests;
+			sourceTree = "<group>";
+		};
+		28817BAA278F7264004B7C4B /* View */ = {
+			isa = PBXGroup;
+			children = (
+				28817B7D278E490E004B7C4B /* ContentView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		28817BAB278F7272004B7C4B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		28817BAC278F727F004B7C4B /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				28817BAD2790AB21004B7C4B /* ID_GeneratorEntity.swift */,
+			);
+			path = ViewModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -266,6 +293,7 @@
 				28817B85278E490E004B7C4B /* Persistence.swift in Sources */,
 				28817B7E278E490E004B7C4B /* ContentView.swift in Sources */,
 				28817B7C278E490E004B7C4B /* BushwhackGPSApp.swift in Sources */,
+				28817BAE2790AB21004B7C4B /* ID_GeneratorEntity.swift in Sources */,
 				28817B88278E490E004B7C4B /* BushwhackGPS.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
