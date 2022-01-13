@@ -53,7 +53,7 @@ extension ID_GeneratorEntity: Comparable {
         theIDGenerator.nextIDToReturn += 1
         
         do {
-            try context.save() // Not handling the try/catch because there's nothing I can do about it
+            try context.save()
         } catch {
             // Replace this implementation with code to handle the error appropriately.
             // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
