@@ -8,7 +8,7 @@
 import Foundation
 import CoreData
 
-// Only One Method - Static getNextID() -> Int64
+
 extension ID_GeneratorEntity: Comparable {
 
     public static func < (lhs: ID_GeneratorEntity, rhs: ID_GeneratorEntity) -> Bool {
