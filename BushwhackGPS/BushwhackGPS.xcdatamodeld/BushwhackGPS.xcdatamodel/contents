@@ -7,12 +7,12 @@
     <entity name="ID_GeneratorEntity" representedClassName="ID_GeneratorEntity" syncable="YES" codeGenerationType="class">
         <attribute name="nextIDToReturn" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
-    <entity name="Item" representedClassName="Item" syncable="YES" codeGenerationType="class">
+    <entity name="ItemDELETEME" representedClassName="ItemDELETEME" syncable="YES" codeGenerationType="class">
         <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
     </entity>
     <elements>
-        <element name="ID_GeneratorEntity" positionX="-63" positionY="-9" width="128" height="44"/>
-        <element name="Item" positionX="-63" positionY="-18" width="128" height="58"/>
         <element name="AppSettingsEntity" positionX="-54" positionY="9" width="128" height="59"/>
+        <element name="ID_GeneratorEntity" positionX="-63" positionY="-9" width="128" height="44"/>
+        <element name="ItemDELETEME" positionX="-63" positionY="-18" width="128" height="44"/>
     </elements>
 </model>

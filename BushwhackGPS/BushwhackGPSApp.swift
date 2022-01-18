@@ -13,7 +13,7 @@ struct BushwhackGPSApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(theMap_ViewModel: Map_ViewModel()) // Construct and pass in the ViewModel
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
