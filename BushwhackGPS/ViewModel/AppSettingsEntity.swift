@@ -9,7 +9,8 @@ import Foundation
 import CoreData
 
 extension AppSettingsEntity {
-    
+    static let REVIEW_THRESHOLD = 10 // Number of app activations needed to trigger a review request
+
     // Get the One and Only AppSettingsEntity or create one if it doesn't exist
     public static func getAppSettingsEntity() -> AppSettingsEntity {
         let context = PersistenceController.shared.container.viewContext
@@ -52,6 +53,17 @@ extension AppSettingsEntity {
         }
     }
     
+    // Update the AppInfo usageCount and save it
+    public func updateUsageCount(theCount: Int32) {
+        usageCount = theCount
+        save()
+    }
     
+    // Increment Usage Count
+    public func incrementUsageCount() {
+        usageCount += 1
+        save()
+    }
+
     
 }

@@ -3,6 +3,7 @@
     <entity name="AppSettingsEntity" representedClassName="AppSettingsEntity" syncable="YES" codeGenerationType="class">
         <attribute name="metric" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="orientNorth" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="usageCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
     <entity name="ID_GeneratorEntity" representedClassName="ID_GeneratorEntity" syncable="YES" codeGenerationType="class">
         <attribute name="nextIDToReturn" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
@@ -10,9 +11,14 @@
     <entity name="ItemDELETEME" representedClassName="ItemDELETEME" syncable="YES" codeGenerationType="class">
         <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
     </entity>
+    <entity name="ParkingSpotEntity" representedClassName="ParkingSpotEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="lat" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="lon" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+    </entity>
     <elements>
-        <element name="AppSettingsEntity" positionX="-54" positionY="9" width="128" height="59"/>
+        <element name="AppSettingsEntity" positionX="-54" positionY="9" width="128" height="74"/>
         <element name="ID_GeneratorEntity" positionX="-63" positionY="-9" width="128" height="44"/>
         <element name="ItemDELETEME" positionX="-63" positionY="-18" width="128" height="44"/>
+        <element name="ParkingSpotEntity" positionX="-54" positionY="9" width="128" height="59"/>
     </elements>
 </model>
