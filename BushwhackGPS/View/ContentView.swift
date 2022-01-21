@@ -11,10 +11,24 @@ import CoreData
 struct ContentView: View {
     @ObservedObject var theMap_ViewModel: Map_ViewModel
     @Environment(\.managedObjectContext) private var viewContext
+    @StateObject var theAlert = AlertMessage.shared // @StateObject not @ObservedObject to avoid AttributeGraph cycle warnings
 
     var body: some View {
         NavigationView {
             VStack {
+                Spacer()
+                // vvvvvvv ALERT MESSAGE vvvvvvvvv
+                if #available(iOS 15.0, *) {
+                    Spacer()
+                        .alert(theAlert.theMessage, isPresented: $theAlert.showAlert) {
+                            Button("OK", role: .cancel) { }
+                        }
+                } else {
+                    // Fallback on earlier versions
+                    Spacer()
+                }
+                // ^^^^^^^^^ ALERT MESSAGE ^^^^^^^^^^^^^
+
                 Text("Bongo")
                 MapView(theMap_ViewModel: theMap_ViewModel)
             } // VStack
@@ -53,6 +67,14 @@ struct ContentView: View {
         withAnimation {
             Haptic.shared.impact(style: .heavy)
             theMap_ViewModel.orientMap() // Call intent function
+        }
+    }
+
+    private func updateParkingSpot() {
+        theMap_ViewModel.requestReview()
+        Haptic.shared.impact(style: .heavy)
+        withAnimation {
+            theMap_ViewModel.updateParkingSpot() // Call intent function
         }
     }
 

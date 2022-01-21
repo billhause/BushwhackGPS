@@ -222,7 +222,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     func orientMap() {
         orientMapFlag = true // Trigger map update
         mStillNeedToOrientMap = true // True until the map tells us it's been oriented using the mapHasBeenOriented() intent func
-//        AlertDialog.shared.Alert("Test Alert: Called from ViewModel orientMap()")
+//        AlertMessage.shared.Alert("Test Alert: Called from ViewModel orientMap()")
     }
 
     
@@ -276,16 +276,16 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return CLLocationCoordinate2D(latitude: ParkingSpotEntity.getParkingSpotEntity().lat, longitude: ParkingSpotEntity.getParkingSpotEntity().lon)
     }
     
-//    func getParkingSpot() -> MKPlacemark {
     func getParkingSpot() -> MKAnnotation {
         return MKParkingAnnotation(coordinate: getParkingSpotLocation()) // wdhx
-//        return MKPlacemark(coordinate: getParkingSpotLocation()) // wdhx
     }
         
     
 }
 
- wdhx Move this into a file of it's own
+
+// MARK: Annotation Types
+
 class MKParkingAnnotation : NSObject, MKAnnotation {
     var coordinate: CLLocationCoordinate2D
     var title: String? = "Parking Spot"

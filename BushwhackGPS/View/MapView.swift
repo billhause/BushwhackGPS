@@ -102,30 +102,32 @@ struct MapView: UIViewRepresentable {
         }
         
         
+        // UPDATE PARKING SPOT if necessary
         if theMap_ViewModel.parkingSpotMoved { // The user updated the parking spot so move the annotation
             theMap_ViewModel.parkingSpotMoved = false
             // Remove theParking Spot annotation and re-add it in case it moved and triggered this update
             // Avoid removing the User Location Annotation
             theMapView.annotations.forEach {
-                if !($0 is MKUserLocation) {
+                if ($0 is MKParkingAnnotation) {
                     theMapView.removeAnnotation($0)
                 }
             }
+            
             // Now add the parking spot annotation in it's new location
             theMapView.addAnnotations([theMap_ViewModel.getParkingSpot()])
-//            MyLog.debug("Updated the Parking Spot in MapView")
             
             // Now orient the map for the new parking spot location
             bShouldSizeAndCenter = true // set flag that will Size and Center the map a few lines down from here
         }
-        
-        // If the parking spot is not on the map AND the user is not Messing with the Map then recenter it
-        // It could be the parking spot drifted off the map OR we came back from background without knowing our location accurately
-        if theMap_ViewModel.shouldKeepMapCentered() {
-            if !isParkingSpotShownOnMap() {
-                theMap_ViewModel.orientMap()
-            }
-        }
+
+// OLD CODE from Parking Spot app - No longer needed.  DELETE THIS NOW
+//        // If the parking spot is not on the map AND the user is not Messing with the Map then recenter it
+//        // It could be the parking spot drifted off the map OR we came back from background without knowing our location accurately
+//        if theMap_ViewModel.shouldKeepMapCentered() {
+//            if !isParkingSpotShownOnMap() {
+//                theMap_ViewModel.orientMap()
+//            }
+//        }
 
         // Size and Center the map Because the user hit the Orient Map Button
         if bShouldSizeAndCenter { // The use has hit the orient map button or did something requireing the map to be re-oriented
@@ -140,7 +142,6 @@ struct MapView: UIViewRepresentable {
             // Center the map on the current location
             theMapView.setCenter(theMap_ViewModel.getLastKnownLocation(), animated: false) // If animated, this gets overwritten when heading is set
 
-//            MyLog.debug("wdh MapView.UpdateUIView: Centering Map on Current Location")
         }
 
         // Set the HEADING
@@ -148,9 +149,8 @@ struct MapView: UIViewRepresentable {
         
     }
     
-//    Make map so that user can't drag map or rotate map manually
     
-    // Delegate created by Bill to handle various call-backs from the MapView class.
+    // Map Call-Backs: Delegate to handle call-backs from the MapView class.
     // This handles things like
     //   - drawing the generated poly-lines layers on the map,
     //   - returning Annotation views to render the annotation points
@@ -162,19 +162,12 @@ struct MapView: UIViewRepresentable {
         var parent: MapView // TouchDetect - Will need to access the parent MapView object
         var mTapGestureRecognizer = UITapGestureRecognizer() // TouchDetect - This also gets passed into the callbacks
         var mPinchGestureRecognizer = UIPinchGestureRecognizer() // TouchDetect - This also gets passed into the callbacks
-//        var mPanGestureRecognizer = UIPanGestureRecognizer() // TouchDetect - This also gets passed into the callbacks
 
-        // We need an init so we can pass in the Map_ViewModel class
-
-//        init(_ theMKMapView: MKMapView, theMapVM: Map_ViewModel) { // Pass MKMapView for TouchDetect to convert pixels to lat/lon
         init(_ theMapView: MapView, theMapVM: Map_ViewModel) { // Pass MKMapView for TouchDetect to convert pixels to lat/lon
             theMap_ViewModel = theMapVM
-//            self.mapView = theMKMapView // TouchDetect will need to reference this
             self.parent = theMapView // TouchDetect will need to reference this
             self.parent.mMapView.isUserInteractionEnabled = true
             super.init()
-
-//            self.mapView.isUserInteractionEnabled = true
                         
             let thePanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(panHandler(_:))) // TouchDetect
             thePanGestureRecognizer.delegate = self // TouchDetect
