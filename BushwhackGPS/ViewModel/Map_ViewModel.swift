@@ -292,6 +292,5 @@ class MKParkingAnnotation : NSObject, MKAnnotation {
     var subtitle: String? = ""
     init(coordinate: CLLocationCoordinate2D) {
         self.coordinate = coordinate
-        MyLog.debug("wdh MKParkingAnnotation init() called")
     }
 }

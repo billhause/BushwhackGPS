@@ -16,7 +16,9 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             VStack {
-                Spacer()
+
+                MapView(theMap_ViewModel: theMap_ViewModel)
+                
                 // vvvvvvv ALERT MESSAGE vvvvvvvvv
                 if #available(iOS 15.0, *) {
                     Spacer()
@@ -28,9 +30,7 @@ struct ContentView: View {
                     Spacer()
                 }
                 // ^^^^^^^^^ ALERT MESSAGE ^^^^^^^^^^^^^
-
-                Text("Bongo")
-                MapView(theMap_ViewModel: theMap_ViewModel)
+                
             } // VStack
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
@@ -66,7 +66,7 @@ struct ContentView: View {
     private func orientMap() {
         withAnimation {
             Haptic.shared.impact(style: .heavy)
-            theMap_ViewModel.orientMap() // Call intent function
+            theMap_ViewModel.orientMap() // Call intent functionj
         }
     }
 
