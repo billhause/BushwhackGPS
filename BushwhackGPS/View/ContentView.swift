@@ -16,7 +16,7 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             VStack {
-
+                
                 MapView(theMap_ViewModel: theMap_ViewModel)
                 
                 // vvvvvvv ALERT MESSAGE vvvvvvvvv
@@ -32,7 +32,27 @@ struct ContentView: View {
                 // ^^^^^^^^^ ALERT MESSAGE ^^^^^^^^^^^^^
                 
             } // VStack
+//            .navigationBarHidden(true) // Remove the space for the top nav bar
+            .navigationBarTitleDisplayMode(.inline) // Put title on same line as tool bar
             .toolbar {
+                ToolbarItemGroup(placement: .automatic) { // Top Toolbar
+                    HStack {
+                        Text("Distance: \(theMap_ViewModel.theDistance) Feet")
+                        Spacer()
+                        Button(action: updateParkingSpot) {
+                            let theColor = UIColor(red: 0.0, green: 0.5, blue: 0.0, alpha: 1.0)
+                            let parkingImageName = theMap_ViewModel.getParkingLocationImageName()
+                            Label("Save Spot", systemImage: parkingImageName)
+                                .foregroundColor(Color(theColor))
+                                .padding() // Move the Parking symbol away from right border a little bit
+                        } .font(.system(size: 25.0))
+                            .labelStyle(HorizontalLabelStyle())
+                    }
+                }
+
+
+
+                // BOTTOM TOOL BAR
                 ToolbarItemGroup(placement: .bottomBar) {
                     Picker("What kind of map do you want", selection: $theMap_ViewModel.isHybrid) {
                         Text("Hybrid").tag(true)
@@ -52,7 +72,7 @@ struct ContentView: View {
                     } //.font(.largeTitle) .padding()
                         .labelStyle(HorizontalLabelStyle())
                     
-                }
+                } // Bottom Tool Bar
             }
             // Detect moving back to foreground
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
