@@ -36,7 +36,7 @@ extension ParkingSpotEntity: Comparable {    // Making Comparable so that it can
         let results = try? viewContext.fetch(request) // should never fail
         
         // If we found one return it, otherwise create one and return it
-        if let theParkingSpotEntity = results!.first { // wdh!
+        if let theParkingSpotEntity = results!.first { 
             // Found one so return it
             return theParkingSpotEntity
         } else {

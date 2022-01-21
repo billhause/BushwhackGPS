@@ -12,15 +12,6 @@ import CoreLocation
 import StoreKit
 import Network
 
-
-//Next create a new app library to write a debug file to the app folder
-//https://www.hackingwithswift.com/books/ios-swiftui/writing-data-to-the-documents-directory
-//https://www.hackingwithswift.com/example-code/strings/how-to-save-a-string-to-a-file-on-disk-with-writeto
-
-//Test Logger io.log2phys wdhx
-//https://www.avanderlee.com/workflow/oslog-unified-logging/
-
-
 class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     // This class
     //   1 - provides data to the view in a way the view can easily consume it
@@ -160,12 +151,12 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     func locationManager(_ locationManager: CLLocationManager, didUpdateLocations: [CLLocation]) {
 //        MyLog.debug("Called: Map_ViewModel.locationManager(_ locationManager CLLocationManager, didUpdateLocations: [CLLocation])")
         
-        let currentLocation = didUpdateLocations.last!.coordinate // The array is guananteed to have at least one element wdh!
+        let currentLocation = didUpdateLocations.last!.coordinate // The array is guananteed to have at least one element
 
         if theMapModel.updateParkingSpotFlag == true {
             // Update the parking spot location and set the flag back to false
             theMapModel.updateParkingSpotFlag = false
-            ParkingSpotEntity.getParkingSpotEntity().updateLocation(lat: currentLocation.latitude, lon: currentLocation.longitude, andSave: true) // wdhx
+            ParkingSpotEntity.getParkingSpotEntity().updateLocation(lat: currentLocation.latitude, lon: currentLocation.longitude, andSave: true) 
 //            MyLog.debug("** Updated the parking spot in Map_ViewModel.locationManager(didUpdateLocations)")
             
             // Now that the parking spot has been updated, let the map know to move the marker
@@ -285,10 +276,22 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return CLLocationCoordinate2D(latitude: ParkingSpotEntity.getParkingSpotEntity().lat, longitude: ParkingSpotEntity.getParkingSpotEntity().lon)
     }
     
-    func getParkingSpot() -> MKPlacemark {
-        return MKPlacemark(coordinate: getParkingSpotLocation())
+//    func getParkingSpot() -> MKPlacemark {
+    func getParkingSpot() -> MKAnnotation {
+        return MKParkingAnnotation(coordinate: getParkingSpotLocation()) // wdhx
+//        return MKPlacemark(coordinate: getParkingSpotLocation()) // wdhx
     }
         
     
 }
 
+ wdhx Move this into a file of it's own
+class MKParkingAnnotation : NSObject, MKAnnotation {
+    var coordinate: CLLocationCoordinate2D
+    var title: String? = "Parking Spot"
+    var subtitle: String? = ""
+    init(coordinate: CLLocationCoordinate2D) {
+        self.coordinate = coordinate
+        MyLog.debug("wdh MKParkingAnnotation init() called")
+    }
+}

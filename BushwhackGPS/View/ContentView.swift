@@ -17,7 +17,6 @@ struct ContentView: View {
             VStack {
                 Text("Bongo")
                 MapView(theMap_ViewModel: theMap_ViewModel)
-                Text("Banana")
             } // VStack
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
@@ -31,9 +30,10 @@ struct ContentView: View {
                     }
                     
                     Button(action: orientMap) {
+                        // TODO: Fix the AttributeCycle run-time warning when clicking the orient button.  This doesn't happen in CarFinder
                         let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
                         let imageString = theMap_ViewModel.getOrientMapImageName()
-                        Label("Center & Zoom", systemImage: imageString)
+                        Label("Follow", systemImage: imageString)
                             .foregroundColor(Color(theColor))
                     } //.font(.largeTitle) .padding()
                         .labelStyle(HorizontalLabelStyle())

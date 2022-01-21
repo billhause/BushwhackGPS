@@ -33,6 +33,7 @@ struct MapView: UIViewRepresentable {
     @ObservedObject var theMap_ViewModel: Map_ViewModel
     @State var mMapView = MKMapView() // TouchDetect - made member var instead of local var in makeUIView NOTE: MUST BE @State or duplicate instances will be created
     
+    
     func isParkingSpotShownOnMap() -> Bool {
         // NOTE: There seems to be some buffer off the side of the map so sometimes it says it's shown when it isn't really
         let parkingSpotLatLon = theMap_ViewModel.getParkingSpotLocation()
@@ -74,7 +75,7 @@ struct MapView: UIViewRepresentable {
 //        mapView.setUserTrackingMode(MKUserTrackingMode.followWithHeading, animated: true) // .followWithHeading, .follow, .none
 
         // Add the parking spot annotation to the map
-        mMapView.addAnnotations([theMap_ViewModel.getParkingSpot()])
+        mMapView.addAnnotations([theMap_ViewModel.getParkingSpot()]) // wdhx
         theMap_ViewModel.orientMap() // zoom in on the current location and the parking location
         
         return mMapView
@@ -83,7 +84,7 @@ struct MapView: UIViewRepresentable {
     
 //    mutating func updateMapViewReference(newMapView: MKMapView) {
 //        mMapView = newMapView
-//        MyLog.debug("updated mMapView wdh002")
+//        MyLog.debug("updated mMapView wdh")
 //    }
     
     // This gets called when ever the Model changes
@@ -215,7 +216,7 @@ struct MapView: UIViewRepresentable {
             // postion on map, CLLocationCoordinate2D
             let coordinate = self.parent.mMapView.convert(location, toCoordinateFrom: self.parent.mMapView)
             MyLog.debug("LatLon Tapped: Lat: \(coordinate.latitude), Lon: \(coordinate.longitude)")
-//            AlertDialog.shared.Alert("wdhx LatLon Tapped: Lat: \(coordinate.latitude), Lon: \(coordinate.longitude)")
+//            AlertDialog.shared.Alert("wdh LatLon Tapped: Lat: \(coordinate.latitude), Lon: \(coordinate.longitude)")
         }
 
         // NOTE: FOR SOME REASON the panHandler and pinchHandler call-backs don't ever get called
@@ -324,30 +325,34 @@ struct MapView: UIViewRepresentable {
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
 //            MyLog.debug("Called13: 'func mapView(_ mapView: MKMapView, viewFor: MKAnnotation) -> MKAnnotationView?'")
 
+            // BLUE DOT USER LOCATION Annotation
             if (annotation is MKUserLocation) {
                 // This is the User Location (Blue Dot) so just use the default annotation icon by returning nil
                 return nil
             }
             
-            let Identifier = "Pin"
-            let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: Identifier) ?? MKAnnotationView(annotation: annotation, reuseIdentifier: Identifier)
+            // PARKING SPOT ANNOTATION
+            if (annotation is MKParkingAnnotation) {
+                let Identifier = "ParkingSpot"
+                let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: Identifier) ?? MKAnnotationView(annotation: annotation, reuseIdentifier: Identifier)
 
-            annotationView.canShowCallout = true
-            
-            let dotSize = 35 // Size for Parking Symbol
-              
-            let theColor = UIColor(red: 0.0, green: 0.5, blue: 0.0, alpha: 1.0)
-  
-            let dotImage = UIImage(systemName: theMap_ViewModel.getParkingLocationImageName())!.withTintColor(theColor) // wdh!
+                annotationView.canShowCallout = true // Show Title and subtitle if the user taps on the annotation
+                
+                // MARK: Parking Symbol
+                let PARKING_SYMBOL_SIZE = 25 // Size for Parking Symbol
+                let PARKING_SYMBOL_COLOR = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0) // Black shows up better on hybrid background
+                let parkingSymbolImage = UIImage(systemName: theMap_ViewModel.getParkingLocationImageName())!.withTintColor(PARKING_SYMBOL_COLOR) // wdhx
+                let size = CGSize(width: PARKING_SYMBOL_SIZE, height: PARKING_SYMBOL_SIZE)
 
-            let size = CGSize(width: dotSize, height: dotSize)
-
-            // Create Annotation Image and return it
-            annotationView.image = UIGraphicsImageRenderer(size:size).image {
-                _ in dotImage.draw(in:CGRect(origin:.zero, size:size))
+                // Create Annotation Image and return it
+                annotationView.image = UIGraphicsImageRenderer(size:size).image {
+                    _ in parkingSymbolImage.draw(in:CGRect(origin:.zero, size:size))
+                }
+                
+                return annotationView
             }
-            
-            return annotationView
+
+            return nil // We didn't handle this Annotation so return nil to use the default annotation icon.
         }
         
         
