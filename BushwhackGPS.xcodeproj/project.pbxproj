@@ -26,6 +26,7 @@
 		288BB0E6279797E1005F3D0C /* ParkingSpotEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288BB0E5279797E1005F3D0C /* ParkingSpotEntity.swift */; };
 		288BB0E92797993E005F3D0C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288BB0E82797993E005F3D0C /* Reachability.swift */; };
 		288BCB38279B721E008FC368 /* AlertMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288BCB37279B721E008FC368 /* AlertMessage.swift */; };
+		288BCB3A279E25D8008FC368 /* DotEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288BCB39279E25D8008FC368 /* DotEntity.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 		288BB0E5279797E1005F3D0C /* ParkingSpotEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParkingSpotEntity.swift; sourceTree = "<group>"; };
 		288BB0E82797993E005F3D0C /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		288BCB37279B721E008FC368 /* AlertMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertMessage.swift; sourceTree = "<group>"; };
+		288BCB39279E25D8008FC368 /* DotEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotEntity.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,6 +185,7 @@
 				28817BAF2790F15C004B7C4B /* AppSettingsEntity.swift */,
 				288BB0DD27976219005F3D0C /* Map_ViewModel.swift */,
 				288BB0E5279797E1005F3D0C /* ParkingSpotEntity.swift */,
+				288BCB39279E25D8008FC368 /* DotEntity.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -330,6 +333,7 @@
 				288BB0DE27976219005F3D0C /* Map_ViewModel.swift in Sources */,
 				28817B7E278E490E004B7C4B /* ContentView.swift in Sources */,
 				288BB0E4279796C2005F3D0C /* Haptic.swift in Sources */,
+				288BCB3A279E25D8008FC368 /* DotEntity.swift in Sources */,
 				28817B7C278E490E004B7C4B /* BushwhackGPSApp.swift in Sources */,
 				288BCB38279B721E008FC368 /* AlertMessage.swift in Sources */,
 				28817BB02790F15C004B7C4B /* AppSettingsEntity.swift in Sources */,

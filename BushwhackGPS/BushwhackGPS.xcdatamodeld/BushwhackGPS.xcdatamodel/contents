@@ -5,6 +5,15 @@
         <attribute name="orientNorth" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="usageCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
+    <entity name="DotEntity" representedClassName="DotEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="course" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="lat" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="lon" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="speed" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="uuid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+    </entity>
     <entity name="ID_GeneratorEntity" representedClassName="ID_GeneratorEntity" syncable="YES" codeGenerationType="class">
         <attribute name="nextIDToReturn" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
@@ -20,5 +29,6 @@
         <element name="ID_GeneratorEntity" positionX="-63" positionY="-9" width="128" height="44"/>
         <element name="ItemDELETEME" positionX="-63" positionY="-18" width="128" height="44"/>
         <element name="ParkingSpotEntity" positionX="-54" positionY="9" width="128" height="59"/>
+        <element name="DotEntity" positionX="-45" positionY="27" width="128" height="134"/>
     </elements>
 </model>
