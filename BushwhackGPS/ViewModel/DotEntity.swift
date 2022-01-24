@@ -16,7 +16,7 @@ extension DotEntity: Comparable {
     }
 
     // Get array of all DotEntitys.
-    public static func getAllDots() -> [DotEntity] {
+    public static func getAllDotEntities() -> [DotEntity] {
         
         let viewContext = PersistenceController.shared.container.viewContext
         let request = NSFetchRequest<DotEntity>(entityName: "DotEntity")
@@ -26,6 +26,7 @@ extension DotEntity: Comparable {
         // Get array of sorted results
         do {
             let results = try viewContext.fetch(request)
+            MyLog.debug("getAllDotEntities Loaded \(results.count) DotEntities")
             return results
         } catch {
             let nsError = error as NSError
@@ -36,7 +37,9 @@ extension DotEntity: Comparable {
         return []
     }
     
-    public static func createDot(lat: Double, lon: Double, speed: Double, course: Double) {
+    
+    // Create a new dot, save it and return it
+    public static func createDotEntity(lat: Double, lon: Double, speed: Double, course: Double) -> DotEntity {
         let viewContext = PersistenceController.shared.container.viewContext
         let newDot = DotEntity(context: viewContext)
         newDot.id = ID_GeneratorEntity.getNextID()
@@ -48,9 +51,18 @@ extension DotEntity: Comparable {
         newDot.course = course
         do {
             try viewContext.save()
+            MyLog.debug("Saved DotEntity at lat:\(lat), lon:\(lon)")
         } catch {
             let nsError = error as NSError
             MyLog.debug("wdh Error saving new DotEntity in createDot() \(nsError.userInfo)")
         }
+        return newDot
     }
+    
+    // Delete a DotEntity object
+    static func deleteDotEntity(_ theDotEntity: DotEntity) {
+        let viewContext = PersistenceController.shared.container.viewContext
+        viewContext.delete(theDotEntity)
+    }
+    
 }

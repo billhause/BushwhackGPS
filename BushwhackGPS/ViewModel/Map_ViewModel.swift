@@ -153,6 +153,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         
         let currentLocation = didUpdateLocations.last!.coordinate // The array is guananteed to have at least one element
 
+        // UPDATE PARKING SPOT if necessary
         if theMapModel.updateParkingSpotFlag == true {
             // Update the parking spot location and set the flag back to false
             theMapModel.updateParkingSpotFlag = false
@@ -233,6 +234,14 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         // Tell the location manager to upate the location and call the locationManager(didUpdateLocations:) function above.
         mLocationManager?.requestLocation()
     }
+    
+    func addTestDot() { // wdhx
+        if let loc = mLocationManager?.location {
+            DotEntity.createDotEntity(lat: loc.coordinate.latitude, lon: loc.coordinate.longitude, speed: 0, course: -1)
+        } else {
+            MyLog.debug("addTestDot failed to add dot because mLocationManager was nil")
+        }
+    }
         
     func requestReview() {
         if AppSettingsEntity.getAppSettingsEntity().usageCount > AppSettingsEntity.REVIEW_THRESHOLD {
@@ -281,10 +290,32 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     }
         
     
+    // Return an array of ALL DotAnnotations ready to be added to the map
+    func getDotAnnotations() -> [MKDotAnnotation] { // wdhx
+        let dotEntities = DotEntity.getAllDotEntities()
+        var dotAnnotations: [MKDotAnnotation] = []
+        
+        for dotEntity in dotEntities {
+            let newMKDotAnnotation = MKDotAnnotation(coordinate: CLLocationCoordinate2D(latitude: dotEntity.lat, longitude: dotEntity.lon))
+            dotAnnotations.append(newMKDotAnnotation)
+        }
+        return dotAnnotations
+    }
+    
+    
 }
 
 
 // MARK: Annotation Types
+
+class MKDotAnnotation: NSObject, MKAnnotation {
+    var coordinate: CLLocationCoordinate2D
+    var title: String? = "Dot Annotation"
+    var subtitle: String? = ""
+    init(coordinate: CLLocationCoordinate2D) {
+        self.coordinate = coordinate
+    }
+}
 
 class MKParkingAnnotation : NSObject, MKAnnotation {
     var coordinate: CLLocationCoordinate2D

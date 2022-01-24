@@ -75,8 +75,11 @@ struct MapView: UIViewRepresentable {
 //        mapView.setUserTrackingMode(MKUserTrackingMode.followWithHeading, animated: true) // .followWithHeading, .follow, .none
 
         // Add the parking spot annotation to the map
-        mMapView.addAnnotations([theMap_ViewModel.getParkingSpot()]) // wdhx
+        mMapView.addAnnotations([theMap_ViewModel.getParkingSpot()])
         theMap_ViewModel.orientMap() // zoom in on the current location and the parking location
+        
+        // Add the map dots to the map
+        mMapView.addAnnotations(theMap_ViewModel.getDotAnnotations()) // wdhx
         
         return mMapView
 
@@ -311,7 +314,6 @@ struct MapView: UIViewRepresentable {
 //            MyLog.debug("Called12: 'func mapView(_ mapView: MKMapView, didChange: MKUserTrackingMode, animated: \(animated)'")
         }
         
-        // MARK: Optional - Managing Annotation Views
 
         // Return the annotation view to display for the specified annotation or
         // nil if you want to display a standard annotation view.
@@ -322,6 +324,28 @@ struct MapView: UIViewRepresentable {
             if (annotation is MKUserLocation) {
                 // This is the User Location (Blue Dot) so just use the default annotation icon by returning nil
                 return nil
+            }
+            
+            // DOT ANNOTATION wdhx
+            if (annotation is MKDotAnnotation) {
+                MyLog.debug("Creating Annotation View for DOT Annotation ")
+                let Identifier = "Dot"
+                let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: Identifier) ?? MKAnnotationView(annotation: annotation, reuseIdentifier: Identifier)
+
+                annotationView.canShowCallout = true // Show Title and subtitle if the user taps on the annotation
+                
+                // MARK: Parking Symbol
+                let PARKING_SYMBOL_SIZE = 25 // Size for Parking Symbol
+                let PARKING_SYMBOL_COLOR = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 1.0) // Black shows up better on hybrid background
+                let parkingSymbolImage = UIImage(systemName: theMap_ViewModel.getParkingLocationImageName())!.withTintColor(PARKING_SYMBOL_COLOR) // wdhx
+                let size = CGSize(width: PARKING_SYMBOL_SIZE, height: PARKING_SYMBOL_SIZE)
+
+                // Create Annotation Image and return it
+                annotationView.image = UIGraphicsImageRenderer(size:size).image {
+                    _ in parkingSymbolImage.draw(in:CGRect(origin:.zero, size:size))
+                }
+                
+                return annotationView
             }
             
             // PARKING SPOT ANNOTATION
@@ -349,6 +373,8 @@ struct MapView: UIViewRepresentable {
         }
         
         
+        // MARK: Optional - Managing Annotation Views
+
         // One or more annotation views were added to the map.
         func mapView(_ mapView: MKMapView, didAdd: [MKAnnotationView]) {
 //            MyLog.debug("Called14: 'func mapView(_ mapView: MKMapView, didAdd: [MKAnnotationView])'")

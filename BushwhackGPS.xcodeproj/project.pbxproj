@@ -122,8 +122,8 @@
 			children = (
 				28817B84278E490E004B7C4B /* Persistence.swift */,
 				28817B7B278E490E004B7C4B /* BushwhackGPSApp.swift */,
-				28817BAC278F727F004B7C4B /* ViewModel */,
 				28817BAB278F7272004B7C4B /* Model */,
+				28817BAC278F727F004B7C4B /* ViewModel */,
 				28817BAA278F7264004B7C4B /* View */,
 				28817B7F278E490E004B7C4B /* Assets.xcassets */,
 				28817B86278E490E004B7C4B /* BushwhackGPS.xcdatamodeld */,
