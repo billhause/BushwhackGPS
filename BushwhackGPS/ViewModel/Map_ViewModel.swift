@@ -126,6 +126,14 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     
     // Sometimes the device will not have the first choice symbol so check first
     // Return a default that is always present
+    func getDotImageName() -> String {
+        // Check symbols in order of preference
+        if UIImage(systemName: "circle.fill") != nil { return "circle.fill" }
+        return "circle" // default that is always there on all devices
+    }
+
+    // Sometimes the device will not have the first choice symbol so check first
+    // Return a default that is always present
     func getParkingLocationImageName() -> String {
         // Check symbols in order of preference
         if UIImage(systemName: "parkingsign.circle") != nil { return "parkingsign.circle" }
@@ -149,16 +157,14 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     // REQUIRED - Called EVERY TIME the location data is updated
     // The MOST RECENT location is the last one in the array
     func locationManager(_ locationManager: CLLocationManager, didUpdateLocations: [CLLocation]) {
-//        MyLog.debug("Called: Map_ViewModel.locationManager(_ locationManager CLLocationManager, didUpdateLocations: [CLLocation])")
         
         let currentLocation = didUpdateLocations.last!.coordinate // The array is guananteed to have at least one element
 
-        // UPDATE PARKING SPOT if necessary
+        // PARKING SPOT - Update the parking spot if it's been moved
         if theMapModel.updateParkingSpotFlag == true {
             // Update the parking spot location and set the flag back to false
             theMapModel.updateParkingSpotFlag = false
             ParkingSpotEntity.getParkingSpotEntity().updateLocation(lat: currentLocation.latitude, lon: currentLocation.longitude, andSave: true) 
-//            MyLog.debug("** Updated the parking spot in Map_ViewModel.locationManager(didUpdateLocations)")
             
             // Now that the parking spot has been updated, let the map know to move the marker
             parkingSpotMoved = true
@@ -285,8 +291,8 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return CLLocationCoordinate2D(latitude: ParkingSpotEntity.getParkingSpotEntity().lat, longitude: ParkingSpotEntity.getParkingSpotEntity().lon)
     }
     
-    func getParkingSpot() -> MKAnnotation {
-        return MKParkingAnnotation(coordinate: getParkingSpotLocation()) // wdhx
+    func getParkingSpotAnnotation() -> MKAnnotation {
+        return MKParkingAnnotation(coordinate: getParkingSpotLocation())
     }
         
     

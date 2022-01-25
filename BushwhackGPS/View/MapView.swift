@@ -52,7 +52,7 @@ struct MapView: UIViewRepresentable {
         return MapViewCoordinator(self, theMapVM: theMap_ViewModel) // Pass in the view model so that the delegate has access to it
     }
     
-    // Required by UIViewRepresentable protocol
+    // Called Once when MapView is created
     func makeUIView(context: Context) -> MKMapView {
 
         // Part of the UIViewRepresentable protocol requirements
@@ -75,7 +75,7 @@ struct MapView: UIViewRepresentable {
 //        mapView.setUserTrackingMode(MKUserTrackingMode.followWithHeading, animated: true) // .followWithHeading, .follow, .none
 
         // Add the parking spot annotation to the map
-        mMapView.addAnnotations([theMap_ViewModel.getParkingSpot()])
+        mMapView.addAnnotations([theMap_ViewModel.getParkingSpotAnnotation()])
         theMap_ViewModel.orientMap() // zoom in on the current location and the parking location
         
         // Add the map dots to the map
@@ -117,20 +117,12 @@ struct MapView: UIViewRepresentable {
             }
             
             // Now add the parking spot annotation in it's new location
-            theMapView.addAnnotations([theMap_ViewModel.getParkingSpot()])
+            theMapView.addAnnotations([theMap_ViewModel.getParkingSpotAnnotation()])
             
             // Now orient the map for the new parking spot location
             bShouldSizeAndCenter = true // set flag that will Size and Center the map a few lines down from here
         }
 
-// OLD CODE from Parking Spot app - No longer needed.  DELETE THIS NOW
-//        // If the parking spot is not on the map AND the user is not Messing with the Map then recenter it
-//        // It could be the parking spot drifted off the map OR we came back from background without knowing our location accurately
-//        if theMap_ViewModel.shouldKeepMapCentered() {
-//            if !isParkingSpotShownOnMap() {
-//                theMap_ViewModel.orientMap()
-//            }
-//        }
 
         // Size and Center the map Because the user hit the Orient Map Button
         if bShouldSizeAndCenter { // The use has hit the orient map button or did something requireing the map to be re-oriented
@@ -293,13 +285,30 @@ struct MapView: UIViewRepresentable {
 //            MyLog.debug("Called9: 'func mapViewDidStopLocatingUser(_ mapView: MKMapView)'")
         }
         
+        
+        //
         // The location of the user was updated.
+        //
         func mapView(_ mapView: MKMapView, didUpdate: MKUserLocation) {
-//            MyLog.debug("Called10: 'func mapView(_ mapView: MKMapView, didUpdate: MKUserLocation)'")
+            MyLog.debug("Called10: 'func mapView(_ mapView: MKMapView, didUpdate: MKUserLocation)'")
             // Center the map on the current location
             if theMap_ViewModel.shouldKeepMapCentered() { // Only do this if the user wants the map to stay centered
-                mapView.setCenter(theMap_ViewModel.getLastKnownLocation(), animated: true)
+//                mapView.setCenter(theMap_ViewModel.getLastKnownLocation(), animated: true)
+                mapView.setCenter(didUpdate.coordinate, animated: true)
             }
+            
+            // Add a Map Dot at the current location
+            let lat = didUpdate.coordinate.latitude
+            let lon = didUpdate.coordinate.longitude
+            var speed: Double = -1 // No speed provided
+            var course: Double = -1 // No course provided
+            if let location = didUpdate.location {
+                speed = location.speed
+                course = location.course
+            }
+            DotEntity.createDotEntity(lat: lat, lon: lon, speed: speed, course: course)
+            let dotAnnotation = MKDotAnnotation(coordinate: didUpdate.coordinate)
+            parent.mMapView.addAnnotation(dotAnnotation)
 
         }
         
@@ -315,18 +324,19 @@ struct MapView: UIViewRepresentable {
         }
         
 
+        // Get AnnotationView
         // Return the annotation view to display for the specified annotation or
         // nil if you want to display a standard annotation view.
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
 //            MyLog.debug("Called13: 'func mapView(_ mapView: MKMapView, viewFor: MKAnnotation) -> MKAnnotationView?'")
 
-            // BLUE DOT USER LOCATION Annotation
+            // USER LOCATION Annotation Type - Blue dot that shows your locaiton
             if (annotation is MKUserLocation) {
                 // This is the User Location (Blue Dot) so just use the default annotation icon by returning nil
                 return nil
             }
             
-            // DOT ANNOTATION wdhx
+            // DOT ANNOTATION Type
             if (annotation is MKDotAnnotation) {
                 MyLog.debug("Creating Annotation View for DOT Annotation ")
                 let Identifier = "Dot"
@@ -335,20 +345,20 @@ struct MapView: UIViewRepresentable {
                 annotationView.canShowCallout = true // Show Title and subtitle if the user taps on the annotation
                 
                 // MARK: Parking Symbol
-                let PARKING_SYMBOL_SIZE = 25 // Size for Parking Symbol
-                let PARKING_SYMBOL_COLOR = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 1.0) // Black shows up better on hybrid background
-                let parkingSymbolImage = UIImage(systemName: theMap_ViewModel.getParkingLocationImageName())!.withTintColor(PARKING_SYMBOL_COLOR) // wdhx
-                let size = CGSize(width: PARKING_SYMBOL_SIZE, height: PARKING_SYMBOL_SIZE)
+                let DOT_SIZE = 5 // Size for Map Dot Symbol
+                let DOT_COLOR = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 1.0) // Black shows up better on hybrid background
+                let DotSymbolImage = UIImage(systemName: theMap_ViewModel.getDotImageName())!.withTintColor(DOT_COLOR) // wdhx
+                let size = CGSize(width: DOT_SIZE, height: DOT_SIZE)
 
                 // Create Annotation Image and return it
                 annotationView.image = UIGraphicsImageRenderer(size:size).image {
-                    _ in parkingSymbolImage.draw(in:CGRect(origin:.zero, size:size))
+                    _ in DotSymbolImage.draw(in:CGRect(origin:.zero, size:size))
                 }
                 
                 return annotationView
             }
             
-            // PARKING SPOT ANNOTATION
+            // PARKING SPOT Annotation type
             if (annotation is MKParkingAnnotation) {
                 let Identifier = "ParkingSpot"
                 let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: Identifier) ?? MKAnnotationView(annotation: annotation, reuseIdentifier: Identifier)
