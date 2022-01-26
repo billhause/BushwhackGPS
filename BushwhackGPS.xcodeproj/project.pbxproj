@@ -70,6 +70,7 @@
 		288BB0E82797993E005F3D0C /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		288BCB37279B721E008FC368 /* AlertMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertMessage.swift; sourceTree = "<group>"; };
 		288BCB39279E25D8008FC368 /* DotEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotEntity.swift; sourceTree = "<group>"; };
+		288BCB3B27A19E21008FC368 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +121,7 @@
 		28817B7A278E490E004B7C4B /* BushwhackGPS */ = {
 			isa = PBXGroup;
 			children = (
+				288BCB3B27A19E21008FC368 /* Info.plist */,
 				28817B84278E490E004B7C4B /* Persistence.swift */,
 				28817B7B278E490E004B7C4B /* BushwhackGPSApp.swift */,
 				28817BAB278F7272004B7C4B /* Model */,
@@ -506,7 +508,9 @@
 				DEVELOPMENT_TEAM = XXF7Y2ZTA7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BushwhackGPS/Info.plist;
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This app needs to know where you are in order to log the path that you've taken";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "This app needs to know where you are to log where you've been";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app needs to know where you are in order to log the path that you've taken";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -537,7 +541,9 @@
 				DEVELOPMENT_TEAM = XXF7Y2ZTA7;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BushwhackGPS/Info.plist;
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This app needs to know where you are in order to log the path that you've taken";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "This app needs to know where you are to log where you've been";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app needs to know where you are in order to log the path that you've taken";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

@@ -65,7 +65,10 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         mLocationManager?.startUpdatingHeading() // Will call the delegates didUpdateHeading function when heading changes
         
         // Apps that want to receive location updates when suspended must include the UIBackgroundModes key (with the location value) in their app’s Info.plist
-        //mLocationManager?.allowsBackgroundLocationUpdates = true //must include the UIBackgroundModes key in the Info.plist
+
+        // To Receive Backgroun Locadtion Updates...
+        // NOTE: MUST CHECK THE XCODE App Setting box for 'Location Updates' in the 'Background Modes' section under the 'Signing and Capabilities' tab
+        mLocationManager?.allowsBackgroundLocationUpdates = true //MUST CHECK THE XCODE App Setting box for 'Location Updates' in the 'Background Modes' section under the 'Signing and Capabilities' tab
         
     }
 
@@ -152,14 +155,16 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     }
 
     
-    // MARK: CLLocationManagerDelegate Functions
+    // MARK: Location Updates - Called every update
 
     // REQUIRED - Called EVERY TIME the location data is updated
     // The MOST RECENT location is the last one in the array
     func locationManager(_ locationManager: CLLocationManager, didUpdateLocations: [CLLocation]) {
-        
         let currentLocation = didUpdateLocations.last!.coordinate // The array is guananteed to have at least one element
 
+        // wdhx Add new dots here instead of in the MapView
+        MyLog.debug("Loation Updated in Map_ViewModel")
+        
         // PARKING SPOT - Update the parking spot if it's been moved
         if theMapModel.updateParkingSpotFlag == true {
             // Update the parking spot location and set the flag back to false
@@ -290,7 +295,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         
     
     // Return an array of ALL DotAnnotations ready to be added to the map
-    func getDotAnnotations() -> [MKDotAnnotation] { // wdhx
+    func getDotAnnotations() -> [MKDotAnnotation] { 
         let dotEntities = DotEntity.getAllDotEntities()
         var dotAnnotations: [MKDotAnnotation] = []
         

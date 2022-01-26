@@ -79,7 +79,7 @@ struct MapView: UIViewRepresentable {
         theMap_ViewModel.orientMap() // zoom in on the current location and the parking location
         
         // Add the map dots to the map
-        mMapView.addAnnotations(theMap_ViewModel.getDotAnnotations()) // wdhx
+        mMapView.addAnnotations(theMap_ViewModel.getDotAnnotations())
         
         return mMapView
 
@@ -90,6 +90,7 @@ struct MapView: UIViewRepresentable {
 //        MyLog.debug("updated mMapView wdh")
 //    }
     
+    // MARK: Model Changed - Update Map
     // This gets called when ever the Model changes
     // Required by UIViewRepresentable protocol
     func updateUIView(_ mapView: MKMapView, context: Context) {
@@ -105,7 +106,7 @@ struct MapView: UIViewRepresentable {
         }
         
         
-        // UPDATE PARKING SPOT if necessary
+        // UPDATE PARKING SPOT if necessary wdhxx
         if theMap_ViewModel.parkingSpotMoved { // The user updated the parking spot so move the annotation
             theMap_ViewModel.parkingSpotMoved = false
             // Remove theParking Spot annotation and re-add it in case it moved and triggered this update
@@ -145,6 +146,7 @@ struct MapView: UIViewRepresentable {
     }
     
     
+    // MARK: Map Callbacks in MapViewacoordinator
     // Map Call-Backs: Delegate to handle call-backs from the MapView class.
     // This handles things like
     //   - drawing the generated poly-lines layers on the map,
@@ -299,6 +301,9 @@ struct MapView: UIViewRepresentable {
                 mapView.setCenter(didUpdate.coordinate, animated: true)
             }
             
+            
+            // wdhx Add dots in the Map_ViewModel instead of here so that dots are added in the background
+            MyLog.debug("Adding Dot in MapView didUpdate")
             // Add a Map Dot at the current location
             let lat = didUpdate.coordinate.latitude
             let lon = didUpdate.coordinate.longitude
@@ -348,7 +353,7 @@ struct MapView: UIViewRepresentable {
                 
                 let DOT_SIZE = 5 // Size for Map Dot Symbol
                 let DOT_COLOR = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 1.0) // Black shows up better on hybrid background
-                let DotSymbolImage = UIImage(systemName: theMap_ViewModel.getDotImageName())!.withTintColor(DOT_COLOR) // wdhx
+                let DotSymbolImage = UIImage(systemName: theMap_ViewModel.getDotImageName())!.withTintColor(DOT_COLOR)
                 let size = CGSize(width: DOT_SIZE, height: DOT_SIZE)
 
                 // Create Annotation Image and return it
@@ -368,7 +373,7 @@ struct MapView: UIViewRepresentable {
                 
                 let PARKING_SYMBOL_SIZE = 25 // Size for Parking Symbol
                 let PARKING_SYMBOL_COLOR = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0) // Black shows up better on hybrid background
-                let parkingSymbolImage = UIImage(systemName: theMap_ViewModel.getParkingLocationImageName())!.withTintColor(PARKING_SYMBOL_COLOR) // wdhx
+                let parkingSymbolImage = UIImage(systemName: theMap_ViewModel.getParkingLocationImageName())!.withTintColor(PARKING_SYMBOL_COLOR)
                 let size = CGSize(width: PARKING_SYMBOL_SIZE, height: PARKING_SYMBOL_SIZE)
 
                 // Create Annotation Image and return it
