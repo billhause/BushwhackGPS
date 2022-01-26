@@ -20,11 +20,14 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     // MARK: Member Vars
     @Published private var theMapModel: Map_Model = Map_Model()
     @Published public var parkingSpotMoved = false // Signal when the parking spot moves so the map knows to move the parking icon
-    @Published public var theDistance = 123
+    @Published public var theParkingSpotDistance = 123
     
-    private var mStillNeedToOrientMap = true // Set to true when the map needs to be oriented
-
     private var mLocationManager: CLLocationManager?
+
+    // Flags to communicate with the mapView since the MapView never knows what data model change triggere an update
+    private var mStillNeedToOrientMap = true // Set to true when the map needs to be oriented
+    private var mNewAnnotationWaiting = false // Set to true if there is a new annotation waiting to be added to the map
+
     
     
     // MARK: Flag Variables
@@ -160,26 +163,50 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     // REQUIRED - Called EVERY TIME the location data is updated
     // The MOST RECENT location is the last one in the array
     func locationManager(_ locationManager: CLLocationManager, didUpdateLocations: [CLLocation]) {
-        let currentLocation = didUpdateLocations.last!.coordinate // The array is guananteed to have at least one element
-
-        // wdhx Add new dots here instead of in the MapView
-        MyLog.debug("Loation Updated in Map_ViewModel")
         
-        // PARKING SPOT - Update the parking spot if it's been moved
+        let currentLocation = didUpdateLocations.last!
+        let lat = currentLocation.coordinate.latitude
+        let lon = currentLocation.coordinate.longitude
+        let speed = currentLocation.speed
+        let course = currentLocation.course
+
+        // === ADD MAP DOT ===
+        DotEntity.createDotEntity(lat: lat, lon: lon, speed: speed, course: course)
+        let dotAnnotation = MKDotAnnotation(coordinate: currentLocation.coordinate)
+        // Since we can't add the annotation directly to the MapView, we must add it to
+        // the MapModel which will trigger a map update where
+        // the annotation will be added to the map as an AnnotationView
+        theMapModel.newMKAnotation = dotAnnotation // Update the MapModel with the new annotation to be added to the map
+        
+        // The Map_ViewModel must keep track if there is a new annotation to add to the map since the MapView doesn't know what change to the data model triggered the update
+        mNewAnnotationWaiting = true
+        
+        // === PARKING SPOT ===  Update the parking spot location if it's been moved
+        // TODO: Add the Parkingspot to the map model newMKAnnotations list to add it to the map like we do for the Map Dot's above
         if theMapModel.updateParkingSpotFlag == true {
             // Update the parking spot location and set the flag back to false
             theMapModel.updateParkingSpotFlag = false
-            ParkingSpotEntity.getParkingSpotEntity().updateLocation(lat: currentLocation.latitude, lon: currentLocation.longitude, andSave: true) 
+            ParkingSpotEntity.getParkingSpotEntity().updateLocation(lat: lat, lon: lon, andSave: true)
             
             // Now that the parking spot has been updated, let the map know to move the marker
             parkingSpotMoved = true
         }
         
-        // Update the distance
+        // === DISTANCE === - Update the distance
         let parkingSpot = getParkingSpotLocation()
-        theDistance = getDistanceInFeet(p1: parkingSpot, p2: currentLocation)
+        theParkingSpotDistance = getDistanceInFeet(p1: parkingSpot, p2: currentLocation.coordinate)
     }
 
+    
+    // Will return nil if newMKAnnotation is nil or if the annotation has already been returned once.
+    func getNewAnnotation() -> MKAnnotation? {
+        if mNewAnnotationWaiting {
+            mNewAnnotationWaiting = false
+            return theMapModel.newMKAnotation
+        }
+        return nil // No new annotation is waiting
+    }
+    
     func getDistanceInFeet(p1: CLLocationCoordinate2D, p2: CLLocationCoordinate2D) -> Int {
         // Calculate Distance
         
@@ -203,7 +230,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     // Heading - Tells the delegate that the location manager received updated heading information.
     // Note: Must have previously called mLocationManager?.startUpdatingHeading() for this to be called
     func locationManager(_ locationManager: CLLocationManager, didUpdateHeading: CLHeading) {
-//        MyLog.debug("Map_ViewModel.LocaitonManager didUpdateHeading: \(didUpdateHeading)")
+        MyLog.debug("Map_ViewModel.LocaitonManager didUpdateHeading: \(didUpdateHeading)")
         theMapModel.currentHeading = didUpdateHeading.trueHeading
     }
 //
@@ -280,13 +307,13 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     
     
     // MARK: Getters
-        
+
     func getCurrentHeading() -> Double {
         return theMapModel.currentHeading
     }
     
     func getParkingSpotLocation() -> CLLocationCoordinate2D {
-        return CLLocationCoordinate2D(latitude: ParkingSpotEntity.getParkingSpotEntity().lat, longitude: ParkingSpotEntity.getParkingSpotEntity().lon)
+        return CLLocationCoordinate2D(latitude: ParkingSpotEntity.getParkingSpotEntity().lat, longitude: ParkingSpotEntity.getParkingSpotEntity().lon) // wdhx
     }
     
     func getParkingSpotAnnotation() -> MKAnnotation {

@@ -75,7 +75,9 @@ struct MapView: UIViewRepresentable {
 //        mapView.setUserTrackingMode(MKUserTrackingMode.followWithHeading, animated: true) // .followWithHeading, .follow, .none
 
         // Add the parking spot annotation to the map
+        MyLog.debug("Brefore add parking spot Annotation")
         mMapView.addAnnotations([theMap_ViewModel.getParkingSpotAnnotation()])
+        MyLog.debug("After add parking spot Annotation")
         theMap_ViewModel.orientMap() // zoom in on the current location and the parking location
         
         // Add the map dots to the map
@@ -85,16 +87,12 @@ struct MapView: UIViewRepresentable {
 
     }
     
-//    mutating func updateMapViewReference(newMapView: MKMapView) {
-//        mMapView = newMapView
-//        MyLog.debug("updated mMapView wdh")
-//    }
     
-    // MARK: Model Changed - Update Map
-    // This gets called when ever the Model changes
+    // MARK: MapModel Changed - Update Map
+    // This gets called when ever the Model changes or published variables in the ViewModel
     // Required by UIViewRepresentable protocol
     func updateUIView(_ mapView: MKMapView, context: Context) {
-//        MyLog.debug("MapView.updateUIView() called")
+        MyLog.debug("MapView.updateUIView() called - MapModel changed")
         let theMapView = mapView
         var bShouldSizeAndCenter = theMap_ViewModel.isSizingAndCenteringNeeded()
         
@@ -106,7 +104,7 @@ struct MapView: UIViewRepresentable {
         }
         
         
-        // UPDATE PARKING SPOT if necessary wdhxx
+        // UPDATE PARKING SPOT if necessary
         if theMap_ViewModel.parkingSpotMoved { // The user updated the parking spot so move the annotation
             theMap_ViewModel.parkingSpotMoved = false
             // Remove theParking Spot annotation and re-add it in case it moved and triggered this update
@@ -124,6 +122,12 @@ struct MapView: UIViewRepresentable {
             bShouldSizeAndCenter = true // set flag that will Size and Center the map a few lines down from here
         }
 
+        // ADD NEW DOT ANNOTATION if there is one
+        if let newDotAnnotation = theMap_ViewModel.getNewAnnotation() {
+            // If we got in here, then there's a new annotation to add
+            theMapView.addAnnotation(newDotAnnotation)
+        }
+        
 
         // Size and Center the map Because the user hit the Orient Map Button
         if bShouldSizeAndCenter { // The use has hit the orient map button or did something requireing the map to be re-oriented
@@ -140,7 +144,7 @@ struct MapView: UIViewRepresentable {
 
         }
 
-        // Set the HEADING
+        // Set the HEADING - The direction the phone is pointing, not the direction we are moving
         theMapView.camera.heading=theMap_ViewModel.getCurrentHeading() // Adjustes map direction without affecting zoom level
         
     }
@@ -232,7 +236,6 @@ struct MapView: UIViewRepresentable {
         // VVVVVVV Optional MKMapViewDelegate protocol functions that I added for demo/testing purposes VVVVV
         // VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
 
-        // MARK: Optional - Responding to Map Position Changes
         // The region displayed by the map view is about to change.
         func mapView(_ mapView: MKMapView, regionWillChangeAnimated: Bool) {
 //            MyLog.debug("Called1 'func mapView(_ mapView: MKMapView, regionWillChangeAnimated: \(regionWillChangeAnimated))'")
@@ -288,10 +291,12 @@ struct MapView: UIViewRepresentable {
         }
         
         
+        // MARK: LOCATION UPDATES CALLBACK - While Map is displayed
         //
         // The location of the user was updated.
-        //    Center the map and add a new dot if necessary
-        //
+        //    Center the map
+        //    NOTE: This is only called if the map is displayed.
+        //          For locaiton updates when the map is not displayed use Map_ViewModel didUpdateLocations
         func mapView(_ mapView: MKMapView, didUpdate: MKUserLocation) {
 //            MyLog.debug("Called10: 'func mapView(_ mapView: MKMapView, didUpdate: MKUserLocation)'")
             
@@ -300,24 +305,6 @@ struct MapView: UIViewRepresentable {
 //                mapView.setCenter(theMap_ViewModel.getLastKnownLocation(), animated: true)
                 mapView.setCenter(didUpdate.coordinate, animated: true)
             }
-            
-            
-            // wdhx Add dots in the Map_ViewModel instead of here so that dots are added in the background
-            MyLog.debug("Adding Dot in MapView didUpdate")
-            // Add a Map Dot at the current location
-            let lat = didUpdate.coordinate.latitude
-            let lon = didUpdate.coordinate.longitude
-            var speed: Double = -1 // No speed provided
-            var course: Double = -1 // No course provided
-            if let location = didUpdate.location {
-                speed = location.speed
-                course = location.course
-            }
-//            MyLog.debug("speed: \(speed), course: \(course)")
-            DotEntity.createDotEntity(lat: lat, lon: lon, speed: speed, course: course)
-            let dotAnnotation = MKDotAnnotation(coordinate: didUpdate.coordinate)
-            parent.mMapView.addAnnotation(dotAnnotation)
-
         }
         
         // An attempt to locate the user’s position failed.

@@ -37,7 +37,7 @@ struct ContentView: View {
             .toolbar {
                 ToolbarItemGroup(placement: .automatic) { // Top Toolbar
                     HStack {
-                        Text("Distance: \(theMap_ViewModel.theDistance) Feet")
+                        Text("Distance: \(theMap_ViewModel.theParkingSpotDistance) Feet")
                         Spacer()
                         Button(action: updateParkingSpot) {
                             let theColor = UIColor(red: 0.0, green: 0.5, blue: 0.0, alpha: 1.0)

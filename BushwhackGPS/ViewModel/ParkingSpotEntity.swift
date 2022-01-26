@@ -33,8 +33,10 @@ extension ParkingSpotEntity: Comparable {    // Making Comparable so that it can
         //request.sortDescriptors = [sortDesc] // array of sort descriptors to use
         
         // Get array of results
+//        MyLog.debug("BEFORE let results = try? viewContext.fetch(request) // should never fail")
         let results = try? viewContext.fetch(request) // should never fail
-        
+//        MyLog.debug("AFTER let results = try? viewContext.fetch(request) // should never fail")
+
         // If we found one return it, otherwise create one and return it
         if let theParkingSpotEntity = results!.first { 
             // Found one so return it
