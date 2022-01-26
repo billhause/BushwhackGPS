@@ -39,7 +39,7 @@ extension DotEntity: Comparable {
     
     
     // Create a new dot, save it and return it
-    public static func createDotEntity(lat: Double, lon: Double, speed: Double, course: Double) -> DotEntity {
+    @discardableResult public static func createDotEntity(lat: Double, lon: Double, speed: Double, course: Double) -> DotEntity {
         let viewContext = PersistenceController.shared.container.viewContext
         let newDot = DotEntity(context: viewContext)
         newDot.id = ID_GeneratorEntity.getNextID()
@@ -51,7 +51,6 @@ extension DotEntity: Comparable {
         newDot.course = course
         do {
             try viewContext.save()
-            MyLog.debug("Saved DotEntity at lat:\(lat), lon:\(lon)")
         } catch {
             let nsError = error as NSError
             MyLog.debug("wdh Error saving new DotEntity in createDot() \(nsError.userInfo)")

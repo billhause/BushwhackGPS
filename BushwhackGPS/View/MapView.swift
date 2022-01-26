@@ -288,9 +288,11 @@ struct MapView: UIViewRepresentable {
         
         //
         // The location of the user was updated.
+        //    Center the map and add a new dot if necessary
         //
         func mapView(_ mapView: MKMapView, didUpdate: MKUserLocation) {
-            MyLog.debug("Called10: 'func mapView(_ mapView: MKMapView, didUpdate: MKUserLocation)'")
+//            MyLog.debug("Called10: 'func mapView(_ mapView: MKMapView, didUpdate: MKUserLocation)'")
+            
             // Center the map on the current location
             if theMap_ViewModel.shouldKeepMapCentered() { // Only do this if the user wants the map to stay centered
 //                mapView.setCenter(theMap_ViewModel.getLastKnownLocation(), animated: true)
@@ -306,6 +308,7 @@ struct MapView: UIViewRepresentable {
                 speed = location.speed
                 course = location.course
             }
+//            MyLog.debug("speed: \(speed), course: \(course)")
             DotEntity.createDotEntity(lat: lat, lon: lon, speed: speed, course: course)
             let dotAnnotation = MKDotAnnotation(coordinate: didUpdate.coordinate)
             parent.mMapView.addAnnotation(dotAnnotation)
@@ -330,21 +333,19 @@ struct MapView: UIViewRepresentable {
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
 //            MyLog.debug("Called13: 'func mapView(_ mapView: MKMapView, viewFor: MKAnnotation) -> MKAnnotationView?'")
 
-            // USER LOCATION Annotation Type - Blue dot that shows your locaiton
+            // === USER LOCATION Annotation Type - Blue dot that shows your locaiton ===
             if (annotation is MKUserLocation) {
                 // This is the User Location (Blue Dot) so just use the default annotation icon by returning nil
                 return nil
             }
             
-            // DOT ANNOTATION Type
+            // === DOT ANNOTATION Type ===
             if (annotation is MKDotAnnotation) {
-                MyLog.debug("Creating Annotation View for DOT Annotation ")
                 let Identifier = "Dot"
                 let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: Identifier) ?? MKAnnotationView(annotation: annotation, reuseIdentifier: Identifier)
 
                 annotationView.canShowCallout = true // Show Title and subtitle if the user taps on the annotation
                 
-                // MARK: Parking Symbol
                 let DOT_SIZE = 5 // Size for Map Dot Symbol
                 let DOT_COLOR = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 1.0) // Black shows up better on hybrid background
                 let DotSymbolImage = UIImage(systemName: theMap_ViewModel.getDotImageName())!.withTintColor(DOT_COLOR) // wdhx
@@ -358,14 +359,13 @@ struct MapView: UIViewRepresentable {
                 return annotationView
             }
             
-            // PARKING SPOT Annotation type
+            // === PARKING SPOT Annotation type ===
             if (annotation is MKParkingAnnotation) {
                 let Identifier = "ParkingSpot"
                 let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: Identifier) ?? MKAnnotationView(annotation: annotation, reuseIdentifier: Identifier)
 
                 annotationView.canShowCallout = true // Show Title and subtitle if the user taps on the annotation
                 
-                // MARK: Parking Symbol
                 let PARKING_SYMBOL_SIZE = 25 // Size for Parking Symbol
                 let PARKING_SYMBOL_COLOR = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0) // Black shows up better on hybrid background
                 let parkingSymbolImage = UIImage(systemName: theMap_ViewModel.getParkingLocationImageName())!.withTintColor(PARKING_SYMBOL_COLOR) // wdhx
@@ -413,17 +413,16 @@ struct MapView: UIViewRepresentable {
         
         // One of its annotation views was selected.
         func mapView(_ mapView: MKMapView, didSelect: MKAnnotationView) {
-            MyLog.debug("Called17: 'func mapView(_ mapView: MKMapView, didSelect: MKAnnotationView)'")
+            let theAnnotationTitle = didSelect.annotation?.title ?? "No Title" // Default the optional value to 'No Title' in case it's nil
+            MyLog.debug("Called17: ** Annotation View Selected ** '\(theAnnotationTitle!)'")
         }
 
         // One of its annotation views was deselected.
         func mapView(_ mapView: MKMapView, didDeselect: MKAnnotationView) {
-            MyLog.debug("Called18: 'func mapView(_ mapView: MKMapView, didDeselect: MKAnnotationView)'")
+            MyLog.debug("Called18: ** Annotation View DE-Selected **")
         }
 
-        // MARK: Optional - Managing the Display of Overlays
-        
-        
+        // Optional - Managing the Display of Overlays
         // Tells the delegate that one or more renderer objects were added to the map.
         func mapView(_ mapView: MKMapView, didAdd: [MKOverlayRenderer]) {
             MyLog.debug("Called19: 'func mapView(MKMapView, didAdd: [MKOverlayRenderer])'")

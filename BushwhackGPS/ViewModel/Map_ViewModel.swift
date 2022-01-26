@@ -241,13 +241,6 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         mLocationManager?.requestLocation()
     }
     
-    func addTestDot() { // wdhx
-        if let loc = mLocationManager?.location {
-            DotEntity.createDotEntity(lat: loc.coordinate.latitude, lon: loc.coordinate.longitude, speed: 0, course: -1)
-        } else {
-            MyLog.debug("addTestDot failed to add dot because mLocationManager was nil")
-        }
-    }
         
     func requestReview() {
         if AppSettingsEntity.getAppSettingsEntity().usageCount > AppSettingsEntity.REVIEW_THRESHOLD {

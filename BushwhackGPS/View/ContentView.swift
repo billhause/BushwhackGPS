@@ -63,9 +63,6 @@ struct ContentView: View {
 //                        print("Hybrid Picker Called \(value)")
                     }
                     
-                    Button(action: addTestDot) {
-                        Text("Add Test Dot")
-                    }
                     
                     Button(action: orientMap) {
                         // TODO: Fix the AttributeCycle run-time warning when clicking the orient button.  This doesn't happen in CarFinder
@@ -87,10 +84,6 @@ struct ContentView: View {
         } // NavigationView
     }
 
-    private func addTestDot() {
-        MyLog.debug("addTestDot() called")
-        theMap_ViewModel.addTestDot()
-    }
     
     private func orientMap() {
         withAnimation {
