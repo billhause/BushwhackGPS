@@ -59,6 +59,10 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         mLocationManager = CLLocationManager()
         super.init() // Call the NSObject init - Must be after member vars are initialized and before 'self' is referenced
         
+        if mLocationManager == nil {
+            MyLog.debug("ERROR mLocationManager is nil in Map_ViewModel.init()")
+        }
+        
 //        mLocationManager?.requestWhenInUseAuthorization()
         mLocationManager?.requestAlwaysAuthorization() // Request permission even when the app is not in use
         mLocationManager?.delegate = self
@@ -69,7 +73,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         
         // Apps that want to receive location updates when suspended must include the UIBackgroundModes key (with the location value) in their app’s Info.plist
 
-        // To Receive Backgroun Locadtion Updates...
+        // To Receive Backgroun Location Updates...
         // NOTE: MUST CHECK THE XCODE App Setting box for 'Location Updates' in the 'Background Modes' section under the 'Signing and Capabilities' tab
         mLocationManager?.allowsBackgroundLocationUpdates = true //MUST CHECK THE XCODE App Setting box for 'Location Updates' in the 'Background Modes' section under the 'Signing and Capabilities' tab
         

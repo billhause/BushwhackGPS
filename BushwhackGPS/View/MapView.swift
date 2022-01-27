@@ -125,6 +125,7 @@ struct MapView: UIViewRepresentable {
         // ADD NEW DOT ANNOTATION if there is one
         if let newDotAnnotation = theMap_ViewModel.getNewAnnotation() {
             // If we got in here, then there's a new annotation to add
+            MyLog.debug("Adding new dot annotation")
             theMapView.addAnnotation(newDotAnnotation)
         }
         

@@ -509,9 +509,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BushwhackGPS/Info.plist;
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This app needs to know where you are in order to log the path that you've taken";
-				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "This app needs to know where you are to log where you've been";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app needs to know where you are in order to log the path that you've taken";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This app needs to know where you are in order to save the path that you've taken";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app needs to know where you are in order to save the path that you've taken";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -542,9 +541,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BushwhackGPS/Info.plist;
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This app needs to know where you are in order to log the path that you've taken";
-				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "This app needs to know where you are to log where you've been";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app needs to know where you are in order to log the path that you've taken";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This app needs to know where you are in order to save the path that you've taken";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app needs to know where you are in order to save the path that you've taken";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
