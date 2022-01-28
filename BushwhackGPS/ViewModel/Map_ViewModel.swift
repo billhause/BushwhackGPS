@@ -56,26 +56,42 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     override init() {
 
         // Initialize the LocationManager - https://stackoverflow.com/questions/60356182/how-to-invoke-a-method-in-a-view-in-swiftui
+        // Good Article on Location Manager Settings and fields etc: https://itnext.io/swift-ios-cllocationmanager-all-in-one-b786ffd37e4a
+        
+        
         mLocationManager = CLLocationManager()
         super.init() // Call the NSObject init - Must be after member vars are initialized and before 'self' is referenced
         
         if mLocationManager == nil {
             MyLog.debug("ERROR mLocationManager is nil in Map_ViewModel.init()")
+        } else {
+            MyLog.debug("NO ERROR mLocationManager is NOT nil in Map_ViewModel.init()")
         }
-        
-//        mLocationManager?.requestWhenInUseAuthorization()
-        mLocationManager?.requestAlwaysAuthorization() // Request permission even when the app is not in use
-        mLocationManager?.delegate = self
-        
-        // Save battery by not enabling the UpdateLocation and UpdateHeading??? Not sure
-        mLocationManager?.startUpdatingLocation() // Will call the delegate's didUpdateLocations function when locaiton changes
-        mLocationManager?.startUpdatingHeading() // Will call the delegates didUpdateHeading function when heading changes
         
         // Apps that want to receive location updates when suspended must include the UIBackgroundModes key (with the location value) in their app’s Info.plist
 
         // To Receive Backgroun Location Updates...
         // NOTE: MUST CHECK THE XCODE App Setting box for 'Location Updates' in the 'Background Modes' section under the 'Signing and Capabilities' tab
+
+        // TODO: wdhx try experamenting with 'significantLocationUpdate' setting to get updates every 5 minues or so
+        // a comment said 'you're not handling the location key properly https://developer.apple.com/forums/thread/69152
+        // There is an indication that requestLocation stops the location service once the request has been fulfilled https://developer.apple.com/library/content/documentation/Performance/Conceptual/EnergyGuide-iOS/LocationBestPractices.html
+        // Try setting the CLLocationManager ActivityType to fitness vs automotiveNavigation.  This is used by iOS to pause locaiton updates in the background state to conserve power
+        
+//        mLocationManager?.requestWhenInUseAuthorization()
+        mLocationManager?.requestAlwaysAuthorization() // Request permission even when the app is not in use
+        mLocationManager?.delegate = self
+        
+        mLocationManager?.desiredAccuracy = kCLLocationAccuracyBest
+        MyLog.debug("Before: mLocationManager?.distanceFilter = \(mLocationManager?.distanceFilter)")
+        mLocationManager?.distanceFilter = 10 // Meters - Won't get a new point unless you move at least 10 meters
+        MyLog.debug("After: mLocationManager?.distanceFilter = \(mLocationManager?.distanceFilter)")
+
         mLocationManager?.allowsBackgroundLocationUpdates = true //MUST CHECK THE XCODE App Setting box for 'Location Updates' in the 'Background Modes' section under the 'Signing and Capabilities' tab
+        mLocationManager?.startUpdatingLocation() // Will call the delegate's didUpdateLocations function when locaiton changes
+//        mLocationManager?.startMonitoringSignificantLocationChanges() // only updates every 5 minutes for 500 meter or more change
+        mLocationManager?.startUpdatingHeading() // Will call the delegates didUpdateHeading function when heading changes
+
         
     }
 
@@ -175,6 +191,9 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         let course = currentLocation.course
 
         // === ADD MAP DOT ===
+        
+// TODO:         Add code here to check for minimum didstance and time change before adding another dot.  See code from MapDots MapViewController line 290
+        
         DotEntity.createDotEntity(lat: lat, lon: lon, speed: speed, course: course)
         let dotAnnotation = MKDotAnnotation(coordinate: currentLocation.coordinate)
         // Since we can't add the annotation directly to the MapView, we must add it to
