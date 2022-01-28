@@ -92,7 +92,7 @@ struct MapView: UIViewRepresentable {
     // This gets called when ever the Model changes or published variables in the ViewModel
     // Required by UIViewRepresentable protocol
     func updateUIView(_ mapView: MKMapView, context: Context) {
-        MyLog.debug("MapView.updateUIView() called - MapModel changed")
+//        MyLog.debug("MapView.updateUIView() called - MapModel changed")
         let theMapView = mapView
         var bShouldSizeAndCenter = theMap_ViewModel.isSizingAndCenteringNeeded()
         
@@ -123,9 +123,9 @@ struct MapView: UIViewRepresentable {
         }
 
         // ADD NEW DOT ANNOTATION if there is one
-        if let newDotAnnotation = theMap_ViewModel.getNewAnnotation() {
+        if let newDotAnnotation = theMap_ViewModel.getNewDotAnnotation() {
             // If we got in here, then there's a new annotation to add
-            MyLog.debug("Adding new dot annotation")
+            MyLog.debug("Adding new dot annotation \(newDotAnnotation.id)")
             theMapView.addAnnotation(newDotAnnotation)
         }
         

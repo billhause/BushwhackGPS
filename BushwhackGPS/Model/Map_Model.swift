@@ -19,7 +19,7 @@ struct Map_Model {
     var orientMapFlag = false  // This flag signals the map to orient it'self maybe it should be in the ViewModel instead
     var updateParkingSpotFlag = false // Set flag to true if the parking spot should be updated
         
-    var newMKAnotation: MKAnnotation? // a new MKAnnotation that is waiting to be added to the mapView. Could be nil
+    var newMKDotAnnotation: MKDotAnnotation? // a new MKDotAnnotation that is waiting to be added to the mapView. Could be nil
     
 //    var currentLocation = CLLocationCoordinate2D(latitude: CLLocationDegrees(40.0), longitude: CLLocationDegrees(-105.0))
     // The parking location is stored in CoreData ParkingSpotEntity
