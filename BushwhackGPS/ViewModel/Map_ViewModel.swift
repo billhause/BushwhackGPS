@@ -83,14 +83,16 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         mLocationManager?.delegate = self
         
         mLocationManager?.desiredAccuracy = kCLLocationAccuracyBest
-// TODO: Uncomment the next line
+// TODO: Uncomment the next line - Must also Change parking spot update to request the current location or temporarily set distanceFilter to none and then change it back after the spot updates
 //        mLocationManager?.distanceFilter = 10 // Meters - Won't get a new point unless you move at least 10 meters
 
         mLocationManager?.allowsBackgroundLocationUpdates = true //MUST CHECK THE XCODE App Setting box for 'Location Updates' in the 'Background Modes' section under the 'Signing and Capabilities' tab
+        mLocationManager?.pausesLocationUpdatesAutomatically = false // Avoid pausing when in background or suspended
+        mLocationManager?.activityType = .fitness // or .automotiveNavigation
         mLocationManager?.startUpdatingLocation() // Will call the delegate's didUpdateLocations function when locaiton changes
 //        mLocationManager?.startMonitoringSignificantLocationChanges() // only updates every 5 minutes for 500 meter or more change
         mLocationManager?.startUpdatingHeading() // Will call the delegates didUpdateHeading function when heading changes
-
+        
         
     }
 
@@ -209,6 +211,9 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         // the MapModel which will trigger a map update where
         // the annotation will be added to the map as an AnnotationView
         theMapModel.newMKDotAnnotation = dotAnnotation // Update the MapModel with the new annotation to be added to the map
+        
+        
+        MyLog.debug("mLocationManager?.pausesLocationUpdatesAutomatically: \(mLocationManager?.pausesLocationUpdatesAutomatically)")
         
         // The Map_ViewModel must keep track if there is a new annotation to add to the map since the MapView doesn't know what change to the data model triggered the update
         mNewDotAnnotationWaiting = true

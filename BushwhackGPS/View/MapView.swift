@@ -126,6 +126,7 @@ struct MapView: UIViewRepresentable {
         if let newDotAnnotation = theMap_ViewModel.getNewDotAnnotation() {
             // If we got in here, then there's a new annotation to add
             MyLog.debug("Adding new dot annotation \(newDotAnnotation.id)")
+//            Haptic.shared.impact(style: .medium)
             theMapView.addAnnotation(newDotAnnotation)
         }
         
