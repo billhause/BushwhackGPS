@@ -58,6 +58,8 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         // Initialize the LocationManager - https://stackoverflow.com/questions/60356182/how-to-invoke-a-method-in-a-view-in-swiftui
         // Good Article on Location Manager Settings and fields etc: https://itnext.io/swift-ios-cllocationmanager-all-in-one-b786ffd37e4a
         
+        MyLog.debug("isIdelTimerDisabled = \(UIApplication.shared.isIdleTimerDisabled)")
+//        UIApplication.shared.isIdleTimerDisabled = true // wdhx to prevent suspension after being put in the background
         
         mLocationManager = CLLocationManager()
         super.init() // Call the NSObject init - Must be after member vars are initialized and before 'self' is referenced
@@ -80,16 +82,18 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         
 //        mLocationManager?.requestWhenInUseAuthorization()
         mLocationManager?.requestAlwaysAuthorization() // Request permission even when the app is not in use
+        mLocationManager?.startUpdatingLocation() // Will call the delegate's didUpdateLocations function when locaiton changes
         mLocationManager?.delegate = self
-        
+        mLocationManager?.allowsBackgroundLocationUpdates = true //MUST CHECK THE XCODE App Setting box for 'Location Updates' in the 'Background Modes' section under the 'Signing and Capabilities' tab
+
         mLocationManager?.desiredAccuracy = kCLLocationAccuracyBest
 // TODO: Uncomment the next line - Must also Change parking spot update to request the current location or temporarily set distanceFilter to none and then change it back after the spot updates
 //        mLocationManager?.distanceFilter = 10 // Meters - Won't get a new point unless you move at least 10 meters
-
-        mLocationManager?.allowsBackgroundLocationUpdates = true //MUST CHECK THE XCODE App Setting box for 'Location Updates' in the 'Background Modes' section under the 'Signing and Capabilities' tab
+//        mLocationManager?.headingFilter = 20 // degrees before an update is sent
         mLocationManager?.pausesLocationUpdatesAutomatically = false // Avoid pausing when in background or suspended
-        mLocationManager?.activityType = .fitness // or .automotiveNavigation
-        mLocationManager?.startUpdatingLocation() // Will call the delegate's didUpdateLocations function when locaiton changes
+        mLocationManager?.activityType = .automotiveNavigation // will disable when indoors
+        // mLocationManager?.activityType = .otherNavigation // non-automotive vehicle
+        // mLocationManager?.activityType = .fitness // will disable when indoors
 //        mLocationManager?.startMonitoringSignificantLocationChanges() // only updates every 5 minutes for 500 meter or more change
         mLocationManager?.startUpdatingHeading() // Will call the delegates didUpdateHeading function when heading changes
         
@@ -193,7 +197,8 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     // REQUIRED - Called EVERY TIME the location data is updated
     // The MOST RECENT location is the last one in the array
     func locationManager(_ locationManager: CLLocationManager, didUpdateLocations: [CLLocation]) {
-        
+        MyLog.debug("--- locationManager Update Location wdh ---")
+
         let currentLocation = didUpdateLocations.last!
         let lat = currentLocation.coordinate.latitude
         let lon = currentLocation.coordinate.longitude
@@ -205,21 +210,17 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         
         // === ADD MAP DOT ===
                 
-        var newDotEntity = DotEntity.createDotEntity(lat: lat, lon: lon, speed: speed, course: course) // save to DB
+        let newDotEntity = DotEntity.createDotEntity(lat: lat, lon: lon, speed: speed, course: course) // save to DB
         let dotAnnotation = MKDotAnnotation(coordinate: currentLocation.coordinate, id: newDotEntity.id)
         // Since we can't add the annotation directly to the MapView, we must add it to
         // the MapModel which will trigger a map update where
         // the annotation will be added to the map as an AnnotationView
         theMapModel.newMKDotAnnotation = dotAnnotation // Update the MapModel with the new annotation to be added to the map
         
-        
-        MyLog.debug("mLocationManager?.pausesLocationUpdatesAutomatically: \(mLocationManager?.pausesLocationUpdatesAutomatically)")
-        
         // The Map_ViewModel must keep track if there is a new annotation to add to the map since the MapView doesn't know what change to the data model triggered the update
         mNewDotAnnotationWaiting = true
         
         // === PARKING SPOT ===  Update the parking spot location if it's been moved
-        // TODO: Add the Parkingspot to the map model newMKAnnotations list to add it to the map like we do for the Map Dot's above
         if theMapModel.updateParkingSpotFlag == true {
             // Update the parking spot location and set the flag back to false
             theMapModel.updateParkingSpotFlag = false
@@ -270,26 +271,36 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         MyLog.debug("Map_ViewModel.LocaitonManager didUpdateHeading: \(didUpdateHeading)")
         theMapModel.currentHeading = didUpdateHeading.trueHeading
     }
-//
-//    // Tells the delegate when the app creates the location manager and when the authorization status changes.
-//    func locationManagerDidChangeAuthorization(_ locationManager: CLLocationManager) {}
-//
-//
-//    // Tells the delegate that updates will no longer be deferred.
-//    func locationManager(_ locationManager: CLLocationManager, didFinishDeferredUpdatesWithError: Error?) {}
-//
-//    // Tells the delegate that location updates were paused.
-//    func locationManagerDidPauseLocationUpdates(_ locationManager: CLLocationManager) {}
-//
-//    // Tells the delegate that the delivery of location updates has resumed.
-//    func locationManagerDidResumeLocationUpdates(_ locationManager: CLLocationManager) {}
-//
-//
-//    // Asks the delegate whether the heading calibration alert should be displayed.
-//    //func locationManagerShouldDisplayHeadingCalibration(_ locationManager: CLLocationManager) -> Bool {}
-//
-//    NOTE: There are OTHER CALLBACKs not listed above
-    
+
+    // Tells the delegate when the app creates the location manager and when the authorization status changes.
+    func locationManagerDidChangeAuthorization(_ locationManager: CLLocationManager) {
+        MyLog.debug("** wdh location manager authorization changed")
+    }
+
+
+    // Tells the delegate that updates will no longer be deferred.
+    func locationManager(_ locationManager: CLLocationManager, didFinishDeferredUpdatesWithError: Error?) {
+        MyLog.debug("** wdh UNEXPECTED location manager updates will no longer be deferred")
+    }
+
+    // Tells the delegate that location updates were paused.
+    func locationManagerDidPauseLocationUpdates(_ locationManager: CLLocationManager) {
+        // We don't want to pause in the background so if this is ever turned off, turn it back on
+        mLocationManager?.startUpdatingLocation() // wdhx
+        MyLog.debug("*** wdh UNEXPECTED Location Manager Paused so I restarted it")
+    }
+
+
+    // Tells the delegate that the delivery of location updates has resumed.
+    func locationManagerDidResumeLocationUpdates(_ locationManager: CLLocationManager) {
+        MyLog.debug("*** wdh UNEXPECTED Location Manager Did Resume Location Updates")
+    }
+
+
+    // Asks the delegate whether the heading calibration alert should be displayed.
+    //func locationManagerShouldDisplayHeadingCalibration(_ locationManager: CLLocationManager) -> Bool {}
+
+    // NOTE: There are OTHER CALLBACKs not listed above
     
     
     // MARK: Intent Functions

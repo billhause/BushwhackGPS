@@ -18,8 +18,8 @@
 // TO VIEW THE LOG FILE saved on your phone DO THE FOLLOWING
 // - In XCode select window->devices and simulators
 // - select your device
-// - click on your app (displayed in the 'installed apps' section
-// - click the gear icon and select 'download container' and save it
+// - click on your app's name (displayed in the 'installed apps' section)
+// - click the elipsis or gear icon and select 'download container' and save it
 // - RIGHT click on the file and select 'Show Package Contents'
 // - Drill down "AppData->Documents->log.txt" and open the file
 //
@@ -30,7 +30,7 @@ import Foundation
 
 class MyLog {
     static private let NO_LOG = false // Set to true to remove ALL logging via optimizing compiler
-    static private let FILE_LOGGING_ENABLED = false // Hard code to True or False to turn on/off
+    static private let FILE_LOGGING_ENABLED = true // Hard code to True or False to turn on/off
     
     static private var disabledFlag = false // This is changed programatically to turn logging on/off
     static private var textLog = TextLog() // File Logger - Only call this once per app execution
@@ -50,7 +50,13 @@ class MyLog {
         let outPut = "\(message) \(fileName) Line:\(lineNum)"
         print(outPut) // write to stdio
         if FILE_LOGGING_ENABLED {
-            textLog.write("\(outPut)\n") // write to file
+            // Prepend a timestamp when writing a line to a file
+            let timestamp = Date()
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateStyle = .short
+            dateFormatter.timeStyle = .medium
+            let timeStampString = dateFormatter.string(from: timestamp)
+            textLog.write("\(timeStampString): \(outPut)\n") // write to file
         }
     }
     
@@ -120,3 +126,6 @@ struct TextLog: TextOutputStream {
         }
     }
 }
+
+
+

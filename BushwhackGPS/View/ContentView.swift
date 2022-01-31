@@ -79,7 +79,11 @@ struct ContentView: View {
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
                 theMap_ViewModel.orientMap() // Re-orient map when app moves back to the foreground
                 AppSettingsEntity.getAppSettingsEntity().incrementUsageCount() // Count usage to know when to display the request for a review
-                MyLog.debug("Moved back to foreground wdh")
+                MyLog.debug("** App Moved back to foreground wdh")
+            }
+            // Detect moving to background
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
+                MyLog.debug("** App Moved to Background wdh")
             }
         } // NavigationView
     }

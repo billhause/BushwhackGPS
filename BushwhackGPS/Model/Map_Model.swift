@@ -12,6 +12,7 @@ import MapKit
 
 // MARK: Model
 struct Map_Model {
+    var dummyTrigger = 1 // Dummy var so we can trigger a view update if desired
     var currentHeading = 0.0
     var isHybrid = false       // Track if the hybrid map or the standard map is displayed
     var keepMapCentered = true // Will set to false if the user starts manipulating the map manually
