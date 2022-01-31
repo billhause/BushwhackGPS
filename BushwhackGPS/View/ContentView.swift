@@ -16,7 +16,6 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             VStack {
-                
                 MapView(theMap_ViewModel: theMap_ViewModel)
                 
                 // vvvvvvv ALERT MESSAGE vvvvvvvvv

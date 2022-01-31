@@ -12,6 +12,12 @@ import CoreLocation
 import StoreKit
 import Network
 
+// MARK: Constants
+let THRESHOLD_DISTANCE = 10.0 // Minimum Number of meteres that you must move to get a new dot added to the map
+let THRESHOLD_TIME_PERIOD = 10.0 // // Minimum Number of seconds that must pass to get a new dot added to the map
+// TODO: Create a TIME_FILTER_VALUE that must elapse between point updates
+
+
 class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     // This class
     //   1 - provides data to the view in a way the view can easily consume it
@@ -23,6 +29,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     @Published public var theParkingSpotDistance = 123
     
     private var mLocationManager: CLLocationManager?
+    private var mLastDotTimeStamp: Double = 0.0 // The Last Dot's timestamp since jan 1 1970 that the last dot was created
 
     // Flags to communicate with the mapView since the MapView never knows what data model change triggere an update
     private var mStillNeedToOrientMap = true // Set to true when the map needs to be oriented
@@ -50,7 +57,17 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         }
     }
 
-
+    @objc func appMovedToBackground() {
+        MyLog.debug("** appMovedToBackground() called in Map_ViewModel")
+        mLocationManager?.stopUpdatingHeading() // Must reduce background processing to avoid app suspension
+        // mLocationManager?.distanceFilter = DISTANCE_FILTER_VALUE // Meters - Won't get a new point unless you move at least 10 meters
+    }
+    
+    @objc func appMovingToForeground() {
+        MyLog.debug("** appMovingToForeground() called in Map_ViewModel")
+        mLocationManager?.startUpdatingHeading() // Will call the delegates didUpdateHeading function when heading changes
+        // mLocationManager?.distanceFilter = kCLDistanceFilterNone
+    }
     
     // MARK: Init Functions
     override init() {
@@ -59,10 +76,11 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         // Good Article on Location Manager Settings and fields etc: https://itnext.io/swift-ios-cllocationmanager-all-in-one-b786ffd37e4a
         
         MyLog.debug("isIdelTimerDisabled = \(UIApplication.shared.isIdleTimerDisabled)")
-//        UIApplication.shared.isIdleTimerDisabled = true // wdhx to prevent suspension after being put in the background
+        UIApplication.shared.isIdleTimerDisabled = true // wdhx to prevent suspension after being put in the background
         
         mLocationManager = CLLocationManager()
         super.init() // Call the NSObject init - Must be after member vars are initialized and before 'self' is referenced
+
         
         if mLocationManager == nil {
             MyLog.debug("ERROR mLocationManager is nil in Map_ViewModel.init()")
@@ -88,15 +106,25 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
 
         mLocationManager?.desiredAccuracy = kCLLocationAccuracyBest
 // TODO: Uncomment the next line - Must also Change parking spot update to request the current location or temporarily set distanceFilter to none and then change it back after the spot updates
-//        mLocationManager?.distanceFilter = 10 // Meters - Won't get a new point unless you move at least 10 meters
-//        mLocationManager?.headingFilter = 20 // degrees before an update is sent
+        mLocationManager?.distanceFilter = THRESHOLD_DISTANCE // Meters - Won't get a new point unless you move at least 10 meters
         mLocationManager?.pausesLocationUpdatesAutomatically = false // Avoid pausing when in background or suspended
-        mLocationManager?.activityType = .automotiveNavigation // will disable when indoors
-        // mLocationManager?.activityType = .otherNavigation // non-automotive vehicle
+        // mLocationManager?.activityType = .automotiveNavigation // will disable when indoors
+        mLocationManager?.activityType = .otherNavigation // non-automotive vehicle
         // mLocationManager?.activityType = .fitness // will disable when indoors
 //        mLocationManager?.startMonitoringSignificantLocationChanges() // only updates every 5 minutes for 500 meter or more change
         mLocationManager?.startUpdatingHeading() // Will call the delegates didUpdateHeading function when heading changes
         
+        
+        // Register to receive notification when the app goes into the background or moves back to foreground
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self,
+                                       selector: #selector(appMovedToBackground),
+                                       name: UIApplication.willResignActiveNotification,
+                                       object: nil)
+        notificationCenter.addObserver(self,
+                                       selector: #selector(appMovingToForeground),
+                                       name: UIApplication.willEnterForegroundNotification,
+                                       object: nil)
         
     }
 
@@ -109,22 +137,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return mStillNeedToOrientMap
     }
     
-    
-    // TODO: put this back after debugging why updates stop when sleeping wdhx
-//    func getLastKnownLocation() -> CLLocationCoordinate2D {
-//        // Get current location.  IF none, then use the parking spot location as the current location
-//        let parkingLocation = getParkingSpotLocation() // Defalt to parking spot location if we don't have a last known location
-//        var lastKnownLocation = parkingLocation
-//
-//        if (mLocationManager != nil) {
-//            let tmpLoc = mLocationManager!.location // CLLocation - Center Point
-//            if tmpLoc != nil {
-//                lastKnownLocation = CLLocationCoordinate2D(latitude: (tmpLoc!.coordinate.latitude), longitude: (tmpLoc!.coordinate.longitude))
-//            }
-//        }
-//        return lastKnownLocation
-//    }
-    
+        
     private var mLastKnownLocation: CLLocationCoordinate2D?
     func getLastKnownLocation() -> CLLocationCoordinate2D {
         // Get current location.  IF none, then use the parking spot location as the current location
@@ -209,16 +222,19 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         mLastKnownLocation = currentLocation.coordinate
         
         // === ADD MAP DOT ===
-                
-        let newDotEntity = DotEntity.createDotEntity(lat: lat, lon: lon, speed: speed, course: course) // save to DB
-        let dotAnnotation = MKDotAnnotation(coordinate: currentLocation.coordinate, id: newDotEntity.id)
-        // Since we can't add the annotation directly to the MapView, we must add it to
-        // the MapModel which will trigger a map update where
-        // the annotation will be added to the map as an AnnotationView
-        theMapModel.newMKDotAnnotation = dotAnnotation // Update the MapModel with the new annotation to be added to the map
-        
-        // The Map_ViewModel must keep track if there is a new annotation to add to the map since the MapView doesn't know what change to the data model triggered the update
-        mNewDotAnnotationWaiting = true
+        let deltaTime = NSDate().timeIntervalSince1970 - mLastDotTimeStamp // mCurrentWayPoint.timeStamp
+        if(deltaTime > THRESHOLD_TIME_PERIOD) {
+            let newDotEntity = DotEntity.createDotEntity(lat: lat, lon: lon, speed: speed, course: course) // save to DB
+            let dotAnnotation = MKDotAnnotation(coordinate: currentLocation.coordinate, id: newDotEntity.id)
+            // Since we can't add the annotation directly to the MapView, we must add it to
+            // the MapModel which will trigger a map update where
+            // the annotation will be added to the map as an AnnotationView
+            theMapModel.newMKDotAnnotation = dotAnnotation // Update the MapModel with the new annotation to be added to the map
+            
+            // The Map_ViewModel must keep track if there is a new annotation to add to the map since the MapView doesn't know what change to the data model triggered the update
+            mNewDotAnnotationWaiting = true
+            mLastDotTimeStamp = Date().timeIntervalSince1970
+        }
         
         // === PARKING SPOT ===  Update the parking spot location if it's been moved
         if theMapModel.updateParkingSpotFlag == true {
@@ -305,7 +321,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     
     // MARK: Intent Functions
     
-    
+        
     func orientMap() {
         orientMapFlag = true // Trigger map update
         mStillNeedToOrientMap = true // True until the map tells us it's been oriented using the mapHasBeenOriented() intent func
@@ -392,6 +408,7 @@ class MKDotAnnotation: NSObject, MKAnnotation {
     var title: String? = "Dot Annotation"
     var subtitle: String? = ""
     var id: Int64
+//    var timestamp: Date
     init(coordinate: CLLocationCoordinate2D, id: Int64) {
         self.coordinate = coordinate
         self.id = id

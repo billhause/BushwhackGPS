@@ -45,6 +45,8 @@ extension ID_GeneratorEntity: Comparable {
     }
     
     // MARK: Intents
+    
+    // Get the Next ID and increment it
     public static func getNextID() -> Int64 {
         // Return the next ID and increment. Then save next value in core data
         let context = PersistenceController.shared.container.viewContext
@@ -60,6 +62,13 @@ extension ID_GeneratorEntity: Comparable {
             let nsError = error as NSError
             fatalError("Unresolved error saving ID_GeneratorEntity: \(nsError), \(nsError.userInfo)")
         }
+        return theNextID
+    }
+    
+    // Show the next ID WITHOUT incrementing it
+    public static func peekNextID() -> Int64 {
+        let theIDGenerator = getID_GeneratorEntity()
+        let theNextID = theIDGenerator.nextIDToReturn
         return theNextID
     }
     
