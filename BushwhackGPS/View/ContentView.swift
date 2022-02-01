@@ -64,7 +64,6 @@ struct ContentView: View {
                     
                     
                     Button(action: orientMap) {
-                        // TODO: Fix the AttributeCycle run-time warning when clicking the orient button.  This doesn't happen in CarFinder
                         let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
                         let imageString = theMap_ViewModel.getOrientMapImageName()
                         Label("Follow", systemImage: imageString)
@@ -87,7 +86,7 @@ struct ContentView: View {
         } // NavigationView
     }
 
-    
+    // Called when the Orient Map button is touched
     private func orientMap() {
         withAnimation {
             Haptic.shared.impact(style: .heavy)

@@ -94,13 +94,21 @@ struct MapView: UIViewRepresentable {
     func updateUIView(_ mapView: MKMapView, context: Context) {
 //        MyLog.debug("MapView.updateUIView() called - MapModel changed")
         let theMapView = mapView
-        var bShouldSizeAndCenter = theMap_ViewModel.isSizingAndCenteringNeeded()
+        var bShouldCenterAndFollow = theMap_ViewModel.isSizingAndCenteringNeeded()
         
         // Set Hybrid/Standard mode if it changed
         if (theMapView.mapType != .hybrid) && theMap_ViewModel.isHybrid {
             theMapView.mapType = .hybrid
         } else if (theMapView.mapType == .hybrid) && !theMap_ViewModel.isHybrid {
             theMapView.mapType = .standard
+        }
+        
+        // ADD NEW DOT ANNOTATION if there is one
+        if let newDotAnnotation = theMap_ViewModel.getNewDotAnnotation() {
+            // If we got in here, then there's a new annotation to add
+            MyLog.debug("Adding new dot annotation \(newDotAnnotation.id)")
+//            Haptic.shared.impact(style: .medium)
+            theMapView.addAnnotation(newDotAnnotation)
         }
         
         
@@ -118,30 +126,25 @@ struct MapView: UIViewRepresentable {
             // Now add the parking spot annotation in it's new location
             theMapView.addAnnotations([theMap_ViewModel.getParkingSpotAnnotation()])
             
-            // Now orient the map for the new parking spot location
-            bShouldSizeAndCenter = true // set flag that will Size and Center the map a few lines down from here
+            // Set the bounding rect size to show the current location and the parking spot
+            theMapView.setRegion(theMap_ViewModel.getBoundingMKCoordinateRegion(), animated: false) // If animated, this gets overwritten when heading is set
+
+            // set flag to center the map and follow the user wdhx
+            bShouldCenterAndFollow = true // set flag that will Size and Center the map a few lines down from here
         }
 
-        // ADD NEW DOT ANNOTATION if there is one
-        if let newDotAnnotation = theMap_ViewModel.getNewDotAnnotation() {
-            // If we got in here, then there's a new annotation to add
-            MyLog.debug("Adding new dot annotation \(newDotAnnotation.id)")
-//            Haptic.shared.impact(style: .medium)
-            theMapView.addAnnotation(newDotAnnotation)
-        }
-        
 
         // Size and Center the map Because the user hit the Orient Map Button
-        if bShouldSizeAndCenter { // The use has hit the orient map button or did something requireing the map to be re-oriented
+        if bShouldCenterAndFollow { // The use has hit the orient map button or did something requireing the map to be re-oriented
             
-            theMap_ViewModel.mapHasBeenResizedAndCentered()
+            theMap_ViewModel.mapHasBeenResizedAndCentered() // Let the ViewModel know the map has been sized and centered
             
-            theMap_ViewModel.startCenteringMap() // Switch to 'Centered Map Mode' to keep the map centered on the current location
+            theMap_ViewModel.turnOnFollowMode() // Switch to 'Centered Map Mode' to keep the map centered on the current location
             
-            // Set the bounding rect to show the current location and the parking spot
-            theMapView.setRegion(theMap_ViewModel.getBoundingMKCoordinateRegion(), animated: false) // If animated, this gets overwritten when heading is set
+
+            MyLog.debug("Center and Follow activated")
             
-            // Center the map on the current location
+            // Center the map now rather than wait for the next location update
             theMapView.setCenter(theMap_ViewModel.getLastKnownLocation(), animated: false) // If animated, this gets overwritten when heading is set
 
         }
@@ -303,7 +306,7 @@ struct MapView: UIViewRepresentable {
 //            MyLog.debug("Called10: 'func mapView(_ mapView: MKMapView, didUpdate: MKUserLocation)'")
             
             // Center the map on the current location
-            if theMap_ViewModel.shouldKeepMapCentered() { // Only do this if the user wants the map to stay centered
+            if theMap_ViewModel.shouldKeepMapCentered() { // Check if the user wants the map to stay centered
 //                mapView.setCenter(theMap_ViewModel.getLastKnownLocation(), animated: true)
                 mapView.setCenter(didUpdate.coordinate, animated: true)
             }

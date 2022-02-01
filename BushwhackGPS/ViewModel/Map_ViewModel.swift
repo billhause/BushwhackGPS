@@ -45,15 +45,15 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         }
     }
 
-    // Flag to signal to the map that the user wants the map re-centered and oriented in his direction
-    private var orientMapFlag: Bool {
-        get {
-            return theMapModel.orientMapFlag
-        }
-        set(orientFlag) {
-            theMapModel.orientMapFlag = orientFlag
-        }
-    }
+//    // Flag to signal to the map that the user wants the map re-centered and oriented in his direction
+//    private var orientMapFlag: Bool {
+//        get {
+//            return theMapModel.orientMapFlag
+//        }
+//        set(orientFlag) {
+//            theMapModel.orientMapFlag = orientFlag
+//        }
+//    }
 
     @objc func appMovedToBackground() {
         MyLog.debug("** appMovedToBackground() called in Map_ViewModel")
@@ -323,7 +323,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     
         
     func orientMap() {
-        orientMapFlag = true // Trigger map update
+        theMapModel.orientMapFlag = true // Change Data Model to Trigger map update wdhx
         mStillNeedToOrientMap = true // True until the map tells us it's been oriented using the mapHasBeenOriented() intent func
 //        AlertMessage.shared.Alert("Test Alert: Called from ViewModel orientMap()")
     }
@@ -362,15 +362,15 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     
     func stopCenteringMap() {
         // Call this when the user is manipulating the map by hand to stop the map from recentering
-        theMapModel.keepMapCentered = false
+        theMapModel.followMode = false
     }
-    func startCenteringMap() {
+    func turnOnFollowMode() {
         // Call this if the user wants the map to stay centered on the current location
-        theMapModel.keepMapCentered = true
+        theMapModel.followMode = true
     }
     func shouldKeepMapCentered() -> Bool {
         // This tells the caller if the map should be centered or not
-        return theMapModel.keepMapCentered
+        return theMapModel.followMode
     }
     
     
