@@ -15,8 +15,6 @@ import Network
 // MARK: Constants
 let THRESHOLD_DISTANCE = 10.0 // Minimum Number of meteres that you must move to get a new dot added to the map
 let THRESHOLD_TIME_PERIOD = 10.0 // // Minimum Number of seconds that must pass to get a new dot added to the map
-// TODO: Create a TIME_FILTER_VALUE that must elapse between point updates
-
 
 class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     // This class
@@ -105,7 +103,6 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         mLocationManager?.allowsBackgroundLocationUpdates = true //MUST CHECK THE XCODE App Setting box for 'Location Updates' in the 'Background Modes' section under the 'Signing and Capabilities' tab
 
         mLocationManager?.desiredAccuracy = kCLLocationAccuracyBest
-// TODO: Uncomment the next line - Must also Change parking spot update to request the current location or temporarily set distanceFilter to none and then change it back after the spot updates
         mLocationManager?.distanceFilter = THRESHOLD_DISTANCE // Meters - Won't get a new point unless you move at least 10 meters
         mLocationManager?.pausesLocationUpdatesAutomatically = false // Avoid pausing when in background or suspended
         // mLocationManager?.activityType = .automotiveNavigation // will disable when indoors
@@ -242,6 +239,9 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
             theMapModel.updateParkingSpotFlag = false
             ParkingSpotEntity.getParkingSpotEntity().updateLocation(lat: lat, lon: lon, andSave: true)
             
+            // Temporarily set the distaneFilter to none until the parking spot is updated
+            mLocationManager?.distanceFilter = THRESHOLD_DISTANCE
+            
             // Now that the parking spot has been updated, let the map know to move the marker
             parkingSpotMoved = true
         }
@@ -332,6 +332,9 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     func updateParkingSpot() {
         // Set the Flag to tell the callback to upate the parking spot location SEE: locationManager(didUpdateLocations:) in this same class
         theMapModel.updateParkingSpotFlag = true
+
+        // Temporarily set the distaneFilter to none until the parking spot is updated
+        mLocationManager?.distanceFilter = kCLDistanceFilterNone
         
         // Tell the location manager to upate the location and call the locationManager(didUpdateLocations:) function above.
         mLocationManager?.requestLocation()
@@ -344,6 +347,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
             let reachability = try? Reachability() // Return nil if throws an error
             if reachability?.connection == .wifi {
 //                MyLog.debug("Reachable via WiFi")
+                
                 if let windowScene = UIApplication.shared.windows.first?.windowScene {
                     SKStoreReviewController.requestReview(in: windowScene)
                 }
