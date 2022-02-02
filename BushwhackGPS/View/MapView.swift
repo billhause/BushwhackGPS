@@ -75,14 +75,25 @@ struct MapView: UIViewRepresentable {
 //        mapView.setUserTrackingMode(MKUserTrackingMode.followWithHeading, animated: true) // .followWithHeading, .follow, .none
 
         // Add the parking spot annotation to the map
-        MyLog.debug("Brefore add parking spot Annotation")
         mMapView.addAnnotations([theMap_ViewModel.getParkingSpotAnnotation()])
-        MyLog.debug("After add parking spot Annotation")
         theMap_ViewModel.orientMap() // zoom in on the current location and the parking location
         
         // Add the map dots to the map
         mMapView.addAnnotations(theMap_ViewModel.getDotAnnotations())
         
+        // == Set initial zoom level ==
+        // initial coords don't matter because it will move on current loation 
+        let coords = CLLocationCoordinate2D(latitude: 40.0, longitude: -104.0)
+
+        // set span (radius of points)
+        let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
+
+        // set region
+        let region = MKCoordinateRegion(center: coords, span: span)
+
+        // set the view
+        mMapView.setRegion(region, animated: true)
+    
         return mMapView
 
     }
