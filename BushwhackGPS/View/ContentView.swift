@@ -10,6 +10,7 @@ import CoreData
 
 struct ContentView: View {
     @ObservedObject var theMap_ViewModel: Map_ViewModel
+    @State var mDotArray = DotEntity.getAllDotEntities()
     @Environment(\.managedObjectContext) private var viewContext
     @StateObject var theAlert = AlertMessage.shared // @StateObject not @ObservedObject to avoid AttributeGraph cycle warnings
     
@@ -37,6 +38,7 @@ struct ContentView: View {
                 ToolbarItemGroup(placement: .automatic) { // Top Toolbar
                     HStack {
                         Text("Distance: \(theMap_ViewModel.theParkingSpotDistance) Feet")
+                        Text("Dot Count: \(DotEntity.getAllDotEntities().count)")
                         Spacer()
                         Button(action: updateParkingSpot) {
                             let theColor = UIColor(red: 0.0, green: 0.5, blue: 0.0, alpha: 1.0)
@@ -101,7 +103,8 @@ struct ContentView: View {
     private func orientMap() {
         withAnimation {
             Haptic.shared.impact(style: .heavy)
-            theMap_ViewModel.orientMap() // Call intent functionj
+            theMap_ViewModel.orientMap() // Call intent function
+            MyLog.debug("dot Count: \(mDotArray.count)")
         }
     }
 

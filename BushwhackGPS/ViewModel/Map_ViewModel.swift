@@ -228,16 +228,20 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         mLastKnownLocation = currentLocation.coordinate
         
         // === ADD MAP DOT ===
+        // Since we can't add the dot annotation directly to the MapView, we must add it to
+        // the MapModel which will trigger a map update where
+        // the annotation will be added to the map as an AnnotationView
         let deltaTime = NSDate().timeIntervalSince1970 - mLastDotTimeStamp // mCurrentWayPoint.timeStamp
         if(deltaTime > THRESHOLD_TIME_PERIOD) {
+            
+Add code to skip this dot if the location is within THRESHOLD_DISTANCE of any of the lat 10 dots.
+            
             let newDotEntity = DotEntity.createDotEntity(lat: lat, lon: lon, speed: speed, course: course) // save to DB
             let dotAnnotation = MKDotAnnotation(coordinate: currentLocation.coordinate, id: newDotEntity.id)
-            // Since we can't add the annotation directly to the MapView, we must add it to
-            // the MapModel which will trigger a map update where
-            // the annotation will be added to the map as an AnnotationView
             theMapModel.newMKDotAnnotation = dotAnnotation // Update the MapModel with the new annotation to be added to the map
             
-            // The Map_ViewModel must keep track if there is a new annotation to add to the map since the MapView doesn't know what change to the data model triggered the update
+            // The Map_ViewModel must keep track if there is a new annotation to add to
+            // the map since the MapView doesn't know what data change triggered the update
             mNewDotAnnotationWaiting = true
             mLastDotTimeStamp = Date().timeIntervalSince1970
         }
