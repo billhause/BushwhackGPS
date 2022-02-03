@@ -23,20 +23,20 @@ class BushwhackGPSTests: XCTestCase {
     //
     func testAppSettingsEntity() throws {
         let settings = AppSettingsEntity.getAppSettingsEntity()
-        settings.metric = true
+        settings.metricUnits = true
         settings.orientNorth = true
         settings.save()
         
         let settings2 = AppSettingsEntity.getAppSettingsEntity()
         XCTAssertEqual(settings2.orientNorth, true, "AppSettingsEntity.orientNorth should have been true")
-        XCTAssertEqual(settings2.metric, true, "AppSettingsEntity.metric should have been true")
+        XCTAssertEqual(settings2.metricUnits, true, "AppSettingsEntity.metric should have been true")
         
-        settings.metric = false
+        settings.metricUnits = false
         settings.orientNorth = false
         settings.save()
         
         XCTAssertEqual(settings2.orientNorth, false, "AppSettingsEntity.orientNorth should have been false")
-        XCTAssertEqual(settings2.metric, false, "AppSettingsEntity.metric should have been false")
+        XCTAssertEqual(settings2.metricUnits, false, "AppSettingsEntity.metric should have been false")
     }
     
     

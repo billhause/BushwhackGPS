@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21C52" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="AppSettingsEntity" representedClassName="AppSettingsEntity" syncable="YES" codeGenerationType="class">
-        <attribute name="metric" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="filterEndDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="filterStartDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="metricUnits" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="orientNorth" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="usageCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
@@ -25,10 +27,10 @@
         <attribute name="lon" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
     </entity>
     <elements>
-        <element name="AppSettingsEntity" positionX="-54" positionY="9" width="128" height="74"/>
+        <element name="AppSettingsEntity" positionX="-54" positionY="9" width="128" height="104"/>
+        <element name="DotEntity" positionX="-45" positionY="27" width="128" height="134"/>
         <element name="ID_GeneratorEntity" positionX="-63" positionY="-9" width="128" height="44"/>
         <element name="ItemDELETEME" positionX="-63" positionY="-18" width="128" height="44"/>
         <element name="ParkingSpotEntity" positionX="-54" positionY="9" width="128" height="59"/>
-        <element name="DotEntity" positionX="-45" positionY="27" width="128" height="134"/>
     </elements>
 </model>

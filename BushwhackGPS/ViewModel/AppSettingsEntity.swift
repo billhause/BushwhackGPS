@@ -31,7 +31,10 @@ extension AppSettingsEntity {
         } else {
             let theAppSettingsEntity = AppSettingsEntity(context: context)
             theAppSettingsEntity.orientNorth = false // default to orient in direction phone is pointing
-            theAppSettingsEntity.metric = false // default to English Units
+//            theAppSettingsEntity.metric = false // default to English Units
+            theAppSettingsEntity.metricUnits = false // default to English Units
+            theAppSettingsEntity.filterStartDate = nil
+            theAppSettingsEntity.filterEndDate = nil
             do {
                 try context.save()
             } catch {
@@ -53,11 +56,11 @@ extension AppSettingsEntity {
         }
     }
     
-    // Update the AppInfo usageCount and save it
-    public func updateUsageCount(theCount: Int32) {
-        usageCount = theCount
-        save()
-    }
+//    // Update the AppInfo usageCount and save it
+//    public func updateUsageCount(theCount: Int32) {
+//        usageCount = theCount
+//                save()
+//    }
     
     // Increment Usage Count
     public func incrementUsageCount() {
