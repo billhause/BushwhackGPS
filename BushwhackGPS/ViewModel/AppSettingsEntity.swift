@@ -31,7 +31,6 @@ extension AppSettingsEntity {
         } else {
             let theAppSettingsEntity = AppSettingsEntity(context: context)
             theAppSettingsEntity.orientNorth = false // default to orient in direction phone is pointing
-//            theAppSettingsEntity.metric = false // default to English Units
             theAppSettingsEntity.metricUnits = false // default to English Units
             theAppSettingsEntity.filterStartDate = nil
             theAppSettingsEntity.filterEndDate = nil
@@ -45,6 +44,14 @@ extension AppSettingsEntity {
         }
     }
     
+    public func getOrientNorth() -> Bool {
+        return orientNorth
+    }
+    
+    public func setOrientNorth(always: Bool) {
+        orientNorth = always
+        save()
+    }
     
     public func save() {
         let context = PersistenceController.shared.container.viewContext

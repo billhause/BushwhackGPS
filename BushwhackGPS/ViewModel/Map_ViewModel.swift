@@ -201,7 +201,16 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return "triangle" // default that is always there on all devices
     }
 
-    
+    // Sometimes the device will not have the first choice symbol so check first
+    // Return a default that is always present
+    func getCompassImageName() -> String {
+        // Check symbols in order of preference
+        if UIImage(systemName: "safari") != nil { return "safari" }
+        if UIImage(systemName: "location.north") != nil { return "location.north" }
+        if UIImage(systemName: "dot.arrowtriangles.up.right.down.left.circle") != nil { return "dot.arrowtriangles.up.right.down.left.circle" }
+        return "triangle" // default that is always there on all devices
+    }
+
     // MARK: Location Updates - Called every update
 
     // REQUIRED - Called EVERY TIME the location data is updated
@@ -368,6 +377,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         // Call this if the user wants the map to stay centered on the current location
         theMapModel.followMode = true
     }
+        
     func shouldKeepMapCentered() -> Bool {
         // This tells the caller if the map should be centered or not
         return theMapModel.followMode

@@ -66,13 +66,10 @@ struct MapView: UIViewRepresentable {
 //        mapView.showsBuildings = true
         mMapView.isRotateEnabled = false // Don't let the user manually rotate the map.
         mMapView.showsUserLocation = true // Start map showing the user as a blue dot
-        mMapView.showsCompass = false
+        mMapView.showsCompass = true
         mMapView.showsScale = true  // Show distance scale when zooming
         mMapView.showsTraffic = false
         mMapView.mapType = .standard // .hybrid or .standard - Start as standard
-
-        // Follow, center, and orient in direction of travel/heading
-//        mapView.setUserTrackingMode(MKUserTrackingMode.followWithHeading, animated: true) // .followWithHeading, .follow, .none
 
         // Add the parking spot annotation to the map
         mMapView.addAnnotations([theMap_ViewModel.getParkingSpotAnnotation()])

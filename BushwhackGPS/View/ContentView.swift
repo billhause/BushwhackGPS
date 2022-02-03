@@ -44,8 +44,9 @@ struct ContentView: View {
                             Label("Save Spot", systemImage: parkingImageName)
                                 .foregroundColor(Color(theColor))
                                 .padding() // Move the Parking symbol away from right border a little bit
-                        } .font(.system(size: 25.0))
-                            .labelStyle(HorizontalLabelStyle())
+                        }// .font(.system(size: 25.0))
+                            .labelStyle(VerticalLabelStyle())
+                        
                     }
                 }
 
@@ -62,14 +63,24 @@ struct ContentView: View {
 //                        print("Hybrid Picker Called \(value)")
                     }
                     
-                    
+                    Spacer()
+                    Button(action: toggleMapNorth) {
+                        let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
+                        let compassImageName = theMap_ViewModel.getCompassImageName()
+                        Label("Lock", systemImage: compassImageName)
+                            .foregroundColor(Color(theColor))
+                            .padding()
+                    }
+                        .labelStyle(VerticalLabelStyle())
+
                     Button(action: orientMap) {
                         let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
                         let imageString = theMap_ViewModel.getOrientMapImageName()
                         Label("Follow", systemImage: imageString)
                             .foregroundColor(Color(theColor))
                     } //.font(.largeTitle) .padding()
-                        .labelStyle(HorizontalLabelStyle())
+//                        .labelStyle(HorizontalLabelStyle())
+                        .labelStyle(VerticalLabelStyle())
                     
                 } // Bottom Tool Bar
             }
@@ -101,6 +112,11 @@ struct ContentView: View {
             theMap_ViewModel.updateParkingSpot() // Call intent function
         }
     }
+    
+    private func toggleMapNorth() {
+        MyLog.debug("toggleMapNorth() Called")
+        
+    }
 
 }
 
@@ -109,7 +125,8 @@ struct VerticalLabelStyle: LabelStyle {
     func makeBody(configuration: Configuration) -> some View {
         VStack {
             configuration.icon.font(.headline)
-            configuration.title.font(.subheadline)
+            configuration.title.font(.system(size:8)) // very small print
+//            configuration.title.font(.subheadline)
         }
     }
 }
