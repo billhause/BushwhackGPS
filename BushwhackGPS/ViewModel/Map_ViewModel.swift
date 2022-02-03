@@ -294,7 +294,8 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     // Note: Must have previously called mLocationManager?.startUpdatingHeading() for this to be called
     func locationManager(_ locationManager: CLLocationManager, didUpdateHeading: CLHeading) {
         MyLog.debug("Map_ViewModel.LocaitonManager didUpdateHeading: \(didUpdateHeading)")
-        theMapModel.currentHeading = didUpdateHeading.trueHeading
+//        theMapModel.currentHeading = didUpdateHeading.magneticHeading
+        theMapModel.currentHeading = didUpdateHeading.trueHeading // Should use this, not magnetic north
     }
 
     // Tells the delegate when the app creates the location manager and when the authorization status changes.

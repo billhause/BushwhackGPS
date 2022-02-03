@@ -16,7 +16,7 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             VStack {
-                MapView(theMap_ViewModel: theMap_ViewModel)
+                MapView(theViewModel: theMap_ViewModel)
                 
                 // vvvvvvv ALERT MESSAGE vvvvvvvvv
                 if #available(iOS 15.0, *) {
@@ -115,7 +115,9 @@ struct ContentView: View {
     
     private func toggleMapNorth() {
         MyLog.debug("toggleMapNorth() Called")
-        
+        // Toggle the NorthFlag in the Settings Entity.
+        let newOrientNorthFlag = !AppSettingsEntity.getAppSettingsEntity().orientNorth
+        AppSettingsEntity.getAppSettingsEntity().setOrientNorth(always: newOrientNorthFlag)
     }
 
 }

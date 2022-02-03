@@ -31,8 +31,13 @@ struct MapView: UIViewRepresentable {
     typealias UIViewType = MKMapView
     
     @ObservedObject var theMap_ViewModel: Map_ViewModel
+    @ObservedObject var theAppSettingsEntity: AppSettingsEntity // The AppSettingsEntity is like a tiny view model
     @State var mMapView = MKMapView() // TouchDetect - made member var instead of local var in makeUIView NOTE: MUST BE @State or duplicate instances will be created
     
+    init(theViewModel: Map_ViewModel) {
+        theMap_ViewModel = theViewModel
+        theAppSettingsEntity = AppSettingsEntity.getAppSettingsEntity()
+    }
     
     func isParkingSpotShownOnMap() -> Bool {
         // NOTE: There seems to be some buffer off the side of the map so sometimes it says it's shown when it isn't really
@@ -157,8 +162,14 @@ struct MapView: UIViewRepresentable {
 
         }
 
-        // Set the HEADING - The direction the phone is pointing, not the direction we are moving
-        theMapView.camera.heading=theMap_ViewModel.getCurrentHeading() // Adjustes map direction without affecting zoom level
+        // Locked North??
+        if AppSettingsEntity.getAppSettingsEntity().getOrientNorth() {
+            // Lock Map Pointing North
+            theMapView.camera.heading = 0.0 // Always Point Map North
+        } else {
+            // Set the HEADING - The direction the phone is pointing, not the direction we are moving
+            theMapView.camera.heading=theMap_ViewModel.getCurrentHeading() // Adjustes map direction without affecting zoom level
+        }
         
     }
     
