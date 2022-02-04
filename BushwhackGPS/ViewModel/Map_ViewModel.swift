@@ -211,7 +211,36 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return "triangle" // default that is always there on all devices
     }
 
-    // MARK: Location Updates - Called every update
+    
+    
+    // Check if the specified location is withing THRESHOLD distancce meters of any of the
+    // previous CLUSTER_TAIL_SIZE point.  Return true if it is, false otherwise
+    let CLUSTER_TAIL_SIZE = 8 // How many points at the end of the array should be checked
+    func pointIsClustered(theLocation: CLLocation) -> Bool {
+        // Look at the last X points and if the specified point is within the threshold distance, then return true
+        let count = DotEntity.getAllDotEntities().count
+        
+        // Would crash if trying to check 0 or fewer points at the end of the array
+        if CLUSTER_TAIL_SIZE <= 0 { return false }
+        
+        // Must have more points in the array than the number of points we're going to check
+        var clusterTailSize = CLUSTER_TAIL_SIZE
+        if count <= CLUSTER_TAIL_SIZE {
+            clusterTailSize = count
+        }
+
+        let dotEntityArray = DotEntity.getAllDotEntities()
+        for index in stride(from: count-1, through: count-clusterTailSize, by: -1) {
+            let oldLocation = CLLocation(latitude: dotEntityArray[index].lat, longitude: dotEntityArray[index].lon)
+            if theLocation.distance(from: oldLocation) < THRESHOLD_DISTANCE * 0.9  { // Allow a 10% buffer
+//                MyLog.debug("** POINT REJECTED Becaue it's too close to another recent point")
+                return true // there's already a recent point too close to the target point
+            }
+        }
+        return false
+    }
+    
+    // MARK: LOCATION UPDATE
 
     // REQUIRED - Called EVERY TIME the location data is updated
     // The MOST RECENT location is the last one in the array
@@ -232,18 +261,18 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         // the MapModel which will trigger a map update where
         // the annotation will be added to the map as an AnnotationView
         let deltaTime = NSDate().timeIntervalSince1970 - mLastDotTimeStamp // mCurrentWayPoint.timeStamp
-        if(deltaTime > THRESHOLD_TIME_PERIOD) {
-            
-Add code to skip this dot if the location is within THRESHOLD_DISTANCE of any of the lat 10 dots.
-            
-            let newDotEntity = DotEntity.createDotEntity(lat: lat, lon: lon, speed: speed, course: course) // save to DB
-            let dotAnnotation = MKDotAnnotation(coordinate: currentLocation.coordinate, id: newDotEntity.id)
-            theMapModel.newMKDotAnnotation = dotAnnotation // Update the MapModel with the new annotation to be added to the map
-            
-            // The Map_ViewModel must keep track if there is a new annotation to add to
-            // the map since the MapView doesn't know what data change triggered the update
-            mNewDotAnnotationWaiting = true
-            mLastDotTimeStamp = Date().timeIntervalSince1970
+        if(deltaTime > THRESHOLD_TIME_PERIOD) { // Wait to add the next point
+            // Dont' add the point if it's already in a cluster of recent points E.g. just walking around the house
+            if !pointIsClustered(theLocation: currentLocation) {
+                let newDotEntity = DotEntity.createDotEntity(lat: lat, lon: lon, speed: speed, course: course) // save to DB
+                let dotAnnotation = MKDotAnnotation(coordinate: currentLocation.coordinate, id: newDotEntity.id)
+                theMapModel.newMKDotAnnotation = dotAnnotation // Update the MapModel with the new annotation to be added to the map
+                
+                // The Map_ViewModel must keep track if there is a new annotation to add to
+                // the map since the MapView doesn't know what data change triggered the update
+                mNewDotAnnotationWaiting = true
+                mLastDotTimeStamp = Date().timeIntervalSince1970
+            }
         }
         
         // === PARKING SPOT ===  Update the parking spot location if it's been moved
