@@ -203,6 +203,16 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
 
     // Sometimes the device will not have the first choice symbol so check first
     // Return a default that is always present
+    func getMapLayerImageName() -> String {
+        // Check symbols in order of preference
+        if UIImage(systemName: "square.3.stack.3d") != nil { return "square.3.stack.3d" }
+        if UIImage(systemName: "square.stack.3d.up") != nil { return "square.stack.3d.up" }
+        if UIImage(systemName: "map") != nil { return "map" }
+        return "triangle" // default that is always there on all devices
+    }
+
+    // Sometimes the device will not have the first choice symbol so check first
+    // Return a default that is always present
     func getCompassImageName() -> String {
         // Check symbols in order of preference
         if UIImage(systemName: "safari") != nil { return "safari" }
@@ -215,7 +225,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     
     // Check if the specified location is withing THRESHOLD distancce meters of any of the
     // previous CLUSTER_TAIL_SIZE point.  Return true if it is, false otherwise
-    let CLUSTER_TAIL_SIZE = 8 // How many points at the end of the array should be checked
+    let CLUSTER_TAIL_SIZE = 15 // How many points at the end of the array should be checked
     func pointIsClustered(theLocation: CLLocation) -> Bool {
         // Look at the last X points and if the specified point is within the threshold distance, then return true
         let count = DotEntity.getAllDotEntities().count

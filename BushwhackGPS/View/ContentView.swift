@@ -64,7 +64,16 @@ struct ContentView: View {
                     .onChange(of: theMap_ViewModel.isHybrid) { value in
 //                        print("Hybrid Picker Called \(value)")
                     }
-                    
+                    Spacer()
+                    Button(action: toggleMapLayers) {
+                        let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
+                        let mapLayersImageName = theMap_ViewModel.getMapLayerImageName()
+                        Label("Aerial", systemImage: mapLayersImageName)
+                            .foregroundColor(Color(theColor))
+                            .padding()
+                    }
+                        .labelStyle(VerticalLabelStyle())
+
                     Spacer()
                     Button(action: toggleMapNorth) {
                         let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
@@ -99,6 +108,11 @@ struct ContentView: View {
         } // NavigationView
     }
 
+    private func toggleMapLayers() {
+        MyLog.debug("toggleMapLayers() called")
+        Continue Here
+    }
+    
     // Called when the Orient Map button is touched
     private func orientMap() {
         withAnimation {
