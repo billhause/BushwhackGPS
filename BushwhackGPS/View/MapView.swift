@@ -116,12 +116,27 @@ struct MapView: UIViewRepresentable {
             theMapView.mapType = .standard
         }
         
+        
         // ADD NEW DOT ANNOTATION if there is one
         if let newDotAnnotation = theMap_ViewModel.getNewDotAnnotation() {
             // If we got in here, then there's a new annotation to add
             MyLog.debug("Adding new dot annotation \(newDotAnnotation.id)")
 //            Haptic.shared.impact(style: .medium)
             theMapView.addAnnotation(newDotAnnotation)
+        }
+        
+        
+        // RELOAD ALL DOTS If the Filter Dates Changed
+        if theMap_ViewModel.dotFilterIsDirty {
+            theMap_ViewModel.dotFilterIsDirty = false // turn off the flag
+            // Remove all dots from the map
+            theMapView.annotations.forEach {
+                if ($0 is MKDotAnnotation) {
+                    theMapView.removeAnnotation($0)
+                }
+            }
+            // Add all of the Dots back to the map
+            mMapView.addAnnotations(theMap_ViewModel.getDotAnnotations())
         }
         
         

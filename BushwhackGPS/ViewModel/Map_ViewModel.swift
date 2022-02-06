@@ -24,7 +24,8 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     // MARK: Member Vars
     @Published private var theMapModel: Map_Model = Map_Model()
     @Published public var parkingSpotMoved = false // Signal when the parking spot moves so the map knows to move the parking icon
-    @Published public var theParkingSpotDistance = 123
+    @Published public var dotFilterIsDirty = false // signal when the map must update all points because the dot filter changed
+//    @Published public var theParkingSpotDistance = 123
     
     private var mLocationManager: CLLocationManager?
     private var mLastDotTimeStamp: Double = 0.0 // The Last Dot's timestamp since jan 1 1970 that the last dot was created
@@ -184,6 +185,17 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
 
     // Sometimes the device will not have the first choice symbol so check first
     // Return a default that is always present
+    func getHideDotsImageName() -> String {
+        // Check symbols in order of preference
+        if UIImage(systemName: "xmark.circle") != nil { return "xmark.circle" }
+        if UIImage(systemName: "minus.circle") != nil { return "minus.circle" }
+        if UIImage(systemName: "h.circle") != nil { return "h.circle" }
+        return "triangle" // default that is always there on all devices
+    }
+
+    
+    // Sometimes the device will not have the first choice symbol so check first
+    // Return a default that is always present
     func getParkingLocationImageName() -> String {
         // Check symbols in order of preference
         if UIImage(systemName: "parkingsign.circle") != nil { return "parkingsign.circle" }
@@ -228,7 +240,8 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     let CLUSTER_TAIL_SIZE = 15 // How many points at the end of the array should be checked
     func pointIsClustered(theLocation: CLLocation) -> Bool {
         // Look at the last X points and if the specified point is within the threshold distance, then return true
-        let count = DotEntity.getAllDotEntities().count
+        let dotEntityArray = getFilteredDotEntites()
+        let count = dotEntityArray.count
         
         // Would crash if trying to check 0 or fewer points at the end of the array
         if CLUSTER_TAIL_SIZE <= 0 { return false }
@@ -239,7 +252,6 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
             clusterTailSize = count
         }
 
-        let dotEntityArray = DotEntity.getAllDotEntities()
         for index in stride(from: count-1, through: count-clusterTailSize, by: -1) {
             let oldLocation = CLLocation(latitude: dotEntityArray[index].lat, longitude: dotEntityArray[index].lon)
             if theLocation.distance(from: oldLocation) < THRESHOLD_DISTANCE * 0.9  { // Allow a 10% buffer
@@ -249,7 +261,33 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         }
         return false
     }
-    
+//    // Check if the specified location is withing THRESHOLD distancce meters of any of the
+//    // previous CLUSTER_TAIL_SIZE point.  Return true if it is, false otherwise
+//    let CLUSTER_TAIL_SIZE = 15 // How many points at the end of the array should be checked
+//    func pointIsClustered(theLocation: CLLocation) -> Bool {
+//        // Look at the last X points and if the specified point is within the threshold distance, then return true
+//        let count = DotEntity.getAllDotEntities().count
+//
+//        // Would crash if trying to check 0 or fewer points at the end of the array
+//        if CLUSTER_TAIL_SIZE <= 0 { return false }
+//
+//        // Must have more points in the array than the number of points we're going to check
+//        var clusterTailSize = CLUSTER_TAIL_SIZE
+//        if count <= CLUSTER_TAIL_SIZE {
+//            clusterTailSize = count
+//        }
+//
+//        let dotEntityArray = DotEntity.getAllDotEntities()
+//        for index in stride(from: count-1, through: count-clusterTailSize, by: -1) {
+//            let oldLocation = CLLocation(latitude: dotEntityArray[index].lat, longitude: dotEntityArray[index].lon)
+//            if theLocation.distance(from: oldLocation) < THRESHOLD_DISTANCE * 0.9  { // Allow a 10% buffer
+////                MyLog.debug("** POINT REJECTED Becaue it's too close to another recent point")
+//                return true // there's already a recent point too close to the target point
+//            }
+//        }
+//        return false
+//    }
+
     // MARK: LOCATION UPDATE
 
     // REQUIRED - Called EVERY TIME the location data is updated
@@ -298,9 +336,9 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
             parkingSpotMoved = true
         }
         
-        // === DISTANCE === - Update the distance
-        let parkingSpot = getParkingSpotLocation()
-        theParkingSpotDistance = getDistanceInFeet(p1: parkingSpot, p2: currentLocation.coordinate)
+//        // === DISTANCE === - Update the distance
+//        let parkingSpot = getParkingSpotLocation()
+//        theParkingSpotDistance = getDistanceInFeet(p1: parkingSpot, p2: currentLocation.coordinate)
     }
 
     
@@ -374,7 +412,29 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     
     // MARK: Intent Functions
     
-        
+    // Allow nil to be passed in as date to indicate no date
+    func updateFilterStartDate(_ newDate: Date?) {
+        AppSettingsEntity.getAppSettingsEntity().updateFilterStartDate(newDate)
+        dotFilterIsDirty = true // Allow map to check what changed when doing its update
+    }
+    // Allow nil to be passed in as date to indicate no date
+    func updateFilterEndDate(_ newDate: Date?) {
+        AppSettingsEntity.getAppSettingsEntity().updateFilterEndDate(newDate)
+        dotFilterIsDirty = true // Allow map to check what changed when doing its update
+    }
+    func hasFilterStartDate() -> Bool {
+        if AppSettingsEntity.getAppSettingsEntity().filterStartDate == nil {
+            return false
+        }
+        return true
+    }
+    func hasFilterEndDate() -> Bool {
+        if AppSettingsEntity.getAppSettingsEntity().filterEndDate == nil {
+            return false
+        }
+        return true
+    }
+
     func orientMap() {
         theMapModel.orientMapFlag = true // Change Data Model to Trigger map update wdhx
         mStillNeedToOrientMap = true // True until the map tells us it's been oriented using the mapHasBeenOriented() intent func
@@ -442,20 +502,42 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return MKParkingAnnotation(coordinate: getParkingSpotLocation())
     }
         
+    // Get the list of DotEntities that pass the date filter
+    private func getFilteredDotEntites() -> [DotEntity] {
+        let allDotEntities = DotEntity.getAllDotEntities()
+
+        // Create a new dot array with the dots that don't pass the filter removed
+        let filteredDotEntities = allDotEntities.filter {
+            if hasFilterStartDate() {
+                if $0.timestamp == nil {return false} // This should never happen dots are assigned a date when created
+                if $0.timestamp! < AppSettingsEntity.getAppSettingsEntity().filterStartDate! {
+                    return false // Filter Start date is after this dot was created so don't include this dot
+                }
+            }
+            if hasFilterEndDate() {
+                if $0.timestamp == nil {return false} // This should never happen dots are assigned a date when created
+                if $0.timestamp! > AppSettingsEntity.getAppSettingsEntity().filterEndDate! {
+                    return false // Filter End date is before this dot was created so don't include the dot
+                }
+            }
+            return true // the dot's date is between the filter's start and end dates
+        }
+        return filteredDotEntities
+    }
     
-    // Return an array of ALL DotAnnotations ready to be added to the map
+    // Return an array of DotAnnotations ready to be added to the map
+    // This func will filter out any dots that don't fall in the date filter range
     func getDotAnnotations() -> [MKDotAnnotation] { 
-        let dotEntities = DotEntity.getAllDotEntities()
+        // Create Annotations for ech of the dots that passed the filter.
         var dotAnnotations: [MKDotAnnotation] = []
         
-        for dotEntity in dotEntities {
+        let filteredDotEntities = getFilteredDotEntites()
+        for dotEntity in filteredDotEntities {
             let newMKDotAnnotation = MKDotAnnotation(coordinate: CLLocationCoordinate2D(latitude: dotEntity.lat, longitude: dotEntity.lon), id: dotEntity.id)
             dotAnnotations.append(newMKDotAnnotation)
         }
         return dotAnnotations
     }
-    
-    
 }
 
 

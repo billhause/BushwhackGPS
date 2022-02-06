@@ -37,7 +37,7 @@ struct ContentView: View {
             .toolbar {
                 ToolbarItemGroup(placement: .automatic) { // Top Toolbar
                     HStack {
-                        Text("Distance: \(theMap_ViewModel.theParkingSpotDistance) Feet")
+//                        Text("Distance: \(theMap_ViewModel.theParkingSpotDistance) Feet")
                         Text("Dot Count: \(DotEntity.getAllDotEntities().count)")
                         Spacer()
                         Button(action: updateParkingSpot) {
@@ -56,19 +56,20 @@ struct ContentView: View {
 
                 // BOTTOM TOOL BAR
                 ToolbarItemGroup(placement: .bottomBar) {
-                    Picker("What kind of map do you want", selection: $theMap_ViewModel.isHybrid) {
-                        Text("Hybrid").tag(true)
-                        Text("Standard").tag(false)
+                    Button(action: hideDotsHandler) {
+                        let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
+                        let hideDotsImageName = theMap_ViewModel.getHideDotsImageName()
+                        Label("Hide Dots", systemImage: hideDotsImageName)
+                            .foregroundColor(Color(theColor))
+                            .padding()
                     }
-                    .pickerStyle(.segmented)
-                    .onChange(of: theMap_ViewModel.isHybrid) { value in
-//                        print("Hybrid Picker Called \(value)")
-                    }
+                        .labelStyle(VerticalLabelStyle())
+
                     Spacer()
                     Button(action: toggleMapLayers) {
                         let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
                         let mapLayersImageName = theMap_ViewModel.getMapLayerImageName()
-                        Label("Aerial", systemImage: mapLayersImageName)
+                        Label("Aerial Layer", systemImage: mapLayersImageName)
                             .foregroundColor(Color(theColor))
                             .padding()
                     }
@@ -78,12 +79,12 @@ struct ContentView: View {
                     Button(action: toggleMapNorth) {
                         let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
                         let compassImageName = theMap_ViewModel.getCompassImageName()
-                        Label("Lock", systemImage: compassImageName)
+                        Label("Lock North", systemImage: compassImageName)
                             .foregroundColor(Color(theColor))
                             .padding()
                     }
                         .labelStyle(VerticalLabelStyle())
-
+                    Spacer()
                     Button(action: orientMap) {
                         let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
                         let imageString = theMap_ViewModel.getOrientMapImageName()
@@ -108,9 +109,16 @@ struct ContentView: View {
         } // NavigationView
     }
 
+    private func hideDotsHandler() {
+        MyLog.debug("hideDotsHandler() called")
+        // Update filter to start right now so that past dots are hidden
+        theMap_ViewModel.updateFilterStartDate(Date())
+        Haptic.shared.impact(style: .heavy)
+    }
+    
     private func toggleMapLayers() {
-        MyLog.debug("toggleMapLayers() called")
-        Continue Here
+        theMap_ViewModel.isHybrid = !theMap_ViewModel.isHybrid // toggle
+        Haptic.shared.impact(style: .heavy)
     }
     
     // Called when the Orient Map button is touched
@@ -135,6 +143,7 @@ struct ContentView: View {
         // Toggle the NorthFlag in the Settings Entity.
         let newOrientNorthFlag = !AppSettingsEntity.getAppSettingsEntity().orientNorth
         AppSettingsEntity.getAppSettingsEntity().setOrientNorth(always: newOrientNorthFlag)
+        Haptic.shared.impact(style: .heavy)
     }
 
 }

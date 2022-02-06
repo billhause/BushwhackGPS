@@ -53,6 +53,18 @@ extension AppSettingsEntity {
         save()
     }
     
+    // Allow nil to be passed in as date
+    public func updateFilterStartDate(_ newDate: Date?) {
+        filterStartDate = newDate
+        save()
+        MyLog.debug("AppSettingsEntity filter start date updated to: \(newDate)")
+    }
+    // Allow nil to be passed in as date
+    public func updateFilterEndDate(_ newDate: Date?) {
+        filterEndDate = newDate
+        save()
+    }
+
     public func save() {
         let context = PersistenceController.shared.container.viewContext
         do {
