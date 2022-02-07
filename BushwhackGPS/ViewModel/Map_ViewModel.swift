@@ -233,7 +233,16 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return "triangle" // default that is always there on all devices
     }
 
-    
+    // Sometimes the device will not have the first choice symbol so check first
+    // Return a default that is always present
+    func getAddMarkerImageName() -> String {
+        // Check symbols in order of preference
+        if UIImage(systemName: "plus.circle") != nil { return "plus.circle" }
+        if UIImage(systemName: "plus.square") != nil { return "plus.square" }
+        if UIImage(systemName: "plus.app") != nil { return "plus.app" }
+        return "triangle" // default that is always there on all devices
+    }
+
     
     // Check if the specified location is withing THRESHOLD distancce meters of any of the
     // previous CLUSTER_TAIL_SIZE point.  Return true if it is, false otherwise
@@ -261,32 +270,6 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         }
         return false
     }
-//    // Check if the specified location is withing THRESHOLD distancce meters of any of the
-//    // previous CLUSTER_TAIL_SIZE point.  Return true if it is, false otherwise
-//    let CLUSTER_TAIL_SIZE = 15 // How many points at the end of the array should be checked
-//    func pointIsClustered(theLocation: CLLocation) -> Bool {
-//        // Look at the last X points and if the specified point is within the threshold distance, then return true
-//        let count = DotEntity.getAllDotEntities().count
-//
-//        // Would crash if trying to check 0 or fewer points at the end of the array
-//        if CLUSTER_TAIL_SIZE <= 0 { return false }
-//
-//        // Must have more points in the array than the number of points we're going to check
-//        var clusterTailSize = CLUSTER_TAIL_SIZE
-//        if count <= CLUSTER_TAIL_SIZE {
-//            clusterTailSize = count
-//        }
-//
-//        let dotEntityArray = DotEntity.getAllDotEntities()
-//        for index in stride(from: count-1, through: count-clusterTailSize, by: -1) {
-//            let oldLocation = CLLocation(latitude: dotEntityArray[index].lat, longitude: dotEntityArray[index].lon)
-//            if theLocation.distance(from: oldLocation) < THRESHOLD_DISTANCE * 0.9  { // Allow a 10% buffer
-////                MyLog.debug("** POINT REJECTED Becaue it's too close to another recent point")
-//                return true // there's already a recent point too close to the target point
-//            }
-//        }
-//        return false
-//    }
 
     // MARK: LOCATION UPDATE
 
@@ -435,6 +418,10 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return true
     }
 
+    func addMarkerCurrentLocation() {
+        MyLog.debug("Map_ViewModel - addMarkerCurrentLocation() Called")
+    }
+    
     func orientMap() {
         theMapModel.orientMapFlag = true // Change Data Model to Trigger map update wdhx
         mStillNeedToOrientMap = true // True until the map tells us it's been oriented using the mapHasBeenOriented() intent func

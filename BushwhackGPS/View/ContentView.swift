@@ -35,7 +35,8 @@ struct ContentView: View {
 //            .navigationBarHidden(true) // Remove the space for the top nav bar
             .navigationBarTitleDisplayMode(.inline) // Put title on same line as tool bar
             .toolbar {
-                ToolbarItemGroup(placement: .automatic) { // Top Toolbar
+                // TOP TOOL BAR
+                ToolbarItemGroup(placement: .automatic) {
                     HStack {
 //                        Text("Distance: \(theMap_ViewModel.theParkingSpotDistance) Feet")
                         Text("Dot Count: \(DotEntity.getAllDotEntities().count)")
@@ -52,14 +53,12 @@ struct ContentView: View {
                     }
                 }
 
-
-
                 // BOTTOM TOOL BAR
                 ToolbarItemGroup(placement: .bottomBar) {
                     Button(action: hideDotsHandler) {
                         let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
                         let hideDotsImageName = theMap_ViewModel.getHideDotsImageName()
-                        Label("Hide Dots", systemImage: hideDotsImageName)
+                        Label("Reset", systemImage: hideDotsImageName)
                             .foregroundColor(Color(theColor))
                             .padding()
                     }
@@ -74,7 +73,15 @@ struct ContentView: View {
                             .padding()
                     }
                         .labelStyle(VerticalLabelStyle())
-
+                    Spacer()
+                    Button(action: addMarkerHandler) {
+                        let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
+                        let hideDotsImageName = theMap_ViewModel.getAddMarkerImageName()
+                        Label("Marker", systemImage: hideDotsImageName)
+                            .foregroundColor(Color(theColor))
+                            .padding()
+                    }
+                        .labelStyle(VerticalLabelStyle())
                     Spacer()
                     Button(action: toggleMapNorth) {
                         let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
@@ -90,8 +97,8 @@ struct ContentView: View {
                         let imageString = theMap_ViewModel.getOrientMapImageName()
                         Label("Follow", systemImage: imageString)
                             .foregroundColor(Color(theColor))
-                    } //.font(.largeTitle) .padding()
-//                        .labelStyle(HorizontalLabelStyle())
+                            .padding()
+                    }
                         .labelStyle(VerticalLabelStyle())
                     
                 } // Bottom Tool Bar
@@ -107,6 +114,11 @@ struct ContentView: View {
                 MyLog.debug("** App Moved to Background wdh")
             }
         } // NavigationView
+    }
+
+    private func addMarkerHandler() {
+        theMap_ViewModel.addMarkerCurrentLocation()
+        Haptic.shared.impact(style: .heavy)
     }
 
     private func hideDotsHandler() {
