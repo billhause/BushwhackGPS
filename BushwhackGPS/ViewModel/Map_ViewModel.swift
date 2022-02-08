@@ -446,21 +446,13 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         // NOTE: If not connected to Internet, then requestReview will lock the interface
             let reachability = try? Reachability() // Return nil if throws an error
             if reachability?.connection == .wifi {
-//                MyLog.debug("Reachable via WiFi")
                 if let scene = UIApplication.shared.connectedScenes.first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene {
                     SKStoreReviewController.requestReview(in: scene)
                 }
-//                if let windowScene = UIApplication.shared.windows.first?.windowScene {
-//                    SKStoreReviewController.requestReview(in: windowScene)
-//                }
             } else if reachability?.connection == .cellular {
-//                MyLog.debug("Reachable via Cellular")
                 if let scene = UIApplication.shared.connectedScenes.first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene {
                     SKStoreReviewController.requestReview(in: scene)
                 }
-//                if let windowScene = UIApplication.shared.windows.first?.windowScene {
-//                    SKStoreReviewController.requestReview(in: windowScene)
-//                }
             }
         }
     }
