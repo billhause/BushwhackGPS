@@ -55,12 +55,13 @@ struct ContentView: View {
 
                 // BOTTOM TOOL BAR
                 ToolbarItemGroup(placement: .bottomBar) {
+                    Spacer()
                     Button(action: hideDotsHandler) {
                         let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
                         let hideDotsImageName = theMap_ViewModel.getHideDotsImageName()
                         Label("Reset", systemImage: hideDotsImageName)
                             .foregroundColor(Color(theColor))
-                            .padding()
+//                            .padding()
                     }
                         .labelStyle(VerticalLabelStyle())
 
@@ -70,7 +71,7 @@ struct ContentView: View {
                         let mapLayersImageName = theMap_ViewModel.getMapLayerImageName()
                         Label("Aerial Layer", systemImage: mapLayersImageName)
                             .foregroundColor(Color(theColor))
-                            .padding()
+//                            .padding()
                     }
                         .labelStyle(VerticalLabelStyle())
                     Spacer()
@@ -79,7 +80,7 @@ struct ContentView: View {
                         let hideDotsImageName = theMap_ViewModel.getAddMarkerImageName()
                         Label("Marker", systemImage: hideDotsImageName)
                             .foregroundColor(Color(theColor))
-                            .padding()
+//                            .padding()
                     }
                         .labelStyle(VerticalLabelStyle())
                     Spacer()
@@ -88,7 +89,7 @@ struct ContentView: View {
                         let compassImageName = theMap_ViewModel.getCompassImageName()
                         Label("Lock North", systemImage: compassImageName)
                             .foregroundColor(Color(theColor))
-                            .padding()
+//                            .padding()
                     }
                         .labelStyle(VerticalLabelStyle())
                     Spacer()
@@ -97,10 +98,10 @@ struct ContentView: View {
                         let imageString = theMap_ViewModel.getOrientMapImageName()
                         Label("Follow", systemImage: imageString)
                             .foregroundColor(Color(theColor))
-                            .padding()
+//                            .padding()
                     }
                         .labelStyle(VerticalLabelStyle())
-                    
+//                    Spacer()
                 } // Bottom Tool Bar
             }
             // Detect moving back to foreground
