@@ -118,7 +118,7 @@ struct ContentView: View {
     }
 
     private func addMarkerHandler() {
-        theMap_ViewModel.addMarkerCurrentLocation()
+        theMap_ViewModel.addNewMarker()
         Haptic.shared.impact(style: .heavy)
     }
 

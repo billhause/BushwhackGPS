@@ -390,6 +390,23 @@ struct MapView: UIViewRepresentable {
                 return annotationView
             }
             
+            // === MARKER ANNOTATIN TYPE ===
+            // Note: the annotation contains its color and symbol image name
+            if (annotation is MKMarkerAnnotation) {
+                let Identifier = "Marker"
+                let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: Identifier) ??
+                    MKAnnotationView(annotation: annotation, reuseIdentifier: Identifier)
+                annotationView.canShowCallout = true // Show title and subtitle if the user taps on the annotation
+                let markerAnnotation = annotation as! MKMarkerAnnotation
+                let MarkerSymbolImage = UIImage(systemName: markerAnnotation.symbolName)!.withTintColor(markerAnnotation.color)
+                let MARKER_SIZE = 10 // size for Marker symbol
+                let size = CGSize(width: MARKER_SIZE, height: MARKER_SIZE)
+                
+                annotationView.image = UIGraphicsImageRenderer(size: size).image {
+                    _ in MarkerSymbolImage.draw(in:CGRect(origin:.zero, size:size))
+                }
+            }
+            
             // === PARKING SPOT Annotation type ===
             if (annotation is MKParkingAnnotation) {
                 let Identifier = "ParkingSpot"

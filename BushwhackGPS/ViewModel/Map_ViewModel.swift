@@ -145,6 +145,21 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return getParkingSpotLocation()
     }
 
+    // Add a new marker to the current location
+    func addNewMarker() {
+        guard let location = mLastKnownLocation else {
+            return // we don't know where we are so we won't be adding a new marker
+        }
+        
+        // Create a new marker and save it
+        let newMarkerEntity = MarkerEntity.createMarkerEntity(lat: location.latitude, lon: location.longitude)
+        
+        // Update model with the waiting MarkerAnnotation
+        theMapModel.waitingMKMarkerAnnotation = MKMarkerAnnotation(theMarkerEntity: newMarkerEntity)
+        
+        continue here, look at the flags used when adding a dot and do the same thing for this new MarkerAnnotation to get it added to the map
+        
+    }
 
     // Find the distance between the parking spot and the current location.
     // Make the map width/height be double that distance minus some buffer percentage
@@ -297,7 +312,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
             if !pointIsClustered(theLocation: currentLocation) {
                 let newDotEntity = DotEntity.createDotEntity(lat: lat, lon: lon, speed: speed, course: course) // save to DB
                 let dotAnnotation = MKDotAnnotation(coordinate: currentLocation.coordinate, id: newDotEntity.id)
-                theMapModel.newMKDotAnnotation = dotAnnotation // Update the MapModel with the new annotation to be added to the map
+                theMapModel.waitingMKDotAnnotation = dotAnnotation // Update the MapModel with the new annotation to be added to the map
                 
                 // The Map_ViewModel must keep track if there is a new annotation to add to
                 // the map since the MapView doesn't know what data change triggered the update
@@ -329,7 +344,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     func getNewDotAnnotation() -> MKDotAnnotation? {
         if mNewDotAnnotationWaiting {
             mNewDotAnnotationWaiting = false
-            return theMapModel.newMKDotAnnotation
+            return theMapModel.waitingMKDotAnnotation
         }
         return nil // No new annotation is waiting
     }
@@ -418,9 +433,10 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return true
     }
 
-    func addMarkerCurrentLocation() {
-        MyLog.debug("Map_ViewModel - addMarkerCurrentLocation() Called")
-    }
+//    func addMarkerCurrentLocation() {
+//        MyLog.debug("Map_ViewModel - addMarkerCurrentLocation() Called") //wdhx
+//
+//    }
     
     func orientMap() {
         theMapModel.orientMapFlag = true // Change Data Model to Trigger map update wdhx
@@ -545,5 +561,55 @@ class MKParkingAnnotation : NSObject, MKAnnotation {
     var subtitle: String? = ""
     init(coordinate: CLLocationCoordinate2D) {
         self.coordinate = coordinate
+    }
+}
+
+// NOTE: MKAnnotation REQUIRES a coordinate, title and description.
+// We provide those as computed properties calculated from the MarkerEntity
+// This class stores a refernce to its associated MarkerEntity object.
+class MKMarkerAnnotation: NSObject, MKAnnotation {
+
+    let mMarkerEntity: MarkerEntity // reference to the MarkerEntity
+    init(theMarkerEntity: MarkerEntity) {
+        mMarkerEntity = theMarkerEntity
+    }
+
+    var coordinate: CLLocationCoordinate2D { // computed property
+        get {
+            return CLLocationCoordinate2D(latitude: mMarkerEntity.lat, longitude: mMarkerEntity.lon)
+        }
+    }
+    var title: String? { // computed property
+        get {
+            return mMarkerEntity.title
+        }
+    }
+    
+    var subtitle: String? { //computed Property
+        get {
+            return mMarkerEntity.desc
+        }
+    }
+    
+    var iconName: String {
+        get {
+            return mMarkerEntity.iconName!
+        }
+    }
+    
+    var id: Int64 {
+        get {
+            return mMarkerEntity.id
+        }
+    }
+    
+    var symbolName: String {
+        get {
+            return mMarkerEntity.iconName
+        }
+    }
+    
+    var color: UIColor {
+        return UIColor(red: mMarkerEntity.colorRed, green: mMarkerEntity.colorGreen, blue: mMarkerEntity.colorBlue, alpha: mMarkerEntity.colorAlpha)
     }
 }
