@@ -59,6 +59,43 @@ class BushwhackGPSTests: XCTestCase {
     }
 
     
+    //
+    // MARK: DotEntity
+    //
+    func testDotEntity() throws {
+        let de = DotEntity.createDotEntity(lat: 100.0, lon: 100.0, speed: 0.0, course: 1.0)
+        // Make sure none of the fields are nil
+        XCTAssertNotNil(de.course)
+        XCTAssertNotNil(de.id)
+        XCTAssertNotNil(de.lat)
+        XCTAssertNotNil(de.lon)
+        XCTAssertNotNil(de.speed)
+        XCTAssertNotNil(de.timestamp)
+        XCTAssertNotNil(de.uuid)
+        DotEntity.deleteDotEntity(de) // remove the test dot from the database
+    }
+
+    
+    //
+    // MARK: MarkerEntity
+    //
+    func testMarkerEntity() throws {
+        let me = MarkerEntity.createMarkerEntity(lat: 100.0, lon: 100.0)
+        // Make sure none of the fields are nil
+        XCTAssertNotNil(me.colorRed)
+        XCTAssertNotNil(me.colorBlue)
+        XCTAssertNotNil(me.colorAlpha)
+        XCTAssertNotNil(me.colorGreen)
+        XCTAssertNotNil(me.desc)
+        XCTAssertNotNil(me.iconName)
+        XCTAssertNotNil(me.id)
+        XCTAssertNotNil(me.lat)
+        XCTAssertNotNil(me.lon)
+        XCTAssertNotNil(me.timestamp)
+        XCTAssertNotNil(me.title)
+        XCTAssertNotNil(me.uuid)
+        MarkerEntity.deleteMarkerEntity(me) // remove the test marker from the database
+    }
     
     func testExample() throws {
         // This is an example of a functional test case.

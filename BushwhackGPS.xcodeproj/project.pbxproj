@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		283C423227BDD9C00049505E /* MarkerEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283C423127BDD9C00049505E /* MarkerEntity.swift */; };
 		28817B7C278E490E004B7C4B /* BushwhackGPSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28817B7B278E490E004B7C4B /* BushwhackGPSApp.swift */; };
 		28817B7E278E490E004B7C4B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28817B7D278E490E004B7C4B /* ContentView.swift */; };
 		28817B80278E490E004B7C4B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 28817B7F278E490E004B7C4B /* Assets.xcassets */; };
@@ -47,6 +48,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		283C423127BDD9C00049505E /* MarkerEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkerEntity.swift; sourceTree = "<group>"; };
 		28817B78278E490E004B7C4B /* BushwhackGPS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BushwhackGPS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		28817B7B278E490E004B7C4B /* BushwhackGPSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BushwhackGPSApp.swift; sourceTree = "<group>"; };
 		28817B7D278E490E004B7C4B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -188,6 +190,7 @@
 				288BB0DD27976219005F3D0C /* Map_ViewModel.swift */,
 				288BB0E5279797E1005F3D0C /* ParkingSpotEntity.swift */,
 				288BCB39279E25D8008FC368 /* DotEntity.swift */,
+				283C423127BDD9C00049505E /* MarkerEntity.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -342,6 +345,7 @@
 				28817BAE2790AB21004B7C4B /* ID_GeneratorEntity.swift in Sources */,
 				28817B88278E490E004B7C4B /* BushwhackGPS.xcdatamodeld in Sources */,
 				288BB0E6279797E1005F3D0C /* ParkingSpotEntity.swift in Sources */,
+				283C423227BDD9C00049505E /* MarkerEntity.swift in Sources */,
 				288BB0E027978C33005F3D0C /* MapView.swift in Sources */,
 				288BB0DC279760B1005F3D0C /* Map_Model.swift in Sources */,
 				288BB0E92797993E005F3D0C /* Reachability.swift in Sources */,

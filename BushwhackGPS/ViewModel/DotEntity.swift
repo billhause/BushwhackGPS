@@ -38,7 +38,7 @@ extension DotEntity: Comparable {
     }
     
     
-    // Create a new dot, save it and return it
+    // Create a new DotEntity, save it and return it
     @discardableResult public static func createDotEntity(lat: Double, lon: Double, speed: Double, course: Double) -> DotEntity {
         let viewContext = PersistenceController.shared.container.viewContext
         let newDot = DotEntity(context: viewContext)
