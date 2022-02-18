@@ -26,7 +26,7 @@ extension DotEntity: Comparable {
         // Get array of sorted results
         do {
             let results = try viewContext.fetch(request)
-            MyLog.debug("getAllDotEntities Loaded \(results.count) DotEntities")
+//            MyLog.debug("getAllDotEntities Loaded \(results.count) DotEntities")
             return results
         } catch {
             let nsError = error as NSError

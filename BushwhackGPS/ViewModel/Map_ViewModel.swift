@@ -33,6 +33,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     // Flags to communicate with the mapView since the MapView never knows what data model change triggere an update
     private var mStillNeedToOrientMap = true // Set to true when the map needs to be oriented
     private var mNewDotAnnotationWaiting = false // Set to true if there is a new dot annotation waiting to be added to the map
+    private var mNewMarkerAnnotationWaiting = false // Set to true if there is a new Marker annotation waiting to be added to the map
 
     
     
@@ -145,7 +146,8 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return getParkingSpotLocation()
     }
 
-    // Add a new marker to the current location
+    // Add a new marker at the current location
+    // Set the flag telling the Map to get the waiting markerAnnotation and add it to the map.
     func addNewMarker() {
         guard let location = mLastKnownLocation else {
             return // we don't know where we are so we won't be adding a new marker
@@ -156,8 +158,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         
         // Update model with the waiting MarkerAnnotation
         theMapModel.waitingMKMarkerAnnotation = MKMarkerAnnotation(theMarkerEntity: newMarkerEntity)
-        
-        continue here, look at the flags used when adding a dot and do the same thing for this new MarkerAnnotation to get it added to the map
+        mNewMarkerAnnotationWaiting = true // This will be set to false after the marker is requested
         
     }
 
@@ -291,7 +292,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     // REQUIRED - Called EVERY TIME the location data is updated
     // The MOST RECENT location is the last one in the array
     func locationManager(_ locationManager: CLLocationManager, didUpdateLocations: [CLLocation]) {
-        MyLog.debug("--- locationManager Update Location wdh ---")
+//        MyLog.debug("--- locationManager Update Location wdh ---")
 
         let currentLocation = didUpdateLocations.last!
         let lat = currentLocation.coordinate.latitude
@@ -346,8 +347,20 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
             mNewDotAnnotationWaiting = false
             return theMapModel.waitingMKDotAnnotation
         }
-        return nil // No new annotation is waiting
+        return nil // No new dot annotation is waiting
     }
+    
+    
+    // Return nil if there is not a new MarkerAnnotation waiting to be added
+    // Otherwise return the MarkerAnnotation to be added
+    func getNewMarkerAnnotation() -> MKMarkerAnnotation? {
+        if mNewMarkerAnnotationWaiting {
+            mNewMarkerAnnotationWaiting = false
+            return theMapModel.waitingMKMarkerAnnotation
+        }
+        return nil // No new Marker annotation are waiting
+    }
+    
     
     func getDistanceInFeet(p1: CLLocationCoordinate2D, p2: CLLocationCoordinate2D) -> Int {
         // Calculate Distance
@@ -372,7 +385,6 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     // Heading - Tells the delegate that the location manager received updated heading information.
     // Note: Must have previously called mLocationManager?.startUpdatingHeading() for this to be called
     func locationManager(_ locationManager: CLLocationManager, didUpdateHeading: CLHeading) {
-        MyLog.debug("Map_ViewModel.LocaitonManager didUpdateHeading: \(didUpdateHeading)")
 //        theMapModel.currentHeading = didUpdateHeading.magneticHeading
         theMapModel.currentHeading = didUpdateHeading.trueHeading // Should use this, not magnetic north
     }
@@ -525,6 +537,19 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return filteredDotEntities
     }
     
+    // Return an array of all MarkerAnnotation objects ready to be added to the map
+    func getMarkerAnnotations() -> [MKMarkerAnnotation] {
+        let allMarkerEntities = MarkerEntity.getAllMarkerEntities()
+        // Build array of MarkerAnnotations
+        var markerAnnotations: [MKMarkerAnnotation] = []
+        for markerEntity in allMarkerEntities {
+            let newMarkerAnnotation = MKMarkerAnnotation(theMarkerEntity: markerEntity)
+            markerAnnotations.append(newMarkerAnnotation)
+        }
+        return markerAnnotations
+    }
+    
+    
     // Return an array of DotAnnotations ready to be added to the map
     // This func will filter out any dots that don't fall in the date filter range
     func getDotAnnotations() -> [MKDotAnnotation] { 
@@ -605,7 +630,7 @@ class MKMarkerAnnotation: NSObject, MKAnnotation {
     
     var symbolName: String {
         get {
-            return mMarkerEntity.iconName
+            return mMarkerEntity.iconName!
         }
     }
     

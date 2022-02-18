@@ -80,8 +80,11 @@ struct MapView: UIViewRepresentable {
         mMapView.addAnnotations([theMap_ViewModel.getParkingSpotAnnotation()])
         theMap_ViewModel.orientMap() // zoom in on the current location and the parking location
         
-        // Add the map dots to the map
-        mMapView.addAnnotations(theMap_ViewModel.getDotAnnotations())
+        // Add the map dot Annotations to the map
+        mMapView.addAnnotations(theMap_ViewModel.getDotAnnotations())  // will add all filtered dot annotations
+
+        // Add the Marker Annotations to the map
+        mMapView.addAnnotations(theMap_ViewModel.getMarkerAnnotations()) // Add all Marker Annotations
         
         // == Set initial zoom level ==
         // initial coords don't matter because it will move on current loation 
@@ -105,7 +108,6 @@ struct MapView: UIViewRepresentable {
     // This gets called when ever the Model changes or published variables in the ViewModel
     // Required by UIViewRepresentable protocol
     func updateUIView(_ mapView: MKMapView, context: Context) {
-//        MyLog.debug("MapView.updateUIView() called - MapModel changed")
         let theMapView = mapView
         var bShouldCenterAndFollow = theMap_ViewModel.isSizingAndCenteringNeeded()
         
@@ -116,12 +118,18 @@ struct MapView: UIViewRepresentable {
             theMapView.mapType = .standard
         }
         
+
+        // ADD NEW MARKER ANNOTATION if there is one
+        if let newMarkerAnnotation = theMap_ViewModel.getNewMarkerAnnotation() {
+            // if we got in here, then there's a new Marker annotation to add to the map
+            theMapView.addAnnotation(newMarkerAnnotation)
+            MyLog.debug("Added Marker Annotation to Map")
+        }
         
         // ADD NEW DOT ANNOTATION if there is one
         if let newDotAnnotation = theMap_ViewModel.getNewDotAnnotation() {
-            // If we got in here, then there's a new annotation to add
+            // If we got in here, then there's a new dot annotation to add to the map
             MyLog.debug("Adding new dot annotation \(newDotAnnotation.id)")
-//            Haptic.shared.impact(style: .medium)
             theMapView.addAnnotation(newDotAnnotation)
         }
         
@@ -405,6 +413,7 @@ struct MapView: UIViewRepresentable {
                 annotationView.image = UIGraphicsImageRenderer(size: size).image {
                     _ in MarkerSymbolImage.draw(in:CGRect(origin:.zero, size:size))
                 }
+                MyLog.debug("Added Marker Annotation VIEW")
             }
             
             // === PARKING SPOT Annotation type ===

@@ -10,7 +10,7 @@ import CoreData
 
 struct ContentView: View {
     @ObservedObject var theMap_ViewModel: Map_ViewModel
-    @State var mDotArray = DotEntity.getAllDotEntities()
+//    @State var mDotArray = DotEntity.getAllDotEntities()
     @Environment(\.managedObjectContext) private var viewContext
     @StateObject var theAlert = AlertMessage.shared // @StateObject not @ObservedObject to avoid AttributeGraph cycle warnings
     
@@ -139,7 +139,6 @@ struct ContentView: View {
         withAnimation {
             Haptic.shared.impact(style: .heavy)
             theMap_ViewModel.orientMap() // Call intent function
-            MyLog.debug("dot Count: \(mDotArray.count)")
         }
     }
 
