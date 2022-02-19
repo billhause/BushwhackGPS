@@ -46,7 +46,7 @@ extension MarkerEntity: Comparable {
         newMarker.timestamp = Date()
         newMarker.lat = lat
         newMarker.lon = lon
-        newMarker.desc = ""
+        newMarker.desc = "My Dummy Descriptin wdh"
         newMarker.colorRed = 0.0
         newMarker.colorBlue = 1.0
         newMarker.colorGreen = 0.0

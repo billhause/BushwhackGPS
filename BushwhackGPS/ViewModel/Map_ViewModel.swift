@@ -76,7 +76,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         // Good Article on Location Manager Settings and fields etc: https://itnext.io/swift-ios-cllocationmanager-all-in-one-b786ffd37e4a
         
         MyLog.debug("isIdelTimerDisabled = \(UIApplication.shared.isIdleTimerDisabled)")
-        UIApplication.shared.isIdleTimerDisabled = true // wdhx to prevent suspension after being put in the background
+        UIApplication.shared.isIdleTimerDisabled = true // to prevent suspension after being put in the background - does not work 100%
         
         mLocationManager = CLLocationManager()
         super.init() // Call the NSObject init - Must be after member vars are initialized and before 'self' is referenced
@@ -93,7 +93,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         // To Receive Backgroun Location Updates...
         // NOTE: MUST CHECK THE XCODE App Setting box for 'Location Updates' in the 'Background Modes' section under the 'Signing and Capabilities' tab
 
-        // TODO: wdhx try experamenting with 'significantLocationUpdate' setting to get updates every 5 minues or so
+        // TODO: try experamenting with 'significantLocationUpdate' setting to get updates every 5 minues or so
         // a comment said 'you're not handling the location key properly https://developer.apple.com/forums/thread/69152
         // There is an indication that requestLocation stops the location service once the request has been fulfilled https://developer.apple.com/library/content/documentation/Performance/Conceptual/EnergyGuide-iOS/LocationBestPractices.html
         // Try setting the CLLocationManager ActivityType to fitness vs automotiveNavigation.  This is used by iOS to pause locaiton updates in the background state to conserve power
@@ -403,14 +403,14 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     // Tells the delegate that location updates were paused.
     func locationManagerDidPauseLocationUpdates(_ locationManager: CLLocationManager) {
         // We don't want to pause in the background so if this is ever turned off, turn it back on
-        mLocationManager?.startUpdatingLocation() // wdhx
-        MyLog.debug("*** wdh UNEXPECTED Location Manager Paused so I restarted it")
+        mLocationManager?.startUpdatingLocation()
+        MyLog.debug("*** ERROR - INVESTIGATE THIS wdh UNEXPECTED Location Manager Paused so I restarted it")
     }
 
 
     // Tells the delegate that the delivery of location updates has resumed.
     func locationManagerDidResumeLocationUpdates(_ locationManager: CLLocationManager) {
-        MyLog.debug("*** wdh UNEXPECTED Location Manager Did Resume Location Updates")
+        MyLog.debug("*** ERROR - INVESTIGATE THIS wdh UNEXPECTED Location Manager Did Resume Location Updates")
     }
 
 
@@ -444,19 +444,13 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         }
         return true
     }
-
-//    func addMarkerCurrentLocation() {
-//        MyLog.debug("Map_ViewModel - addMarkerCurrentLocation() Called") //wdhx
-//
-//    }
     
     func orientMap() {
-        theMapModel.orientMapFlag = true // Change Data Model to Trigger map update wdhx
+        theMapModel.orientMapFlag = true // Change Data Model to Trigger map update
         mStillNeedToOrientMap = true // True until the map tells us it's been oriented using the mapHasBeenOriented() intent func
 //        AlertMessage.shared.Alert("Test Alert: Called from ViewModel orientMap()")
     }
 
-    // TODO: This no longer works because the location callback is only called when you move more than 10 meters.  Change this to reduce the filter to 0 meters (kCLDistanceFilerNone) and then back to 10 after updatiung the parking spot. wdhx
     func updateParkingSpot() {
         // Set the Flag to tell the callback to upate the parking spot location SEE: locationManager(didUpdateLocations:) in this same class
         theMapModel.updateParkingSpotFlag = true
@@ -507,7 +501,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     }
     
     func getParkingSpotLocation() -> CLLocationCoordinate2D {
-        return CLLocationCoordinate2D(latitude: ParkingSpotEntity.getParkingSpotEntity().lat, longitude: ParkingSpotEntity.getParkingSpotEntity().lon) // wdhx
+        return CLLocationCoordinate2D(latitude: ParkingSpotEntity.getParkingSpotEntity().lat, longitude: ParkingSpotEntity.getParkingSpotEntity().lon)
     }
     
     func getParkingSpotAnnotation() -> MKAnnotation {

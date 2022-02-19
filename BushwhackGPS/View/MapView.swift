@@ -165,7 +165,7 @@ struct MapView: UIViewRepresentable {
             // Set the bounding rect size to show the current location and the parking spot
             theMapView.setRegion(theMap_ViewModel.getBoundingMKCoordinateRegion(), animated: false) // If animated, this gets overwritten when heading is set
 
-            // set flag to center the map and follow the user wdhx
+            // set flag to center the map and follow the user
             bShouldCenterAndFollow = true // set flag that will Size and Center the map a few lines down from here
         }
 
@@ -400,59 +400,55 @@ struct MapView: UIViewRepresentable {
             
             // === MARKER ANNOTATIN TYPE ===
             // Note: the annotation contains its color and symbol image name
+            // https://developer.apple.com/documentation/mapkit/mapkit_annotations/annotating_a_map_with_custom_data
             if (annotation is MKMarkerAnnotation) {
                 let Identifier = "Marker"
-                let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: Identifier) ??
-                    MKAnnotationView(annotation: annotation, reuseIdentifier: Identifier)
+                
+                // ALWAYS SHOW THE TITLE - Use MKMarkerAnnotationView to ALWAYS Show the Title - MKAnnotationView will only show the title when tapped.
+                let tempAnnotationView = mapView.dequeueReusableAnnotationView(withIdentifier: Identifier) ??
+                    MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: Identifier)
+                    //MKAnnotationView(annotation: annotation, reuseIdentifier: Identifier)
+                let annotationView = tempAnnotationView as! MKMarkerAnnotationView // Downcast from MKAnnotationView to MKMarkerAnnotationView
+                
                 annotationView.canShowCallout = true // Show title and subtitle if the user taps on the annotation
                 let markerAnnotation = annotation as! MKMarkerAnnotation
                 let MarkerSymbolImage = UIImage(systemName: markerAnnotation.symbolName)!.withTintColor(markerAnnotation.color)
-                let MARKER_SIZE = 10 // size for Marker symbol
+                let MARKER_SIZE = 20 // size for Marker symbol
                 let size = CGSize(width: MARKER_SIZE, height: MARKER_SIZE)
 
                 annotationView.image = UIGraphicsImageRenderer(size: size).image {
                     _ in MarkerSymbolImage.draw(in:CGRect(origin:.zero, size:size))
                 }
                 
-                
-                // https://developer.apple.com/documentation/mapkit/mapkit_annotations/annotating_a_map_with_custom_data
-                
-                // Put 'i' icon in callout and call the callback if someone clicks it.
-                let rightButton = UIButton(type: .detailDisclosure)
-                annotationView.rightCalloutAccessoryView = rightButton
 
-                // Put 'i' icon in callout and call the callback if someone clicks it.
-                let leftButton = UIButton(type: .contactAdd) // Circle with + inside it
-                annotationView.leftCalloutAccessoryView = leftButton
+                // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+                // vvvvvvvv Call-Out Bubble Icons, Images, Buttons etc vvvvvvvvv
+                let infoButton = UIButton(type: .detailDisclosure)
+                let addButton = UIButton(type: .contactAdd) // Circle with + inside it
+                annotationView.rightCalloutAccessoryView = addButton
+                annotationView.leftCalloutAccessoryView = infoButton
 
-                
-                // Provide an image view to use as the accessory view's detail view.
+                // ICON - Provide an image view to use as the accessory view's detail view.
                 annotationView.detailCalloutAccessoryView = UIImageView(image: MarkerSymbolImage)
-                
+                //  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+                // Note the dot annotations suppress the visibility of the Marker annotations if the clusterIdentifier is not nil
                 annotationView.titleVisibility = MKFeatureVisibility.visible // adaptive, hidden, visible
+                //annotationView.subtitleVisibility = MKFeatureVisibility.visible
+                annotationView.clusteringIdentifier = nil // If not nil, then the annotaiton will disappear at higher zoom levels.
+                annotationView.displayPriority = .required // Show the marker at higher zoom levels
+                
+                // We don't want to show the Marker balloon or the glyph image inside the bubble
+                //annotationView.glyphText = "" // Text inside the balloon
+                annotationView.glyphTintColor  = UIColor(red: 0, green: 0, blue: 0, alpha: 0) // Alpha of 0 is invisible
+                annotationView.markerTintColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0) // 0 Alpha makes the balloon transparent
+                
                 
                 MyLog.debug("Added Marker Annotation VIEW - ")
                 return annotationView
             }
-//            // === MARKER ANNOTATIN TYPE ===
-//            // Note: the annotation contains its color and symbol image name
-//            if (annotation is MKMarkerAnnotation) {
-//                let Identifier = "Marker"
-//                let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: Identifier) ??
-//                    MKAnnotationView(annotation: annotation, reuseIdentifier: Identifier)
-//                annotationView.canShowCallout = true // Show title and subtitle if the user taps on the annotation
-//                let markerAnnotation = annotation as! MKMarkerAnnotation
-//                let MarkerSymbolImage = UIImage(systemName: markerAnnotation.symbolName)!.withTintColor(markerAnnotation.color)
-//                let MARKER_SIZE = 10 // size for Marker symbol
-//                let size = CGSize(width: MARKER_SIZE, height: MARKER_SIZE)
-//
-//                annotationView.image = UIGraphicsImageRenderer(size: size).image {
-//                    _ in MarkerSymbolImage.draw(in:CGRect(origin:.zero, size:size))
-//                }
-//                MyLog.debug("Added Marker Annotation VIEW - ")
-//                return annotationView
-//            }
 
+            
             // === PARKING SPOT Annotation type ===
             if (annotation is MKParkingAnnotation) {
                 let Identifier = "ParkingSpot"
@@ -487,6 +483,10 @@ struct MapView: UIViewRepresentable {
         // The user tapped one of the annotation view’s accessory buttons.
         func mapView(_ mapView: MKMapView, annotationView: MKAnnotationView, calloutAccessoryControlTapped: UIControl) {
             MyLog.debug("Called15: 'func mapView(_ mapView: MKMapView, annotationView: MKAnnotationView, calloutAccessoryControlTapped: UIControl)'")
+            
+            
+            Next add a button handler here for when the user clicks on the Info button for a Marker.  It should bring up a 'Details' view to edit the Marker details and add photos etc.  Probalby need to make the mail view be a navigation View
+            MyLog.debug("UIControl: \(calloutAccessoryControlTapped)")
         }
         
         // Asks the delegate to provide a cluster annotation object for the specified annotations.
