@@ -485,7 +485,7 @@ struct MapView: UIViewRepresentable {
             MyLog.debug("Called15: 'func mapView(_ mapView: MKMapView, annotationView: MKAnnotationView, calloutAccessoryControlTapped: UIControl)'")
             
             
-            Next add a button handler here for when the user clicks on the Info button for a Marker.  It should bring up a 'Details' view to edit the Marker details and add photos etc.  Probalby need to make the mail view be a navigation View
+            // wdhx todo: Next add a button handler here for when the user clicks on the Info button for a Marker.  It should bring up a 'Details' view to edit the Marker details and add photos etc.  Probalby need to make the mail view be a navigation View
             MyLog.debug("UIControl: \(calloutAccessoryControlTapped)")
         }
         

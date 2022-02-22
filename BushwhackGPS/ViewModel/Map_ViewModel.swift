@@ -312,7 +312,8 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
             // Dont' add the point if it's already in a cluster of recent points E.g. just walking around the house
             if !pointIsClustered(theLocation: currentLocation) {
                 let newDotEntity = DotEntity.createDotEntity(lat: lat, lon: lon, speed: speed, course: course) // save to DB
-                let dotAnnotation = MKDotAnnotation(coordinate: currentLocation.coordinate, id: newDotEntity.id)
+                let dotAnnotation = MKDotAnnotation(theDotEntity: newDotEntity)
+//                let dotAnnotation = MKDotAnnotation(coordinate: currentLocation.coordinate, id: newDotEntity.id)
                 theMapModel.waitingMKDotAnnotation = dotAnnotation // Update the MapModel with the new annotation to be added to the map
                 
                 // The Map_ViewModel must keep track if there is a new annotation to add to
@@ -552,7 +553,8 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         
         let filteredDotEntities = getFilteredDotEntites()
         for dotEntity in filteredDotEntities {
-            let newMKDotAnnotation = MKDotAnnotation(coordinate: CLLocationCoordinate2D(latitude: dotEntity.lat, longitude: dotEntity.lon), id: dotEntity.id)
+            let newMKDotAnnotation = MKDotAnnotation(theDotEntity: dotEntity)
+//            let newMKDotAnnotation = MKDotAnnotation(coordinate: CLLocationCoordinate2D(latitude: dotEntity.lat, longitude: dotEntity.lon), id: dotEntity.id)
             dotAnnotations.append(newMKDotAnnotation)
         }
         return dotAnnotations
@@ -562,7 +564,16 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
 
 // MARK: Annotation Types
 
-class MKDotAnnotation: NSObject, MKAnnotation {
+class MKParkingAnnotation : NSObject, MKAnnotation {
+    var coordinate: CLLocationCoordinate2D
+    var title: String? = "Parking Spot"
+    var subtitle: String? = ""
+    init(coordinate: CLLocationCoordinate2D) {
+        self.coordinate = coordinate
+    }
+}
+
+class MKDotAnnotation2: NSObject, MKAnnotation {
     var coordinate: CLLocationCoordinate2D
     var title: String? = "Dot Annotation"
     var subtitle: String? = ""
@@ -574,14 +585,51 @@ class MKDotAnnotation: NSObject, MKAnnotation {
     }
 }
 
-class MKParkingAnnotation : NSObject, MKAnnotation {
-    var coordinate: CLLocationCoordinate2D
-    var title: String? = "Parking Spot"
-    var subtitle: String? = ""
-    init(coordinate: CLLocationCoordinate2D) {
-        self.coordinate = coordinate
+// NOTE: MKAnnotation REQUIRES a coordinate, title and description.
+// We provide those as computed properties calculated from the DotEntity
+// This class stores a refernce to its associated DotEntity object.
+class MKDotAnnotation: NSObject, MKAnnotation {
+    let mDotEntity: DotEntity // reference to the DotEntity
+    init(theDotEntity: DotEntity) {
+        mDotEntity = theDotEntity
     }
+    var coordinate: CLLocationCoordinate2D { // computed property
+        get {
+            return CLLocationCoordinate2D(latitude: mDotEntity.lat, longitude: mDotEntity.lon)
+        }
+    }
+    var title: String? { // computed property
+        get {
+            // Use creation date as the default title
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateStyle = .short
+            dateFormatter.timeStyle = .medium // .short .medium .long
+            let timeStamp = dateFormatter.string(from: mDotEntity.timestamp!)
+            let speedMPH = NSString(format:"%.1f", mDotEntity.speed*2.24) // m/s to mph
+            return "\(timeStamp), \(speedMPH) MPH"
+        }
+    }
+    
+    var subtitle: String? { //computed Property
+        get {
+            // 5 digits past decimal is accurate to 1.1 meters at equator
+            let latString = NSString(format:"%.5f", mDotEntity.lat) // 8 digits past dicimal max
+            let lonString = NSString(format:"%.5f", mDotEntity.lon)
+            let headingString = NSString(format:"%.0f°", mDotEntity.course)
+            let theSubTitle = "lat:\(latString), long:\(lonString), heading:\(headingString)"
+            return theSubTitle
+        }
+    }
+
+    var id: Int64 {
+        get {
+            return mDotEntity.id
+        }
+    }
+    
 }
+
+
 
 // NOTE: MKAnnotation REQUIRES a coordinate, title and description.
 // We provide those as computed properties calculated from the MarkerEntity
