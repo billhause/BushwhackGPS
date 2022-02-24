@@ -150,7 +150,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     // Set the flag telling the Map to get the waiting markerAnnotation and add it to the map.
     func addNewMarker() {
         guard let location = mLastKnownLocation else {
-            return // we don't know where we are so we won't be adding a new marker
+            return  // we don't know where we are so we won't be adding a new marker
         }
         
         // Create a new marker and save it
@@ -159,9 +159,9 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         // Update model with the waiting MarkerAnnotation
         theMapModel.waitingMKMarkerAnnotation = MKMarkerAnnotation(theMarkerEntity: newMarkerEntity)
         mNewMarkerAnnotationWaiting = true // This will be set to false after the marker is requested
-        
     }
 
+    
     // Find the distance between the parking spot and the current location.
     // Make the map width/height be double that distance minus some buffer percentage
     // make sure the center stays in the center after subtracting the buffer
@@ -251,8 +251,10 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
 
     // Sometimes the device will not have the first choice symbol so check first
     // Return a default that is always present
-    func getAddMarkerImageName() -> String {
+    func getAddJournalEntryImageName() -> String {
         // Check symbols in order of preference
+        if UIImage(systemName: "square.and.pencil") != nil { return "square.and.pencil" }
+        if UIImage(systemName: "pencil.circle") != nil { return "pencil.circle" }
         if UIImage(systemName: "plus.circle") != nil { return "plus.circle" }
         if UIImage(systemName: "plus.square") != nil { return "plus.square" }
         if UIImage(systemName: "plus.app") != nil { return "plus.app" }
