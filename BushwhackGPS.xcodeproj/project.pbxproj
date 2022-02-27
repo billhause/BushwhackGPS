@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2820C3CA27C823D300122B7C /* NewMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2820C3C927C823D300122B7C /* NewMarkerView.swift */; };
 		283C423227BDD9C00049505E /* MarkerEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283C423127BDD9C00049505E /* MarkerEntity.swift */; };
 		28817B7C278E490E004B7C4B /* BushwhackGPSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28817B7B278E490E004B7C4B /* BushwhackGPSApp.swift */; };
 		28817B7E278E490E004B7C4B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28817B7D278E490E004B7C4B /* ContentView.swift */; };
@@ -48,6 +49,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2820C3C927C823D300122B7C /* NewMarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMarkerView.swift; sourceTree = "<group>"; };
 		283C423127BDD9C00049505E /* MarkerEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkerEntity.swift; sourceTree = "<group>"; };
 		28817B78278E490E004B7C4B /* BushwhackGPS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BushwhackGPS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		28817B7B278E490E004B7C4B /* BushwhackGPSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BushwhackGPSApp.swift; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 			children = (
 				28817B7D278E490E004B7C4B /* ContentView.swift */,
 				288BB0DF27978C33005F3D0C /* MapView.swift */,
+				2820C3C927C823D300122B7C /* NewMarkerView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -342,6 +345,7 @@
 				28817B7C278E490E004B7C4B /* BushwhackGPSApp.swift in Sources */,
 				288BCB38279B721E008FC368 /* AlertMessage.swift in Sources */,
 				28817BB02790F15C004B7C4B /* AppSettingsEntity.swift in Sources */,
+				2820C3CA27C823D300122B7C /* NewMarkerView.swift in Sources */,
 				28817BAE2790AB21004B7C4B /* ID_GeneratorEntity.swift in Sources */,
 				28817B88278E490E004B7C4B /* BushwhackGPS.xcdatamodeld in Sources */,
 				288BB0E6279797E1005F3D0C /* ParkingSpotEntity.swift in Sources */,

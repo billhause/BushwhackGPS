@@ -76,7 +76,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         // Good Article on Location Manager Settings and fields etc: https://itnext.io/swift-ios-cllocationmanager-all-in-one-b786ffd37e4a
         
         MyLog.debug("isIdelTimerDisabled = \(UIApplication.shared.isIdleTimerDisabled)")
-        UIApplication.shared.isIdleTimerDisabled = true // to prevent suspension after being put in the background - does not work 100%
+        UIApplication.shared.isIdleTimerDisabled = true // to help prevent suspension after being put in the background - does not work 100%
         
         mLocationManager = CLLocationManager()
         super.init() // Call the NSObject init - Must be after member vars are initialized and before 'self' is referenced
@@ -136,8 +136,16 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return mStillNeedToOrientMap
     }
     
-        
+    // Return the current location or nil if we dont' have one
+    func getCurrentLocation() -> CLLocation? {
+        if let currentLocation = mLocationManager?.location {
+            return currentLocation
+        }
+        return nil // we couldn't find a location so return nil
+    }
+    
     private var mLastKnownLocation: CLLocationCoordinate2D?
+    // This will ALWAYS return a location even if it's not current
     func getLastKnownLocation() -> CLLocationCoordinate2D {
         // Get current location.  IF none, then use the parking spot location as the current location
         if mLastKnownLocation != nil {
@@ -161,6 +169,25 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         mNewMarkerAnnotationWaiting = true // This will be set to false after the marker is requested
     }
 
+    // Location Accuracy Status Values
+    // Used to determine if we can add a new Marker to the map
+    enum LocationAccuracyStatus {
+        case NoLocation
+        case InaccurateLocation
+        case GoodLocation
+    }
+    
+    // Rerturn the status of our location accuracy NoLocation, InaccurateLocation or GoodLocation
+    func getLocationStatus() -> LocationAccuracyStatus {
+        let REQUIRED_LOCATION_ACCURACY = 60.0 // minimum location accuracy in meters required to create a log entry.
+        guard let currentLocation = getCurrentLocation() else {
+            return LocationAccuracyStatus.NoLocation
+        }
+        if currentLocation.horizontalAccuracy < REQUIRED_LOCATION_ACCURACY {
+            return LocationAccuracyStatus.GoodLocation
+        }
+        return LocationAccuracyStatus.InaccurateLocation
+    }
     
     // Find the distance between the parking spot and the current location.
     // Make the map width/height be double that distance minus some buffer percentage
@@ -301,6 +328,8 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         let lon = currentLocation.coordinate.longitude
         let speed = currentLocation.speed
         let course = currentLocation.course
+        
+        MyLog.debug("Horizontal Accuracy: \(currentLocation.horizontalAccuracy) meters")
 
         // Update last known location
         mLastKnownLocation = currentLocation.coordinate
@@ -338,9 +367,6 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
             parkingSpotMoved = true
         }
         
-//        // === DISTANCE === - Update the distance
-//        let parkingSpot = getParkingSpotLocation()
-//        theParkingSpotDistance = getDistanceInFeet(p1: parkingSpot, p2: currentLocation.coordinate)
     }
 
     

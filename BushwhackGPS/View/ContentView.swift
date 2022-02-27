@@ -84,7 +84,7 @@ struct ContentView: View {
 
                     Group { // Group 2
                         Spacer()
-                        NavigationLink(destination: CreateMarkerView(theMap_VM: theMap_ViewModel)) {
+                        NavigationLink(destination: NewMarkerView(theMap_VM: theMap_ViewModel)) {
                                 let theColor = UIColor(red: 0.5, green: 0.0, blue: 1.0, alpha: 1.0)
                                 let journalImageName = theMap_ViewModel.getAddJournalEntryImageName()
                                 Label("Journal Entry", systemImage: journalImageName)
@@ -186,18 +186,6 @@ struct HorizontalLabelStyle: LabelStyle {
 }
 
 
-struct CreateMarkerView: View {
-    @ObservedObject var theMap_ViewModel: Map_ViewModel
-    init(theMap_VM: Map_ViewModel) {
-        theMap_ViewModel = theMap_VM
-//        mNewMarkerEntity = theMap_ViewModel.addNewMarker() // What do we do if it returns nil?
-        Haptic.shared.impact(style: .heavy)
-    }
-    var body: some View {
-        Move this into it's own file somewhere
-        Text("Dude - Add interface to collect Marker info and then call intent func to create it when they save")
-    }
-}
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
