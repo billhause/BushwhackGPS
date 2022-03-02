@@ -44,16 +44,12 @@ struct MarkerEditView: View {
     
     @State var titleText: String = ""
     @State var bodyText: String = ""
-    @State var iconSymbolName: String = "xmark.square.fill"
+    @State var iconSymbolName: String = "multiply.circle" //"xmark.square.fill"
     @State var lat: Double = 100.0
     @State var lon: Double = -100.0
-    @State var colorRed: Double = 0.0
-    @State var colorGreen: Double = 0.0
-    @State var colorBlue: Double = 0.0
-    @State var colorAlpha: Double = 1.0 // no transparency
-    
-    @State private var selectedIndex = 5
-        
+    @State var iconColor: Color = Color(.sRGB, red: 1.0, green: 0.0, blue: 0.0) // Red by default - Satalite and Map
+    @State var dateTimeDetailText = "" // Used to display the time with seconds
+            
     // Constants
     let LEFT_PADDING = 10.0 // Padding on the left side of various controls
     
@@ -69,15 +65,24 @@ struct MarkerEditView: View {
                 .padding(EdgeInsets(top: 0.0, leading: 0.0, bottom: 10, trailing: 0.0))
             TextDataInputMultiLine(title: "Journal Entry", userInput: $bodyText)
             
-            // Icon Picker
-//Next figure out why the default icon does not appear before you pick a different one.
+            // Icon Picker and Color Picker
             HStack {
-                Text("Select a Map Icon:")
-                Picker("Please choose an icon", selection: $iconSymbolName) {
+                Text("Map Icon:")
+                Picker("mapIcon", selection: $iconSymbolName) {
                     ForEach(theMap_ViewModel.getMarkerIconList(), id: \.self) {
                         Label("", systemImage: $0)
                     }
                 } //.pickerStyle(MenuPickerStyle()) //.pickerStyle(SegmentedPickerStyle()) //.pickerStyle(WheelPickerStyle())
+
+                // Color Picker
+                ColorPicker("Icon Color (Darker is better)", selection: $iconColor, supportsOpacity: false)
+                    .padding()
+            } // HStack
+
+            // Date/Time Display
+            HStack {
+                Text("Time Stamp: \(dateTimeDetailText)") // Time with seconds
+                Spacer()
             }
             
             
@@ -115,15 +120,17 @@ struct MarkerEditView: View {
         dateFormatter.dateStyle = .short
         dateFormatter.timeStyle = .short // .medium
         titleText = dateFormatter.string(from: Date())
+        dateFormatter.timeStyle = .medium
+        dateTimeDetailText = dateFormatter.string(from: Date())
 
-        Next add color picker for Marker Icons.
         
     }
     
     func HandleOnDisappear() {
-        MyLog.debug("** HandleOnDisappear() Selected Icon is \(iconSymbolName)")
-        theMap_ViewModel.addNewMarker(lat: self.lat, lon: self.lon, title: titleText, body: bodyText, iconName: iconSymbolName)
         Haptic.shared.impact(style: .heavy)
+        MyLog.debug("** HandleOnDisappear() Selected Icon is \(iconSymbolName)")
+        theMap_ViewModel.addNewMarker(lat: self.lat, lon: self.lon, title: titleText, body: bodyText, iconName: iconSymbolName, color: iconColor)
+        
     }
     
     

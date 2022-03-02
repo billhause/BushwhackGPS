@@ -35,14 +35,28 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     private var mNewDotAnnotationWaiting = false // Set to true if there is a new dot annotation waiting to be added to the map
     private var mNewMarkerAnnotationWaiting = false // Set to true if there is a new Marker annotation waiting to be added to the map
 
-    private var markerIconList: [String] = []
-    private var markerIconNames = [
+    private var mMarkerIconList: [String] = []
+    private var mMarkerIconNames = [
         "xmark.square.fill",
+        "multiply.circle",
+        "house.fill",
+        "heart.fill",
+        "star.fill",
+        "parkingsign.circle",
+        "car.fill",
+        "car.circle",
+        "bolt.car",
+        "fuelpump",
+        "fork.knife.circle",
+        "bed.double",
+        "airplane.circle",
+        "bus",
+        "tram",
+        "ferry.fill",
+        "bicycle",
         "circle",
         "triangle",
         "square",
-        "heart.fill",
-        "star.fill",
         "flag.fill",
         "camera.fill",
         "phone.fill",
@@ -50,28 +64,14 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         "cart.fill",
         "stethoscope.circle",
         "cross.case",
-        "house.fill",
+        "cross.circle",
         "building",
         "wifi",
-        "airplane.circle",
-        "car.fill",
-        "car.circle",
-        "bolt.car",
-        "bus",
-        "tram",
-        "ferry.fill",
-        "bicycle",
-        "parkingsign.circle.fill",
-        "fuelpump",
-        "bed.double",
-        "cross.circle",
         "face.smiling",
         "photo",
-        "fork.knife.circle",
         "binoculars.fill",
         "questionmark.circle.fill",
         "exclamationmark.circle.fill",
-        "multiply.circle",
         "trash",
         "a.circle.fill",
         "b.circle.fill",
@@ -211,26 +211,29 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
                                        selector: #selector(appMovingToForeground),
                                        name: UIApplication.willEnterForegroundNotification,
                                        object: nil)
-        
+        buildMarkerIconList() // Build the array of valid icons in mMarkerIconList and filter out any invalid names
     }
 
     // Return a list of Journal Marker string names to pick from
-    // wdhx
-    func getMarkerIconList() -> [String] {
-        for currentIconName in markerIconNames {
+    // This should only be called once to initialize the icon list.
+    private func buildMarkerIconList() {
+        for currentIconName in mMarkerIconNames {
             if UIImage(systemName: currentIconName) != nil {
-                markerIconList.append(currentIconName)
+                mMarkerIconList.append(currentIconName)
             } else {
                 // Didn't find the image
-                MyLog.debug("Unable to find image for \(currentIconName) in getMarkerIconList")
+                MyLog.debug("ERROR: Unable to find image for \(currentIconName) in buildMarkerIconList()")
             }
-
         }
-//        if UIImage(systemName: "xmark.circle") != nil { return "xmark.circle" }
-        return markerIconList
     }
 
     
+    // Return a list of Journal Marker string names to pick from
+    // wdhx
+    func getMarkerIconList() -> [String] {
+        return mMarkerIconList
+    }
+
     
     // View should call this to inform the ViewModel that the map no longer needs to be oriented
     func mapHasBeenResizedAndCentered() {
@@ -275,13 +278,25 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     }
 
     // Add a new marker to the current location using specified values
-    func addNewMarker(lat: Double, lon: Double, title: String, body: String, iconName: String) { // wdhx
+    func addNewMarker(lat: Double, lon: Double, title: String, body: String, iconName: String, color: Color) { // wdhx
         
         // Create a new marker and save it
         let newMarkerEntity = MarkerEntity.createMarkerEntity(lat: lat, lon: lon)
         newMarkerEntity.title = title
         newMarkerEntity.desc = body
         newMarkerEntity.iconName = iconName
+        
+        // Extract the RGB color values and save them in the Entity
+        var rgbRed: CGFloat = 0
+        var rgbBlue: CGFloat = 0
+        var rgbGreen: CGFloat = 0
+        var rgbAlpha: CGFloat = 0
+        let myUIColor = UIColor(color)
+        myUIColor.getRed(&rgbRed, green: &rgbGreen, blue: &rgbBlue, alpha: &rgbAlpha)
+        newMarkerEntity.colorRed = rgbRed
+        newMarkerEntity.colorBlue = rgbBlue
+        newMarkerEntity.colorGreen = rgbGreen
+        newMarkerEntity.colorAlpha = rgbAlpha // should always be 1.0 for display on map
         
         // Update model with the waiting MarkerAnnotation
         theMapModel.waitingMKMarkerAnnotation = MKMarkerAnnotation(theMarkerEntity: newMarkerEntity)
