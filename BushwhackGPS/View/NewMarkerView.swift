@@ -44,7 +44,7 @@ struct MarkerEditView: View {
     
     @State var titleText: String = ""
     @State var bodyText: String = ""
-    @State var iconName: String = "xmark.square.fill"
+    @State var iconSymbolName: String = "xmark.square.fill"
     @State var lat: Double = 100.0
     @State var lon: Double = -100.0
     @State var colorRed: Double = 0.0
@@ -52,7 +52,6 @@ struct MarkerEditView: View {
     @State var colorBlue: Double = 0.0
     @State var colorAlpha: Double = 1.0 // no transparency
     
-    @State var iconCharacter: String = ""
     @State private var selectedIndex = 5
         
     // Constants
@@ -71,10 +70,10 @@ struct MarkerEditView: View {
             TextDataInputMultiLine(title: "Journal Entry", userInput: $bodyText)
             
             // Icon Picker
-Next figure out why the default icon does not appear before you pick a different one.
+//Next figure out why the default icon does not appear before you pick a different one.
             HStack {
                 Text("Select a Map Icon:")
-                Picker("Please choose an icon", selection: $iconCharacter) {
+                Picker("Please choose an icon", selection: $iconSymbolName) {
                     ForEach(theMap_ViewModel.getMarkerIconList(), id: \.self) {
                         Label("", systemImage: $0)
                     }
@@ -105,13 +104,28 @@ Next figure out why the default icon does not appear before you pick a different
     func HandleOnAppear() {
         Haptic.shared.impact(style: .heavy)
         MyLog.debug("1 HandleOnAppear() called")
+        
+        // Set Lat/Lon
         lat = theMap_ViewModel.getCurrentLocation()?.coordinate.latitude ?? 100.0
         lon = theMap_ViewModel.getCurrentLocation()?.coordinate.longitude ?? -100.0
 
+        // Set default Title
+        // Use creation date as the default title
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .short // .medium
+        titleText = dateFormatter.string(from: Date())
+
+        Next add color picker for Marker Icons.
+        
     }
+    
     func HandleOnDisappear() {
-        MyLog.debug("3 HandleOnDisappear() Selected Icon is \(iconCharacter)")
+        MyLog.debug("** HandleOnDisappear() Selected Icon is \(iconSymbolName)")
+        theMap_ViewModel.addNewMarker(lat: self.lat, lon: self.lon, title: titleText, body: bodyText, iconName: iconSymbolName)
+        Haptic.shared.impact(style: .heavy)
     }
+    
     
 }
 

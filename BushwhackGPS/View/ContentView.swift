@@ -123,8 +123,8 @@ struct ContentView: View {
         } // NavigationView
     }
 
-    private func addMarkerHandler() {
-        theMap_ViewModel.addNewMarker()
+    private func addMarkerHandler() { // wdhx
+        theMap_ViewModel.addNewDefaultMarker()
         Haptic.shared.impact(style: .heavy)
     }
 

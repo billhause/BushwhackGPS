@@ -259,9 +259,9 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return getParkingSpotLocation()
     }
 
-    // Add a new marker at the current location
+    // Add a new marker at the current location using default values
     // Set the flag telling the Map to get the waiting markerAnnotation and add it to the map.
-    func addNewMarker() {
+    func addNewDefaultMarker() { // DELETE THIS FUNCTION AFTER IT"S NO LONGER USED TODO
         guard let location = mLastKnownLocation else {
             return  // we don't know where we are so we won't be adding a new marker
         }
@@ -274,6 +274,21 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         mNewMarkerAnnotationWaiting = true // This will be set to false after the marker is requested
     }
 
+    // Add a new marker to the current location using specified values
+    func addNewMarker(lat: Double, lon: Double, title: String, body: String, iconName: String) { // wdhx
+        
+        // Create a new marker and save it
+        let newMarkerEntity = MarkerEntity.createMarkerEntity(lat: lat, lon: lon)
+        newMarkerEntity.title = title
+        newMarkerEntity.desc = body
+        newMarkerEntity.iconName = iconName
+        
+        // Update model with the waiting MarkerAnnotation
+        theMapModel.waitingMKMarkerAnnotation = MKMarkerAnnotation(theMarkerEntity: newMarkerEntity)
+        mNewMarkerAnnotationWaiting = true // This will be set to false after the marker is requested
+    }
+
+    
     // Location Accuracy Status Values
     // Used to determine if we can add a new Marker to the map
     enum LocationAccuracyStatus {
