@@ -35,7 +35,94 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     private var mNewDotAnnotationWaiting = false // Set to true if there is a new dot annotation waiting to be added to the map
     private var mNewMarkerAnnotationWaiting = false // Set to true if there is a new Marker annotation waiting to be added to the map
 
-    
+    private var markerIconList: [String] = []
+    private var markerIconNames = [
+        "xmark.square.fill",
+        "circle",
+        "triangle",
+        "square",
+        "heart.fill",
+        "star.fill",
+        "flag.fill",
+        "camera.fill",
+        "phone.fill",
+        "cart.circle",
+        "cart.fill",
+        "stethoscope.circle",
+        "cross.case",
+        "house.fill",
+        "building",
+        "wifi",
+        "airplane.circle",
+        "car.fill",
+        "car.circle",
+        "bolt.car",
+        "bus",
+        "tram",
+        "ferry.fill",
+        "bicycle",
+        "parkingsign.circle.fill",
+        "fuelpump",
+        "bed.double",
+        "cross.circle",
+        "face.smiling",
+        "photo",
+        "fork.knife.circle",
+        "binoculars.fill",
+        "questionmark.circle.fill",
+        "exclamationmark.circle.fill",
+        "multiply.circle",
+        "trash",
+        "a.circle.fill",
+        "b.circle.fill",
+        "c.circle.fill",
+        "d.circle.fill",
+        "e.circle.fill",
+        "f.circle.fill",
+        "g.circle.fill",
+        "h.circle.fill",
+        "i.circle.fill",
+        "j.circle.fill",
+        "k.circle.fill",
+        "l.circle.fill",
+        "m.circle.fill",
+        "n.circle.fill",
+        "o.circle.fill",
+        "p.circle.fill",
+        "q.circle.fill",
+        "r.circle.fill",
+        "s.circle.fill",
+        "t.circle.fill",
+        "u.circle.fill",
+        "v.circle.fill",
+        "w.circle.fill",
+        "x.circle.fill",
+        "y.circle.fill",
+        "z.circle.fill",
+        "0.circle.fill",
+        "1.circle.fill",
+        "2.circle.fill",
+        "3.circle.fill",
+        "4.circle.fill",
+        "5.circle.fill",
+        "6.circle.fill",
+        "7.circle.fill",
+        "8.circle.fill",
+        "9.circle.fill",
+        "10.circle.fill",
+        "11.circle.fill",
+        "12.circle.fill",
+        "13.circle.fill",
+        "14.circle.fill",
+        "15.circle.fill",
+        "16.circle.fill",
+        "17.circle.fill",
+        "18.circle.fill",
+        "19.circle.fill",
+        "20.circle.fill"
+    ]
+
+
     
     // MARK: Flag Variables
     var isHybrid: Bool { // Expose this so the View can modify it indirectily through the ViewModel
@@ -127,6 +214,24 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         
     }
 
+    // Return a list of Journal Marker string names to pick from
+    // wdhx
+    func getMarkerIconList() -> [String] {
+        for currentIconName in markerIconNames {
+            if UIImage(systemName: currentIconName) != nil {
+                markerIconList.append(currentIconName)
+            } else {
+                // Didn't find the image
+                MyLog.debug("Unable to find image for \(currentIconName) in getMarkerIconList")
+            }
+
+        }
+//        if UIImage(systemName: "xmark.circle") != nil { return "xmark.circle" }
+        return markerIconList
+    }
+
+    
+    
     // View should call this to inform the ViewModel that the map no longer needs to be oriented
     func mapHasBeenResizedAndCentered() {
         mStillNeedToOrientMap = false

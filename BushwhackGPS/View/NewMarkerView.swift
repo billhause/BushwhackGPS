@@ -44,14 +44,17 @@ struct MarkerEditView: View {
     
     @State var titleText: String = ""
     @State var bodyText: String = ""
-    @State var iconName: String = "triangle"
+    @State var iconName: String = "xmark.square.fill"
     @State var lat: Double = 100.0
-    @State var lon: Double = 100.0
+    @State var lon: Double = -100.0
     @State var colorRed: Double = 0.0
     @State var colorGreen: Double = 0.0
     @State var colorBlue: Double = 0.0
     @State var colorAlpha: Double = 1.0 // no transparency
     
+    @State var iconCharacter: String = ""
+    @State private var selectedIndex = 5
+        
     // Constants
     let LEFT_PADDING = 10.0 // Padding on the left side of various controls
     
@@ -61,15 +64,25 @@ struct MarkerEditView: View {
     
     var body: some View {
         VStack {
+            
+            // Journal Entry Title and Body
             TextDataInput(title: "Title", userInput: $titleText)
-//            HStack {
-//                Text("Journal Entry")
-//                Spacer()
-//            }
+                .padding(EdgeInsets(top: 0.0, leading: 0.0, bottom: 10, trailing: 0.0))
             TextDataInputMultiLine(title: "Journal Entry", userInput: $bodyText)
-//            TextEditor(text: $bodyText)
-//                .multilineTextAlignment(.leading)
-//                .border(Color.black)
+            
+            // Icon Picker
+Next figure out why the default icon does not appear before you pick a different one.
+            HStack {
+                Text("Select a Map Icon:")
+                Picker("Please choose an icon", selection: $iconCharacter) {
+                    ForEach(theMap_ViewModel.getMarkerIconList(), id: \.self) {
+                        Label("", systemImage: $0)
+                    }
+                } //.pickerStyle(MenuPickerStyle()) //.pickerStyle(SegmentedPickerStyle()) //.pickerStyle(WheelPickerStyle())
+            }
+            
+            
+            // LAT/LON Display
             HStack {
                 Text("Latitude: \(lat)")
                 Spacer()
@@ -92,9 +105,12 @@ struct MarkerEditView: View {
     func HandleOnAppear() {
         Haptic.shared.impact(style: .heavy)
         MyLog.debug("1 HandleOnAppear() called")
+        lat = theMap_ViewModel.getCurrentLocation()?.coordinate.latitude ?? 100.0
+        lon = theMap_ViewModel.getCurrentLocation()?.coordinate.longitude ?? -100.0
+
     }
     func HandleOnDisappear() {
-        MyLog.debug("3 HandleOnDisappear() called")
+        MyLog.debug("3 HandleOnDisappear() Selected Icon is \(iconCharacter)")
     }
     
 }
@@ -119,7 +135,6 @@ struct TextDataInput: View {
             TextField("Enter \(title)", text: $userInput)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
         }
-//        .padding()
     }
 }
 
@@ -129,14 +144,17 @@ struct TextDataInputMultiLine: View {
     @Binding var userInput: String
     
     var body: some View {
-        HStack(alignment: VerticalAlignment.center) {
+        VStack(alignment: HorizontalAlignment.leading) {
             Text(title)
                 .font(.body)
+                .padding(EdgeInsets(top: 0.0, leading: 0.0, bottom: -5, trailing: 0.0))
             TextEditor(text: $userInput)
                 .multilineTextAlignment(.leading)
-                .border(Color.black)
+                .overlay( // Round the edit boundry frame
+                         RoundedRectangle(cornerRadius: 5)
+                           .stroke(Color.gray, lineWidth: 1)
+                )
         }
-//        .padding()
     }
 }
 
