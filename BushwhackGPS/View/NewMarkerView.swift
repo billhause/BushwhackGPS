@@ -26,7 +26,7 @@ struct NewMarkerView: View {
                     .padding()
             } else
             if theMap_ViewModel.getLocationStatus() == .InaccurateLocation {
-                Text("Insufficient Location Accuracy to create a reliable Journal Entry Point")
+                Text("Insufficient Location Accuracy to create a reliable Journal Marker location")
                     .padding()
                 Text("Wait for better Location Accuracy and try again")
                     .padding()
@@ -49,12 +49,20 @@ struct MarkerEditView: View {
     @State var lon: Double = -100.0
     @State var iconColor: Color = Color(.sRGB, red: 1.0, green: 0.0, blue: 0.0) // Red by default - Satalite and Map
     @State var dateTimeDetailText = "" // Used to display the time with seconds
+    @State var mMarkerEntity: MarkerEntity? // non-nil if we are editing an existing marker
             
     // Constants
     let LEFT_PADDING = 10.0 // Padding on the left side of various controls
     
+    // Used when we we are creating a NEW MarkerEntity and not editing an existing one
     init(theMap_VM: Map_ViewModel) {
         theMap_ViewModel = theMap_VM
+    }
+    
+    // Used when editing an EXISTING MarkerEntity and not creating a new one
+    init(theMap_VM: Map_ViewModel, markerEntity: MarkerEntity) {
+        theMap_ViewModel = theMap_VM
+        mMarkerEntity = markerEntity
     }
     
     var body: some View {
@@ -110,18 +118,44 @@ struct MarkerEditView: View {
         Haptic.shared.impact(style: .heavy)
         MyLog.debug("1 HandleOnAppear() called")
         
-        // Set Lat/Lon
-        lat = theMap_ViewModel.getCurrentLocation()?.coordinate.latitude ?? 100.0
-        lon = theMap_ViewModel.getCurrentLocation()?.coordinate.longitude ?? -100.0
+        // EITHER
+        //   Use the EXISTING marker that we're EDITING
+        // or
+        //   We're creationg a new Marker so we don't have an existing one yet.
+        
+        if let theMarkerEntity = mMarkerEntity { // EXISTING MARKER
+            // We are editing an existing Marker Entity
+            // Initialize the fields based on the MarkerEntity we are editig
+            titleText = theMarkerEntity.title!
+            bodyText = theMarkerEntity.desc!
+            iconSymbolName = theMarkerEntity.iconName!
+            lat = theMarkerEntity.lat
+            lon = theMarkerEntity.lon
+            iconColor = Color(.sRGB, red: theMarkerEntity.colorRed, green: theMarkerEntity.colorGreen, blue: theMarkerEntity.colorBlue)
+            
+            // Use creation date as the default title
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateStyle = .short
+            dateFormatter.timeStyle = .medium
+            dateTimeDetailText = dateFormatter.string(from: theMarkerEntity.timestamp!)
 
-        // Set default Title
-        // Use creation date as the default title
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .short // .medium
-        titleText = dateFormatter.string(from: Date())
-        dateFormatter.timeStyle = .medium
-        dateTimeDetailText = dateFormatter.string(from: Date())
+        } else { // CREATING NEW MARKER
+            // We are creating a new Marker Entity so initialze the values to defaults
+
+            // Set Lat/Lon
+            lat = theMap_ViewModel.getCurrentLocation()?.coordinate.latitude ?? 100.0
+            lon = theMap_ViewModel.getCurrentLocation()?.coordinate.longitude ?? -100.0
+
+            // Set default Title
+            // Use creation date as the default title
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateStyle = .short
+            dateFormatter.timeStyle = .short // .medium
+            titleText = dateFormatter.string(from: Date())
+            dateFormatter.timeStyle = .medium
+            dateTimeDetailText = dateFormatter.string(from: Date())
+        }
+        
 
         
     }
@@ -129,7 +163,19 @@ struct MarkerEditView: View {
     func HandleOnDisappear() {
         Haptic.shared.impact(style: .heavy)
         MyLog.debug("** HandleOnDisappear() Selected Icon is \(iconSymbolName)")
-        theMap_ViewModel.addNewMarker(lat: self.lat, lon: self.lon, title: titleText, body: bodyText, iconName: iconSymbolName, color: iconColor)
+        
+        
+        // EITHER
+        //   Update the EXISTING marker that we're EDITING
+        // or
+        //   We're creationg a new Marker so we don't have an existing one yet.
+        if let theMarkerEntity = mMarkerEntity { // UPDATE EXISTING MARKER
+            theMap_ViewModel.updateExistingMarker(theMarker: theMarkerEntity, lat: self.lat, lon: self.lon, title: titleText, body: bodyText, iconName: iconSymbolName, color: iconColor)
+
+        } else { // CREATING NEW MARKER
+            theMap_ViewModel.addNewMarker(lat: self.lat, lon: self.lon, title: titleText, body: bodyText, iconName: iconSymbolName, color: iconColor)
+        }
+
         
     }
     

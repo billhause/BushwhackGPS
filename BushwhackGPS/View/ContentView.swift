@@ -72,22 +72,22 @@ struct ContentView: View {
                                 .foregroundColor(Color(theColor))
                         }
                             .labelStyle(VerticalLabelStyle())
-                        Spacer()
-                        Button(action: addMarkerHandler) {
-                            let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
-                            let addMarkerImageName = theMap_ViewModel.getAddJournalEntryImageName()
-                            Label("Marker", systemImage: addMarkerImageName)
-                                .foregroundColor(Color(theColor))
-                        }
-                            .labelStyle(VerticalLabelStyle())
+//                        Spacer()
+//                        Button(action: addMarkerHandler) {
+//                            let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
+//                            let addMarkerImageName = theMap_ViewModel.getAddJournalEntryImageName()
+//                            Label("Marker", systemImage: addMarkerImageName)
+//                                .foregroundColor(Color(theColor))
+//                        }
+//                            .labelStyle(VerticalLabelStyle())
                     } // Group 1
 
                     Group { // Group 2
                         Spacer()
                         NavigationLink(destination: NewMarkerView(theMap_VM: theMap_ViewModel)) {
-                                let theColor = UIColor(red: 0.5, green: 0.0, blue: 1.0, alpha: 1.0)
+                                let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
                                 let journalImageName = theMap_ViewModel.getAddJournalEntryImageName()
-                                Label("Journal Entry", systemImage: journalImageName)
+                                Label("Journal Marker", systemImage: journalImageName)
                                     .foregroundColor(Color(theColor))
                         }
                             .labelStyle(VerticalLabelStyle())
@@ -123,10 +123,10 @@ struct ContentView: View {
         } // NavigationView
     }
 
-    private func addMarkerHandler() { // wdhx
-        theMap_ViewModel.addNewDefaultMarker()
-        Haptic.shared.impact(style: .heavy)
-    }
+//    private func addMarkerHandler() { // wdhx
+//        theMap_ViewModel.addNewDefaultMarker()
+//        Haptic.shared.impact(style: .heavy)
+//    }
 
     private func hideDotsHandler() {
         MyLog.debug("hideDotsHandler() called")

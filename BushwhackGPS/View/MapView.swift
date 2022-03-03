@@ -19,6 +19,7 @@ import MapKit
 import UIKit
 import CoreLocation
 import os
+import CryptoKit
 
 // ======= Adding Touch Detection =======
 // https://stackoverflow.com/questions/63110673/tapping-an-mkmapview-in-swiftui
@@ -423,7 +424,7 @@ struct MapView: UIViewRepresentable {
 
                 // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
                 // vvvvvvvv Call-Out Bubble Icons, Images, Buttons etc vvvvvvvvv
-                let infoButton = UIButton(type: .detailDisclosure)
+                let infoButton = UIButton(type: .detailDisclosure) // Circle with an 'i' inside it
                 let addButton = UIButton(type: .contactAdd) // Circle with + inside it
                 annotationView.rightCalloutAccessoryView = addButton
                 annotationView.leftCalloutAccessoryView = infoButton
@@ -482,11 +483,10 @@ struct MapView: UIViewRepresentable {
 
         // The user tapped one of the annotation view’s accessory buttons.
         func mapView(_ mapView: MKMapView, annotationView: MKAnnotationView, calloutAccessoryControlTapped: UIControl) {
-            MyLog.debug("Called15: 'func mapView(_ mapView: MKMapView, annotationView: MKAnnotationView, calloutAccessoryControlTapped: UIControl)'")
-            
+            MyLog.debug("UIControl: \(calloutAccessoryControlTapped)")
+Next figure out how to display the MapMarkerView editor view from here when the icon in the callout is tapped
             
             // wdhx todo: Next add a button handler here for when the user clicks on the Info button for a Marker.  It should bring up a 'Details' view to edit the Marker details and add photos etc.  Probalby need to make the mail view be a navigation View
-            MyLog.debug("UIControl: \(calloutAccessoryControlTapped)")
         }
         
         // Asks the delegate to provide a cluster annotation object for the specified annotations.
