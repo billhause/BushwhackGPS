@@ -13,17 +13,30 @@ struct ContentView: View {
 //    @State var mDotArray = DotEntity.getAllDotEntities()
     @Environment(\.managedObjectContext) private var viewContext
     @StateObject var theAlert = AlertMessage.shared // @StateObject not @ObservedObject to avoid AttributeGraph cycle warnings
+    @StateObject var theMarkerEditDialog = EditMarker.shared
     
     var body: some View {
         NavigationView {
             VStack {
                 MapView(theViewModel: theMap_ViewModel)
-                
-                // vvvvvvv ALERT MESSAGE vvvvvvvvv
+
+                // vvvvvvv Edit Marker Modal Dialog vvvvvvvvv
+                if #available(iOS 15.0, *) {
+                    Spacer()
+                        .sheet(isPresented:$theMarkerEditDialog.showEditMarkerDialog) {
+                            MarkerEditView(theMap_VM: theMap_ViewModel, markerEntity: theMarkerEditDialog.theMarkerEntity!)
+                        }
+                } else {
+                    // Fallback on earlier versions
+                    Spacer()
+                }
+                // ^^^^^^^^^ EDIT MARKER DIALOG ^^^^^^^^^^^^^
+
+                // vvvvvvv ALERT MESSAGE Modal Dialog vvvvvvvvv
                 if #available(iOS 15.0, *) {
                     Spacer()
                         .alert(theAlert.theMessage, isPresented: $theAlert.showAlert) {
-                            Button("OK", role: .cancel) { }
+                            Button("OK wdhx", role: .cancel) { }
                         }
                 } else {
                     // Fallback on earlier versions

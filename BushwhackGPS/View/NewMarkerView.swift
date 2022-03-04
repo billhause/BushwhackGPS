@@ -225,3 +225,38 @@ struct TextDataInputMultiLine: View {
     }
 }
 
+
+//                        .sheet(isPresented:$theAlert.showAlert) {
+//                            MarkerEditView(theMap_VM: theMap_ViewModel)
+//                        }
+
+// Example Call:
+//   EditMarker.shared.MarkerDialog(theMarkerEntityToEdit)
+//
+// NOTE: The ContentView must have a view that is setup to show an EditMarker dialog like this:
+//   @StateObject var theMarkerEditDialog = EditMarker.shared
+// AND a View (like a Spacer) with a .sheet property
+//if #available(iOS 15.0, *) {
+//    Spacer()
+//    .sheet(isPresented:$theMarkerEditDialog.showEditMarkerDialog) {
+//        MarkerEditView(theMap_VM: theMap_ViewModel, markerEntity: theMarkerEditDialog.theMarkerEntity!)
+//    }
+//} else {
+//    // Fallback on earlier versions
+//    Spacer()
+//}
+
+
+class EditMarker: ObservableObject {
+    static var shared = EditMarker()
+    
+    // To show an alert, set theMessage and set the showAlert bool to true
+    var theMarkerEntity: MarkerEntity?
+    var showEditMarkerDialog = false
+    
+    func MarkerDialog(_ markerEntity: MarkerEntity) {
+        theMarkerEntity = markerEntity
+        showEditMarkerDialog = true
+    }
+    
+}

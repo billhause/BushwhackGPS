@@ -425,13 +425,22 @@ struct MapView: UIViewRepresentable {
                 // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
                 // vvvvvvvv Call-Out Bubble Icons, Images, Buttons etc vvvvvvvvv
                 let infoButton = UIButton(type: .detailDisclosure) // Circle with an 'i' inside it
-                let addButton = UIButton(type: .contactAdd) // Circle with + inside it
-                annotationView.rightCalloutAccessoryView = addButton
-                annotationView.leftCalloutAccessoryView = infoButton
+                annotationView.rightCalloutAccessoryView = infoButton
+//                let addButton = UIButton(type: .contactAdd) // Circle with + inside it
+//                annotationView.leftCalloutAccessoryView = addButton
 
+//                NavigationLink(destination: NewMarkerView(theMap_VM: theMap_ViewModel)) {
+//                        let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
+//                        let journalImageName = theMap_ViewModel.getAddJournalEntryImageName()
+//                        Label("Journal Marker", systemImage: journalImageName)
+//                            .foregroundColor(Color(theColor))
+//                }
+
+                
                 // ICON - Provide an image view to use as the accessory view's detail view.
-                annotationView.detailCalloutAccessoryView = UIImageView(image: MarkerSymbolImage)
-                //  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  //              annotationView.detailCalloutAccessoryView = UIImageView(image: MarkerSymbolImage)
+                //  ^^^^^^^^^ Call-Out Bubble Icons, Images, Buttons etc ^^^^^^^^^^
+                //  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
                 // Note the dot annotations suppress the visibility of the Marker annotations if the clusterIdentifier is not nil
                 annotationView.titleVisibility = MKFeatureVisibility.visible // adaptive, hidden, visible
@@ -484,9 +493,17 @@ struct MapView: UIViewRepresentable {
         // The user tapped one of the annotation view’s accessory buttons.
         func mapView(_ mapView: MKMapView, annotationView: MKAnnotationView, calloutAccessoryControlTapped: UIControl) {
             MyLog.debug("UIControl: \(calloutAccessoryControlTapped)")
-Next figure out how to display the MapMarkerView editor view from here when the icon in the callout is tapped
+
+            // MKMarkerAnnotationView was clicked On - Show Edit Marker Dialog
+
+Make the Edit view a seperate view from the NewMarkerView so that it doesn't get overwritten
             
-            // wdhx todo: Next add a button handler here for when the user clicks on the Info button for a Marker.  It should bring up a 'Details' view to edit the Marker details and add photos etc.  Probalby need to make the mail view be a navigation View
+            if (annotationView is MKMarkerAnnotationView) {
+                let tempMarkerAnnotation = annotationView.annotation as! MKMarkerAnnotation
+                let theMarkerEntityToEdit = tempMarkerAnnotation.mMarkerEntity
+                EditMarker.shared.MarkerDialog(theMarkerEntityToEdit)
+            }
+            
         }
         
         // Asks the delegate to provide a cluster annotation object for the specified annotations.

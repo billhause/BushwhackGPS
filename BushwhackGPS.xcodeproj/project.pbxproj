@@ -137,7 +137,6 @@
 				288BB0E12797966C005F3D0C /* MyLog.swift */,
 				288BB0E3279796C2005F3D0C /* Haptic.swift */,
 				288BCB37279B721E008FC368 /* AlertMessage.swift */,
-				288BB0E727979920005F3D0C /* ThirdPartyCode */,
 			);
 			path = BushwhackGPS;
 			sourceTree = "<group>";
@@ -153,6 +152,7 @@
 		28817B90278E490F004B7C4B /* BushwhackGPSTests */ = {
 			isa = PBXGroup;
 			children = (
+				288BB0E727979920005F3D0C /* ThirdPartyCode */,
 				28817B91278E490F004B7C4B /* BushwhackGPSTests.swift */,
 			);
 			path = BushwhackGPSTests;

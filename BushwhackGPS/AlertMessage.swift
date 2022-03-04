@@ -8,7 +8,7 @@
 import Foundation
 
 // Example Call:
-//   AlertDialog.shared.Alert("This is the message to display with an OK button")
+//   AlertMessage.shared.Alert("This is the message to display with an OK button")
 //
 // NOTE: The ContentView must have a view that is setup to show an alert message like this:
 //   @StateObject var theAlert = AlertDialog.shared
