@@ -495,13 +495,11 @@ struct MapView: UIViewRepresentable {
             MyLog.debug("UIControl: \(calloutAccessoryControlTapped)")
 
             // MKMarkerAnnotationView was clicked On - Show Edit Marker Dialog
-
-Make the Edit view a seperate view from the NewMarkerView so that it doesn't get overwritten
             
             if (annotationView is MKMarkerAnnotationView) {
                 let tempMarkerAnnotation = annotationView.annotation as! MKMarkerAnnotation
                 let theMarkerEntityToEdit = tempMarkerAnnotation.mMarkerEntity
-                EditMarker.shared.MarkerDialog(theMarkerEntityToEdit)
+                EditExistingMarkerController.shared.MarkerDialog(theMarkerEntityToEdit)
             }
             
         }

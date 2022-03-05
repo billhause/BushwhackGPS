@@ -13,7 +13,7 @@ struct ContentView: View {
 //    @State var mDotArray = DotEntity.getAllDotEntities()
     @Environment(\.managedObjectContext) private var viewContext
     @StateObject var theAlert = AlertMessage.shared // @StateObject not @ObservedObject to avoid AttributeGraph cycle warnings
-    @StateObject var theMarkerEditDialog = EditMarker.shared
+    @StateObject var theEditMarkerController = EditExistingMarkerController.shared
     
     var body: some View {
         NavigationView {
@@ -23,8 +23,8 @@ struct ContentView: View {
                 // vvvvvvv Edit Marker Modal Dialog vvvvvvvvv
                 if #available(iOS 15.0, *) {
                     Spacer()
-                        .sheet(isPresented:$theMarkerEditDialog.showEditMarkerDialog) {
-                            MarkerEditView(theMap_VM: theMap_ViewModel, markerEntity: theMarkerEditDialog.theMarkerEntity!)
+                        .sheet(isPresented:$theEditMarkerController.showEditMarkerDialog) {
+                            ExistingMarkerEditView(theMap_VM: theMap_ViewModel, markerEntity: theEditMarkerController.theMarkerEntity!)
                         }
                 } else {
                     // Fallback on earlier versions

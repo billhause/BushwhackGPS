@@ -31,7 +31,7 @@ struct NewMarkerView: View {
                 Text("Wait for better Location Accuracy and try again")
                     .padding()
             } else {
-                MarkerEditView(theMap_VM: theMap_ViewModel)
+                NewMarkerEditView(theMap_VM: theMap_ViewModel)
             }
         }
     }
@@ -39,7 +39,7 @@ struct NewMarkerView: View {
 
 // It's safe to assume we have an Accurate Location for this view because we
 // already checked in the parrent view
-struct MarkerEditView: View {
+struct NewMarkerEditView: View {
     @ObservedObject var theMap_ViewModel: Map_ViewModel
     
     @State var titleText: String = ""
@@ -49,7 +49,7 @@ struct MarkerEditView: View {
     @State var lon: Double = -100.0
     @State var iconColor: Color = Color(.sRGB, red: 1.0, green: 0.0, blue: 0.0) // Red by default - Satalite and Map
     @State var dateTimeDetailText = "" // Used to display the time with seconds
-    @State var mMarkerEntity: MarkerEntity? // non-nil if we are editing an existing marker
+//    @State var mMarkerEntity: MarkerEntity? // non-nil if we are editing an existing marker
             
     // Constants
     let LEFT_PADDING = 10.0 // Padding on the left side of various controls
@@ -59,11 +59,11 @@ struct MarkerEditView: View {
         theMap_ViewModel = theMap_VM
     }
     
-    // Used when editing an EXISTING MarkerEntity and not creating a new one
-    init(theMap_VM: Map_ViewModel, markerEntity: MarkerEntity) {
-        theMap_ViewModel = theMap_VM
-        mMarkerEntity = markerEntity
-    }
+//    // Used when editing an EXISTING MarkerEntity and not creating a new one
+//    init(theMap_VM: Map_ViewModel, markerEntity: MarkerEntity) {
+//        theMap_ViewModel = theMap_VM
+//        mMarkerEntity = markerEntity
+//    }
     
     var body: some View {
         VStack {
@@ -117,66 +117,27 @@ struct MarkerEditView: View {
     func HandleOnAppear() {
         Haptic.shared.impact(style: .heavy)
         MyLog.debug("1 HandleOnAppear() called")
-        
-        // EITHER
-        //   Use the EXISTING marker that we're EDITING
-        // or
-        //   We're creationg a new Marker so we don't have an existing one yet.
-        
-        if let theMarkerEntity = mMarkerEntity { // EXISTING MARKER
-            // We are editing an existing Marker Entity
-            // Initialize the fields based on the MarkerEntity we are editig
-            titleText = theMarkerEntity.title!
-            bodyText = theMarkerEntity.desc!
-            iconSymbolName = theMarkerEntity.iconName!
-            lat = theMarkerEntity.lat
-            lon = theMarkerEntity.lon
-            iconColor = Color(.sRGB, red: theMarkerEntity.colorRed, green: theMarkerEntity.colorGreen, blue: theMarkerEntity.colorBlue)
-            
-            // Use creation date as the default title
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateStyle = .short
-            dateFormatter.timeStyle = .medium
-            dateTimeDetailText = dateFormatter.string(from: theMarkerEntity.timestamp!)
+    
+        // We are creating a new Marker Entity so initialze the values to defaults
 
-        } else { // CREATING NEW MARKER
-            // We are creating a new Marker Entity so initialze the values to defaults
+        // Set Lat/Lon
+        lat = theMap_ViewModel.getCurrentLocation()?.coordinate.latitude ?? 100.0
+        lon = theMap_ViewModel.getCurrentLocation()?.coordinate.longitude ?? -100.0
 
-            // Set Lat/Lon
-            lat = theMap_ViewModel.getCurrentLocation()?.coordinate.latitude ?? 100.0
-            lon = theMap_ViewModel.getCurrentLocation()?.coordinate.longitude ?? -100.0
-
-            // Set default Title
-            // Use creation date as the default title
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateStyle = .short
-            dateFormatter.timeStyle = .short // .medium
-            titleText = dateFormatter.string(from: Date())
-            dateFormatter.timeStyle = .medium
-            dateTimeDetailText = dateFormatter.string(from: Date())
-        }
-        
-
-        
+        // Set default Title
+        // Use creation date as the default title
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .short // .medium
+        titleText = dateFormatter.string(from: Date())
+        dateFormatter.timeStyle = .medium
+        dateTimeDetailText = dateFormatter.string(from: Date())
     }
     
     func HandleOnDisappear() {
         Haptic.shared.impact(style: .heavy)
         MyLog.debug("** HandleOnDisappear() Selected Icon is \(iconSymbolName)")
-        
-        
-        // EITHER
-        //   Update the EXISTING marker that we're EDITING
-        // or
-        //   We're creationg a new Marker so we don't have an existing one yet.
-        if let theMarkerEntity = mMarkerEntity { // UPDATE EXISTING MARKER
-            theMap_ViewModel.updateExistingMarker(theMarker: theMarkerEntity, lat: self.lat, lon: self.lon, title: titleText, body: bodyText, iconName: iconSymbolName, color: iconColor)
-
-        } else { // CREATING NEW MARKER
-            theMap_ViewModel.addNewMarker(lat: self.lat, lon: self.lon, title: titleText, body: bodyText, iconName: iconSymbolName, color: iconColor)
-        }
-
-        
+        theMap_ViewModel.addNewMarker(lat: self.lat, lon: self.lon, title: titleText, body: bodyText, iconName: iconSymbolName, color: iconColor)
     }
     
     
@@ -185,7 +146,7 @@ struct MarkerEditView: View {
 
 struct MarkerEditView_Previews: PreviewProvider {
     static var previews: some View {
-        MarkerEditView(theMap_VM: Map_ViewModel()).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        NewMarkerEditView(theMap_VM: Map_ViewModel()).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }
 
@@ -226,37 +187,3 @@ struct TextDataInputMultiLine: View {
 }
 
 
-//                        .sheet(isPresented:$theAlert.showAlert) {
-//                            MarkerEditView(theMap_VM: theMap_ViewModel)
-//                        }
-
-// Example Call:
-//   EditMarker.shared.MarkerDialog(theMarkerEntityToEdit)
-//
-// NOTE: The ContentView must have a view that is setup to show an EditMarker dialog like this:
-//   @StateObject var theMarkerEditDialog = EditMarker.shared
-// AND a View (like a Spacer) with a .sheet property
-//if #available(iOS 15.0, *) {
-//    Spacer()
-//    .sheet(isPresented:$theMarkerEditDialog.showEditMarkerDialog) {
-//        MarkerEditView(theMap_VM: theMap_ViewModel, markerEntity: theMarkerEditDialog.theMarkerEntity!)
-//    }
-//} else {
-//    // Fallback on earlier versions
-//    Spacer()
-//}
-
-
-class EditMarker: ObservableObject {
-    static var shared = EditMarker()
-    
-    // To show an alert, set theMessage and set the showAlert bool to true
-    var theMarkerEntity: MarkerEntity?
-    var showEditMarkerDialog = false
-    
-    func MarkerDialog(_ markerEntity: MarkerEntity) {
-        theMarkerEntity = markerEntity
-        showEditMarkerDialog = true
-    }
-    
-}
