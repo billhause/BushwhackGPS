@@ -129,6 +129,23 @@ struct MapView: UIViewRepresentable {
             MyLog.debug("Added Marker Annotation to Map")
         }
         
+        // Refresh a MarkerAnnotation if needed
+        // Marker Icon's don't refresh on their own.  You must remove and re-add the Annotation View to get it to refresh
+        // That is why we have these functions and flags
+        let refreshMarkerAnnotationID = theMap_ViewModel.getMarkerIDForRefresh() // Will reset to 0 after being calle
+        if refreshMarkerAnnotationID != 0 { // wdhx
+            theMapView.annotations.forEach {
+                if ($0 is MarkerAnnotation) {
+                    let theMarkerAnnotation = $0 as! MarkerAnnotation
+                    if theMarkerAnnotation.id == refreshMarkerAnnotationID {
+                        theMapView.removeAnnotation($0)
+                        theMapView.addAnnotation($0)
+                        MyLog.debug("*** MarkerAnnotation Removed and Readded id: \(refreshMarkerAnnotationID)")
+                    }
+                }
+            }
+        }
+        
         // ADD NEW DOT ANNOTATION if there is one
         if let newDotAnnotation = theMap_ViewModel.getNewDotAnnotation() {
             // If we got in here, then there's a new dot annotation to add to the map
@@ -412,7 +429,7 @@ struct MapView: UIViewRepresentable {
                     MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: Identifier)
                     //MKAnnotationView(annotation: annotation, reuseIdentifier: Identifier)
                 let annotationView = tempAnnotationView as! MKMarkerAnnotationView // Downcast from MKAnnotationView to MKMarkerAnnotationView
-                
+
                 annotationView.canShowCallout = true // Show title and subtitle if the user taps on the annotation
                 let markerAnnotation = annotation as! MarkerAnnotation
                 let MarkerSymbolImage = UIImage(systemName: markerAnnotation.symbolName)!.withTintColor(markerAnnotation.color)

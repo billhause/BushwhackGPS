@@ -276,6 +276,23 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         mNewMarkerAnnotationWaiting = true // This will be set to false after the marker is requested
     }
 
+    // vvv MARKER ID REFRESH vvv
+    // Trigger a MarkerAnnotation Refresh on the map
+    // Marker Icon's don't refresh on their own.  You must remove and re-add the MarkerAnnotationView to get it to refresh
+    // This has been confirmed by personal google research
+    // That is why we have these functions and flags
+    private var mMarkerIDForRefresh: Int64 = 0
+    func setMarkerIDForRefresh(markerID: Int64) {
+        mMarkerIDForRefresh = markerID
+    }
+    // Set back to 0 after being called
+    func getMarkerIDForRefresh() ->Int64 {
+        let temp = mMarkerIDForRefresh
+        mMarkerIDForRefresh = 0
+        return temp
+    }
+    // ^^^ MARKER ID REFRESH ^^^
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^
     
     func updateExistingMarker(theMarker: MarkerEntity, lat: Double, lon: Double, title: String, body: String, iconName: String, color: Color) { // wdhx
         theMarker.title = title
@@ -293,6 +310,9 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         theMarker.colorBlue = rgbBlue
         theMarker.colorGreen = rgbGreen
         theMarker.colorAlpha = rgbAlpha // should always be 1.0 for display on map
+        
+        setMarkerIDForRefresh(markerID: theMarker.id) // wdhx
+        
     }
 
     
@@ -302,21 +322,6 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         // Create a new marker and save it
         let newMarkerEntity = MarkerEntity.createMarkerEntity(lat: lat, lon: lon)
         updateExistingMarker(theMarker: newMarkerEntity, lat: lat, lon: lon, title: title, body: body, iconName: iconName, color: color)
-//        newMarkerEntity.title = title
-//        newMarkerEntity.desc = body
-//        newMarkerEntity.iconName = iconName
-//
-//        // Extract the RGB color values and save them in the Entity
-//        var rgbRed: CGFloat = 0
-//        var rgbBlue: CGFloat = 0
-//        var rgbGreen: CGFloat = 0
-//        var rgbAlpha: CGFloat = 0
-//        let myUIColor = UIColor(color)
-//        myUIColor.getRed(&rgbRed, green: &rgbGreen, blue: &rgbBlue, alpha: &rgbAlpha)
-//        newMarkerEntity.colorRed = rgbRed
-//        newMarkerEntity.colorBlue = rgbBlue
-//        newMarkerEntity.colorGreen = rgbGreen
-//        newMarkerEntity.colorAlpha = rgbAlpha // should always be 1.0 for display on map
         
         // Update model with the waiting MarkerAnnotation
         theMapModel.waitingMKMarkerAnnotation = MarkerAnnotation(theMarkerEntity: newMarkerEntity)
