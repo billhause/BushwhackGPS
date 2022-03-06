@@ -27,20 +27,12 @@ struct ExistingMarkerEditView: View {
     // Constants
     let LEFT_PADDING = 10.0 // Padding on the left side of various controls
     
-//    // Used when we we are creating a NEW MarkerEntity and not editing an existing one
-//    init(theMap_VM: Map_ViewModel) {
-//        theMap_ViewModel = theMap_VM
-//    }
-    
     // Used when editing an EXISTING MarkerEntity and not creating a new one
     init(theMap_VM: Map_ViewModel, markerEntity: MarkerEntity) {
         theMap_ViewModel = theMap_VM
         mMarkerEntity = markerEntity
     }
-    
-    NEXT STEPS - Trigger the Map to update the Annotation Icon - perhaps delete and re-add the Annotation
-    Figure out how to merge the Edit Existing and New Journal entry dialog views.
-    
+        
     var body: some View {
         VStack(alignment: .leading) {
             HStack {

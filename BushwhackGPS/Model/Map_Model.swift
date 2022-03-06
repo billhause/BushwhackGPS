@@ -22,7 +22,7 @@ struct Map_Model {
         
     var waitingMKDotAnnotation: MKDotAnnotation? // a new MKDotAnnotation that is waiting to be added to the mapView. Could be nil
     
-    var waitingMKMarkerAnnotation: MKMarkerAnnotation? // a new MKMarkerAnnotation, waiting to be aded to the mapView. Could be nil
+    var waitingMKMarkerAnnotation: MarkerAnnotation? // a new MKMarkerAnnotation, waiting to be aded to the mapView. Could be nil
     
 //    var currentLocation = CLLocationCoordinate2D(latitude: CLLocationDegrees(40.0), longitude: CLLocationDegrees(-105.0))
     // The parking location is stored in CoreData ParkingSpotEntity

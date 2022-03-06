@@ -404,7 +404,7 @@ struct MapView: UIViewRepresentable {
             // === MARKER ANNOTATIN TYPE ===
             // Note: the annotation contains its color and symbol image name
             // https://developer.apple.com/documentation/mapkit/mapkit_annotations/annotating_a_map_with_custom_data
-            if (annotation is MKMarkerAnnotation) {
+            if (annotation is MarkerAnnotation) {
                 let Identifier = "Marker"
                 
                 // ALWAYS SHOW THE TITLE - Use MKMarkerAnnotationView to ALWAYS Show the Title - MKAnnotationView will only show the title when tapped.
@@ -414,7 +414,7 @@ struct MapView: UIViewRepresentable {
                 let annotationView = tempAnnotationView as! MKMarkerAnnotationView // Downcast from MKAnnotationView to MKMarkerAnnotationView
                 
                 annotationView.canShowCallout = true // Show title and subtitle if the user taps on the annotation
-                let markerAnnotation = annotation as! MKMarkerAnnotation
+                let markerAnnotation = annotation as! MarkerAnnotation
                 let MarkerSymbolImage = UIImage(systemName: markerAnnotation.symbolName)!.withTintColor(markerAnnotation.color)
                 let MARKER_SIZE = 20 // size for Marker symbol
                 let size = CGSize(width: MARKER_SIZE, height: MARKER_SIZE)
@@ -491,7 +491,7 @@ struct MapView: UIViewRepresentable {
             // MKMarkerAnnotationView was clicked On - Show Edit Marker Dialog
             
             if (annotationView is MKMarkerAnnotationView) {
-                let tempMarkerAnnotation = annotationView.annotation as! MKMarkerAnnotation
+                let tempMarkerAnnotation = annotationView.annotation as! MarkerAnnotation
                 let theMarkerEntityToEdit = tempMarkerAnnotation.mMarkerEntity
                 EditExistingMarkerController.shared.MarkerDialog(theMarkerEntityToEdit)
             }

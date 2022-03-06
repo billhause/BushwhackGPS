@@ -25,7 +25,6 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     @Published private var theMapModel: Map_Model = Map_Model()
     @Published public var parkingSpotMoved = false // Signal when the parking spot moves so the map knows to move the parking icon
     @Published public var dotFilterIsDirty = false // signal when the map must update all points because the dot filter changed
-//    @Published public var theParkingSpotDistance = 123
     
     private var mLocationManager: CLLocationManager?
     private var mLastDotTimeStamp: Double = 0.0 // The Last Dot's timestamp since jan 1 1970 that the last dot was created
@@ -273,7 +272,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         let newMarkerEntity = MarkerEntity.createMarkerEntity(lat: location.latitude, lon: location.longitude)
         
         // Update model with the waiting MarkerAnnotation
-        theMapModel.waitingMKMarkerAnnotation = MKMarkerAnnotation(theMarkerEntity: newMarkerEntity)
+        theMapModel.waitingMKMarkerAnnotation = MarkerAnnotation(theMarkerEntity: newMarkerEntity)
         mNewMarkerAnnotationWaiting = true // This will be set to false after the marker is requested
     }
 
@@ -320,7 +319,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
 //        newMarkerEntity.colorAlpha = rgbAlpha // should always be 1.0 for display on map
         
         // Update model with the waiting MarkerAnnotation
-        theMapModel.waitingMKMarkerAnnotation = MKMarkerAnnotation(theMarkerEntity: newMarkerEntity)
+        theMapModel.waitingMKMarkerAnnotation = MarkerAnnotation(theMarkerEntity: newMarkerEntity)
         mNewMarkerAnnotationWaiting = true // This will be set to false after the marker is requested
     }
 
@@ -536,7 +535,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     
     // Return nil if there is not a new MarkerAnnotation waiting to be added
     // Otherwise return the MarkerAnnotation to be added
-    func getNewMarkerAnnotation() -> MKMarkerAnnotation? {
+    func getNewMarkerAnnotation() -> MarkerAnnotation? {
         if mNewMarkerAnnotationWaiting {
             mNewMarkerAnnotationWaiting = false
             return theMapModel.waitingMKMarkerAnnotation
@@ -715,12 +714,12 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     }
     
     // Return an array of all MarkerAnnotation objects ready to be added to the map
-    func getMarkerAnnotations() -> [MKMarkerAnnotation] {
+    func getMarkerAnnotations() -> [MarkerAnnotation] {
         let allMarkerEntities = MarkerEntity.getAllMarkerEntities()
         // Build array of MarkerAnnotations
-        var markerAnnotations: [MKMarkerAnnotation] = []
+        var markerAnnotations: [MarkerAnnotation] = []
         for markerEntity in allMarkerEntities {
-            let newMarkerAnnotation = MKMarkerAnnotation(theMarkerEntity: markerEntity)
+            let newMarkerAnnotation = MarkerAnnotation(theMarkerEntity: markerEntity)
             markerAnnotations.append(newMarkerAnnotation)
         }
         return markerAnnotations
@@ -755,17 +754,17 @@ class MKParkingAnnotation : NSObject, MKAnnotation {
     }
 }
 
-class MKDotAnnotation2: NSObject, MKAnnotation {
-    var coordinate: CLLocationCoordinate2D
-    var title: String? = "Dot Annotation"
-    var subtitle: String? = ""
-    var id: Int64
-//    var timestamp: Date
-    init(coordinate: CLLocationCoordinate2D, id: Int64) {
-        self.coordinate = coordinate
-        self.id = id
-    }
-}
+//class MKDotAnnotation2: NSObject, MKAnnotation {
+//    var coordinate: CLLocationCoordinate2D
+//    var title: String? = "Dot Annotation"
+//    var subtitle: String? = ""
+//    var id: Int64
+////    var timestamp: Date
+//    init(coordinate: CLLocationCoordinate2D, id: Int64) {
+//        self.coordinate = coordinate
+//        self.id = id
+//    }
+//}
 
 // NOTE: MKAnnotation REQUIRES a coordinate, title and description.
 // We provide those as computed properties calculated from the DotEntity
@@ -816,13 +815,14 @@ class MKDotAnnotation: NSObject, MKAnnotation {
 // NOTE: MKAnnotation REQUIRES a coordinate, title and description.
 // We provide those as computed properties calculated from the MarkerEntity
 // This class stores a refernce to its associated MarkerEntity object.
-class MKMarkerAnnotation: NSObject, MKAnnotation {
+class MarkerAnnotation: NSObject, MKAnnotation {
 
-    let mMarkerEntity: MarkerEntity // reference to the MarkerEntity
+    var mMarkerEntity: MarkerEntity // reference to the MarkerEntity
     init(theMarkerEntity: MarkerEntity) {
         mMarkerEntity = theMarkerEntity
     }
 
+    
     var coordinate: CLLocationCoordinate2D { // computed property
         get {
             return CLLocationCoordinate2D(latitude: mMarkerEntity.lat, longitude: mMarkerEntity.lon)
@@ -840,21 +840,15 @@ class MKMarkerAnnotation: NSObject, MKAnnotation {
         }
     }
     
-    var iconName: String {
-        get {
-            return mMarkerEntity.iconName!
-        }
-    }
-    
-    var id: Int64 {
-        get {
-            return mMarkerEntity.id
-        }
-    }
-    
     var symbolName: String {
         get {
             return mMarkerEntity.iconName!
+        }
+    }
+
+    var id: Int64 {
+        get {
+            return mMarkerEntity.id
         }
     }
     
