@@ -69,9 +69,24 @@ extension MarkerEntity: Comparable {
         return newMarker
     }
     
+    
     // Delete a MarkerEntity object
     static func deleteMarkerEntity(_ theMarkerEntity: MarkerEntity) {
         let viewContext = PersistenceController.shared.container.viewContext
         viewContext.delete(theMarkerEntity)
     }
+    
+    // MARK: Member Functions
+    
+    func save() {
+        let viewContext = PersistenceController.shared.container.viewContext
+        do {
+            try viewContext.save()
+            MyLog.debug("MarkerEntity Saved id:\(id)")
+        } catch {
+            let nsError = error as NSError
+            MyLog.debug("wdh Error saving new MarkerEntity in call to member func 'save()' \(nsError.userInfo)")
+        }
+    }
+    
 }

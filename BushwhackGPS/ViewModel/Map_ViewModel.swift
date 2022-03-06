@@ -311,6 +311,8 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         theMarker.colorGreen = rgbGreen
         theMarker.colorAlpha = rgbAlpha // should always be 1.0 for display on map
         
+        theMarker.save()
+        
         setMarkerIDForRefresh(markerID: theMarker.id) // wdhx
         
     }
