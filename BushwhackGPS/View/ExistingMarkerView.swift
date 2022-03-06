@@ -112,16 +112,9 @@ struct ExistingMarkerEditView: View {
     
     func HandleOnDisappear() {
         Haptic.shared.impact(style: .heavy)
-        MyLog.debug("** HandleOnDisappear() Selected Icon is \(iconSymbolName)")
         
-        // TODO: Move this call into MarkerEntity instead of having it in the Map_ViewModel
         theMap_ViewModel.updateExistingMarker(theMarker: mMarkerEntity, lat: self.lat, lon: self.lon, title: titleText, body: bodyText, iconName: iconSymbolName, color: iconColor)
-
-
-        
     }
-    
-    
 }
 
 
@@ -159,7 +152,6 @@ class EditExistingMarkerController: ObservableObject {
     
     func MarkerDialog(_ markerEntity: MarkerEntity) {
         theMarkerEntity = markerEntity
-        MyLog.debug("showEditMarkerDialog should be false and is \(showEditMarkerDialog)")
         showEditMarkerDialog = true
     }
     

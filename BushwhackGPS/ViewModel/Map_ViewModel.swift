@@ -144,13 +144,13 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
 //    }
 
     @objc func appMovedToBackground() {
-        MyLog.debug("** appMovedToBackground() called in Map_ViewModel")
+        MyLog.debug("appMovedToBackground() called in Map_ViewModel")
         mLocationManager?.stopUpdatingHeading() // Must reduce background processing to avoid app suspension
         // mLocationManager?.distanceFilter = DISTANCE_FILTER_VALUE // Meters - Won't get a new point unless you move at least 10 meters
     }
     
     @objc func appMovingToForeground() {
-        MyLog.debug("** appMovingToForeground() called in Map_ViewModel")
+        MyLog.debug("appMovingToForeground() called in Map_ViewModel")
         mLocationManager?.startUpdatingHeading() // Will call the delegates didUpdateHeading function when heading changes
         // mLocationManager?.distanceFilter = kCLDistanceFilterNone
     }
@@ -161,17 +161,13 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         // Initialize the LocationManager - https://stackoverflow.com/questions/60356182/how-to-invoke-a-method-in-a-view-in-swiftui
         // Good Article on Location Manager Settings and fields etc: https://itnext.io/swift-ios-cllocationmanager-all-in-one-b786ffd37e4a
         
-        MyLog.debug("isIdelTimerDisabled = \(UIApplication.shared.isIdleTimerDisabled)")
         UIApplication.shared.isIdleTimerDisabled = true // to help prevent suspension after being put in the background - does not work 100%
         
         mLocationManager = CLLocationManager()
         super.init() // Call the NSObject init - Must be after member vars are initialized and before 'self' is referenced
 
-        
         if mLocationManager == nil {
             MyLog.debug("ERROR mLocationManager is nil in Map_ViewModel.init()")
-        } else {
-            MyLog.debug("NO ERROR mLocationManager is NOT nil in Map_ViewModel.init()")
         }
         
         // Apps that want to receive location updates when suspended must include the UIBackgroundModes key (with the location value) in their app’s Info.plist
@@ -228,7 +224,6 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
 
     
     // Return a list of Journal Marker string names to pick from
-    // wdhx
     func getMarkerIconList() -> [String] {
         return mMarkerIconList
     }
@@ -313,13 +308,13 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         
         theMarker.save()
         
-        setMarkerIDForRefresh(markerID: theMarker.id) // wdhx
+        setMarkerIDForRefresh(markerID: theMarker.id) // Must tell the map to remove and re-add the MarkerAnnotationView to refresh the icon
         
     }
 
     
     // Add a new marker to the current location using specified values
-    func addNewMarker(lat: Double, lon: Double, title: String, body: String, iconName: String, color: Color) { // wdhx
+    func addNewMarker(lat: Double, lon: Double, title: String, body: String, iconName: String, color: Color) { 
         
         // Create a new marker and save it
         let newMarkerEntity = MarkerEntity.createMarkerEntity(lat: lat, lon: lon)
@@ -580,7 +575,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
 
     // Tells the delegate when the app creates the location manager and when the authorization status changes.
     func locationManagerDidChangeAuthorization(_ locationManager: CLLocationManager) {
-        MyLog.debug("** wdh location manager authorization changed")
+        MyLog.debug("locationManagerDidChangeAuthorization called")
     }
 
 

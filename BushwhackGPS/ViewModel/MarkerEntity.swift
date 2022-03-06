@@ -25,7 +25,6 @@ extension MarkerEntity: Comparable {
         // Get array of sorted results
         do {
             let results = try viewContext.fetch(request)
-            MyLog.debug("getAllMarkerEntities Loaded \(results.count) MarkerEntities")
             return results
         } catch {
             let nsError = error as NSError
@@ -58,7 +57,6 @@ extension MarkerEntity: Comparable {
         dateFormatter.dateStyle = .short
         dateFormatter.timeStyle = .short // .medium
         newMarker.title = dateFormatter.string(from: newMarker.timestamp!)
-        MyLog.debug("New MarkerEntity creted: \(newMarker.title!)")
         
         do {
             try viewContext.save()
@@ -82,7 +80,6 @@ extension MarkerEntity: Comparable {
         let viewContext = PersistenceController.shared.container.viewContext
         do {
             try viewContext.save()
-            MyLog.debug("MarkerEntity Saved id:\(id)")
         } catch {
             let nsError = error as NSError
             MyLog.debug("wdh Error saving new MarkerEntity in call to member func 'save()' \(nsError.userInfo)")

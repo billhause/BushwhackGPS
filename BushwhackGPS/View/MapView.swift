@@ -112,8 +112,6 @@ struct MapView: UIViewRepresentable {
         let theMapView = mapView
         var bShouldCenterAndFollow = theMap_ViewModel.isSizingAndCenteringNeeded()
   
-        MyLog.debug("Update MapView - Model Changed")
-        
         // Set Hybrid/Standard mode if it changed
         if (theMapView.mapType != .hybrid) && theMap_ViewModel.isHybrid {
             theMapView.mapType = .hybrid
@@ -126,21 +124,19 @@ struct MapView: UIViewRepresentable {
         if let newMarkerAnnotation = theMap_ViewModel.getNewMarkerAnnotation() {
             // if we got in here, then there's a new Marker annotation to add to the map
             theMapView.addAnnotation(newMarkerAnnotation)
-            MyLog.debug("Added Marker Annotation to Map")
         }
         
-        // Refresh a MarkerAnnotation if needed
-        // Marker Icon's don't refresh on their own.  You must remove and re-add the Annotation View to get it to refresh
-        // That is why we have these functions and flags
+        // Refresh a MarkerAnnotation after the user changes it's icon
+        // Marker Icon's don't refresh on their own after the user changes the icon.  You must remove and
+        // re-add the Annotation View to get it to refresh
         let refreshMarkerAnnotationID = theMap_ViewModel.getMarkerIDForRefresh() // Will reset to 0 after being calle
-        if refreshMarkerAnnotationID != 0 { // wdhx
+        if refreshMarkerAnnotationID != 0 { 
             theMapView.annotations.forEach {
                 if ($0 is MarkerAnnotation) {
                     let theMarkerAnnotation = $0 as! MarkerAnnotation
                     if theMarkerAnnotation.id == refreshMarkerAnnotationID {
                         theMapView.removeAnnotation($0)
                         theMapView.addAnnotation($0)
-                        MyLog.debug("*** MarkerAnnotation Removed and Readded id: \(refreshMarkerAnnotationID)")
                     }
                 }
             }
@@ -149,7 +145,6 @@ struct MapView: UIViewRepresentable {
         // ADD NEW DOT ANNOTATION if there is one
         if let newDotAnnotation = theMap_ViewModel.getNewDotAnnotation() {
             // If we got in here, then there's a new dot annotation to add to the map
-            MyLog.debug("Adding new dot annotation \(newDotAnnotation.id)")
             theMapView.addAnnotation(newDotAnnotation)
         }
         
@@ -192,17 +187,11 @@ struct MapView: UIViewRepresentable {
 
         // Size and Center the map Because the user hit the Orient Map Button
         if bShouldCenterAndFollow { // The use has hit the orient map button or did something requireing the map to be re-oriented
-            
             theMap_ViewModel.mapHasBeenResizedAndCentered() // Let the ViewModel know the map has been sized and centered
-            
             theMap_ViewModel.turnOnFollowMode() // Switch to 'Centered Map Mode' to keep the map centered on the current location
-            
-
-            MyLog.debug("Center and Follow activated")
             
             // Center the map now rather than wait for the next location update
             theMapView.setCenter(theMap_ViewModel.getLastKnownLocation(), animated: false) // If animated, this gets overwritten when heading is set
-
         }
 
         // Locked North??
@@ -463,9 +452,7 @@ struct MapView: UIViewRepresentable {
                 //annotationView.glyphText = "" // Text inside the balloon
                 annotationView.glyphTintColor  = UIColor(red: 0, green: 0, blue: 0, alpha: 0) // Alpha of 0 is invisible
                 annotationView.markerTintColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0) // 0 Alpha makes the balloon transparent
-                
-                
-                MyLog.debug("Added Marker Annotation VIEW - ID:\(markerAnnotation.mMarkerEntity.id)")
+
                 return annotationView
             }
 
@@ -534,12 +521,12 @@ struct MapView: UIViewRepresentable {
         // One of its annotation views was selected.
         func mapView(_ mapView: MKMapView, didSelect: MKAnnotationView) {
             let theAnnotationTitle = didSelect.annotation?.title ?? "No Title" // Default the optional value to 'No Title' in case it's nil
-            MyLog.debug("Called17: ** Annotation View Selected ** '\(theAnnotationTitle!)'")
+            MyLog.debug("Annotation View Selected: '\(theAnnotationTitle!)'")
         }
 
         // One of its annotation views was deselected.
         func mapView(_ mapView: MKMapView, didDeselect: MKAnnotationView) {
-            MyLog.debug("Called18: ** Annotation View DE-Selected **")
+            MyLog.debug("Annotation View DE-Selected")
         }
 
         // Optional - Managing the Display of Overlays

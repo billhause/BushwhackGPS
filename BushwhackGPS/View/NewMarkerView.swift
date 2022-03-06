@@ -116,7 +116,6 @@ struct NewMarkerEditView: View {
     // Calling this from .onAppear in the Body of the view.
     func HandleOnAppear() {
         Haptic.shared.impact(style: .heavy)
-        MyLog.debug("1 HandleOnAppear() called")
     
         // We are creating a new Marker Entity so initialze the values to defaults
 
@@ -136,7 +135,6 @@ struct NewMarkerEditView: View {
     
     func HandleOnDisappear() {
         Haptic.shared.impact(style: .heavy)
-        MyLog.debug("** HandleOnDisappear() Selected Icon is \(iconSymbolName)")
         theMap_ViewModel.addNewMarker(lat: self.lat, lon: self.lon, title: titleText, body: bodyText, iconName: iconSymbolName, color: iconColor)
     }
     

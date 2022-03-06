@@ -136,10 +136,6 @@ struct ContentView: View {
         } // NavigationView
     }
 
-//    private func addMarkerHandler() { // wdhx
-//        theMap_ViewModel.addNewDefaultMarker()
-//        Haptic.shared.impact(style: .heavy)
-//    }
 
     private func hideDotsHandler() {
         MyLog.debug("hideDotsHandler() called")
@@ -174,7 +170,6 @@ struct ContentView: View {
     }
     
     private func toggleMapNorth() {
-        MyLog.debug("toggleMapNorth() Called")
         // Toggle the NorthFlag in the Settings Entity.
         let newOrientNorthFlag = !AppSettingsEntity.getAppSettingsEntity().orientNorth
         AppSettingsEntity.getAppSettingsEntity().setOrientNorth(always: newOrientNorthFlag)
