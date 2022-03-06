@@ -484,8 +484,6 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         let lon = currentLocation.coordinate.longitude
         let speed = currentLocation.speed
         let course = currentLocation.course
-        
-        MyLog.debug("Horizontal Accuracy: \(currentLocation.horizontalAccuracy) meters")
 
         // Update last known location
         mLastKnownLocation = currentLocation.coordinate

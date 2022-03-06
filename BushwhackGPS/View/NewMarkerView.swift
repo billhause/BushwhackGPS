@@ -14,7 +14,7 @@ struct NewMarkerView: View {
     @ObservedObject var theMap_ViewModel: Map_ViewModel
         
     init(theMap_VM: Map_ViewModel) {
-        MyLog.debug("*** init() called for NewMarkerView")
+//        MyLog.debug("*** NewMarkerView init() called")
         theMap_ViewModel = theMap_VM
     }
     var body: some View {
@@ -71,7 +71,7 @@ struct NewMarkerEditView: View {
             // Journal Entry Title and Body
             TextDataInput(title: "Title", userInput: $titleText)
                 .padding(EdgeInsets(top: 0.0, leading: 0.0, bottom: 10, trailing: 0.0))
-            TextDataInputMultiLine(title: "Journal Entry", userInput: $bodyText)
+            TextDataInputMultiLine(title: "Description", userInput: $bodyText)
             
             // Icon Picker and Color Picker
             HStack {
@@ -106,7 +106,7 @@ struct NewMarkerEditView: View {
         }
         .padding()
 //      .padding(EdgeInsets(top: 0.0, leading: LEFT_PADDING, bottom: 0, trailing: 10))
-        .navigationTitle("New Journal Marker") // Title at top of page
+        .navigationTitle("Journal Entry") // Title at top of page
         .onAppear { HandleOnAppear() }
         .onDisappear { HandleOnDisappear() }
     }
@@ -174,6 +174,7 @@ struct TextDataInputMultiLine: View {
     var body: some View {
         VStack(alignment: HorizontalAlignment.leading) {
             Text(title)
+//                .font(.body)
                 .font(.body)
                 .padding(EdgeInsets(top: 0.0, leading: 0.0, bottom: -5, trailing: 0.0))
             TextEditor(text: $userInput)

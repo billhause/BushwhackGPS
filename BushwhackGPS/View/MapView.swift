@@ -111,6 +111,8 @@ struct MapView: UIViewRepresentable {
     func updateUIView(_ mapView: MKMapView, context: Context) {
         let theMapView = mapView
         var bShouldCenterAndFollow = theMap_ViewModel.isSizingAndCenteringNeeded()
+  
+        MyLog.debug("Update MapView - Model Changed")
         
         // Set Hybrid/Standard mode if it changed
         if (theMapView.mapType != .hybrid) && theMap_ViewModel.isHybrid {
@@ -428,14 +430,6 @@ struct MapView: UIViewRepresentable {
                 annotationView.rightCalloutAccessoryView = infoButton
 //                let addButton = UIButton(type: .contactAdd) // Circle with + inside it
 //                annotationView.leftCalloutAccessoryView = addButton
-
-//                NavigationLink(destination: NewMarkerView(theMap_VM: theMap_ViewModel)) {
-//                        let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
-//                        let journalImageName = theMap_ViewModel.getAddJournalEntryImageName()
-//                        Label("Journal Marker", systemImage: journalImageName)
-//                            .foregroundColor(Color(theColor))
-//                }
-
                 
                 // ICON - Provide an image view to use as the accessory view's detail view.
   //              annotationView.detailCalloutAccessoryView = UIImageView(image: MarkerSymbolImage)
@@ -454,7 +448,7 @@ struct MapView: UIViewRepresentable {
                 annotationView.markerTintColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0) // 0 Alpha makes the balloon transparent
                 
                 
-                MyLog.debug("Added Marker Annotation VIEW - ")
+                MyLog.debug("Added Marker Annotation VIEW - ID:\(markerAnnotation.mMarkerEntity.id)")
                 return annotationView
             }
 

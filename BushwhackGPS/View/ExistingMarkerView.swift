@@ -38,13 +38,24 @@ struct ExistingMarkerEditView: View {
         mMarkerEntity = markerEntity
     }
     
+    NEXT STEPS - Trigger the Map to update the Annotation Icon - perhaps delete and re-add the Annotation
+    Figure out how to merge the Edit Existing and New Journal entry dialog views.
+    
     var body: some View {
-        VStack {
-            
+        VStack(alignment: .leading) {
+            HStack {
+                Spacer()
+                Button("Done") {
+                    EditExistingMarkerController.shared.showEditMarkerDialog = false // Flag that tells the dialog to close
+                }
+            }
+            Text("Journal Entry")
+                .font(.title)
+
             // Journal Entry Title and Body
             TextDataInput(title: "Title", userInput: $titleText)
                 .padding(EdgeInsets(top: 0.0, leading: 0.0, bottom: 10, trailing: 0.0))
-            TextDataInputMultiLine(title: "Journal Entry", userInput: $bodyText)
+            TextDataInputMultiLine(title: "Description", userInput: $bodyText)
             
             // Icon Picker and Color Picker
             HStack {
@@ -152,10 +163,11 @@ class EditExistingMarkerController: ObservableObject {
     
     // To show an alert, set theMessage and set the showAlert bool to true
     var theMarkerEntity: MarkerEntity?
-    var showEditMarkerDialog = false
+    @Published var showEditMarkerDialog = false // Must be published to trigger the dialog to show
     
     func MarkerDialog(_ markerEntity: MarkerEntity) {
         theMarkerEntity = markerEntity
+        MyLog.debug("showEditMarkerDialog should be false and is \(showEditMarkerDialog)")
         showEditMarkerDialog = true
     }
     

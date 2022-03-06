@@ -12,8 +12,8 @@ struct ContentView: View {
     @ObservedObject var theMap_ViewModel: Map_ViewModel
 //    @State var mDotArray = DotEntity.getAllDotEntities()
     @Environment(\.managedObjectContext) private var viewContext
-    @StateObject var theAlert = AlertMessage.shared // @StateObject not @ObservedObject to avoid AttributeGraph cycle warnings
     @StateObject var theEditMarkerController = EditExistingMarkerController.shared
+    @StateObject var theAlert = AlertMessage.shared // @StateObject not @ObservedObject to avoid AttributeGraph cycle warnings
     
     var body: some View {
         NavigationView {
@@ -23,7 +23,7 @@ struct ContentView: View {
                 // vvvvvvv Edit Marker Modal Dialog vvvvvvvvv
                 if #available(iOS 15.0, *) {
                     Spacer()
-                        .sheet(isPresented:$theEditMarkerController.showEditMarkerDialog) {
+                        .sheet(isPresented:$theEditMarkerController.showEditMarkerDialog, onDismiss: handleEditMarkerDismiss) {
                             ExistingMarkerEditView(theMap_VM: theMap_ViewModel, markerEntity: theEditMarkerController.theMarkerEntity!)
                         }
                 } else {
@@ -151,6 +151,10 @@ struct ContentView: View {
     private func toggleMapLayers() {
         theMap_ViewModel.isHybrid = !theMap_ViewModel.isHybrid // toggle
         Haptic.shared.impact(style: .heavy)
+    }
+    
+    private func handleEditMarkerDismiss() {
+        MyLog.debug("handleEditMarkerDismiss() called")
     }
     
     // Called when the Orient Map button is touched

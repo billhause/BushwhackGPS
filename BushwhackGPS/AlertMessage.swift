@@ -29,7 +29,7 @@ class AlertMessage: ObservableObject {
     
     // To show an alert, set theMessage and set the showAlert bool to true
     var theMessage = "Confirm"
-    var showAlert = false
+    @Published var showAlert = false
     
     func Alert(_ message: String) {
         theMessage = message
