@@ -36,6 +36,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
 
     private var mMarkerIconList: [String] = []
     private var mMarkerIconNames = [
+        "doc.richtext",
         "xmark.square.fill",
         "multiply.circle",
         "house.fill",
@@ -53,6 +54,19 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         "tram",
         "ferry.fill",
         "bicycle",
+        "graduationcap.fill",
+        "person.fill",
+        "person.2.fill",
+        "person.3.fill",
+        "peacesign",
+        "globe",
+        "moon.fill",
+        "sun.max.fill",
+        "moon.zzz.fill",
+        "snowflake",
+        "flame.fill",
+        "exclamationmark.triangle.fill",
+        "music.note", // Continue Here wdhx
         "circle",
         "triangle",
         "square",
@@ -71,6 +85,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         "binoculars.fill",
         "questionmark.circle.fill",
         "exclamationmark.circle.fill",
+        "paperplane.fill",
         "trash",
         "a.circle.fill",
         "b.circle.fill",

@@ -19,32 +19,20 @@ struct ContentView: View {
         NavigationView {
             VStack {
                 MapView(theViewModel: theMap_ViewModel)
-
                 // vvvvvvv Edit Marker Modal Dialog vvvvvvvvv
-                if #available(iOS 15.0, *) {
-                    Spacer()
-                        .sheet(isPresented:$theEditMarkerController.showEditMarkerDialog, onDismiss: handleEditMarkerDismiss) {
-                            ExistingMarkerEditView(theMap_VM: theMap_ViewModel, markerEntity: theEditMarkerController.theMarkerEntity!)
-                        }
-                } else {
-                    // Fallback on earlier versions
-                    Spacer()
-                }
+                    .sheet(isPresented:$theEditMarkerController.showEditMarkerDialog, onDismiss: handleEditMarkerDismiss) {
+                        ExistingMarkerEditView(theMap_VM: theMap_ViewModel, markerEntity: theEditMarkerController.theMarkerEntity!)
+                    }
                 // ^^^^^^^^^ EDIT MARKER DIALOG ^^^^^^^^^^^^^
 
                 // vvvvvvv ALERT MESSAGE Modal Dialog vvvvvvvvv
-                if #available(iOS 15.0, *) {
-                    Spacer()
-                        .alert(theAlert.theMessage, isPresented: $theAlert.showAlert) {
-                            Button("OK wdhx", role: .cancel) { }
-                        }
-                } else {
-                    // Fallback on earlier versions
-                    Spacer()
-                }
+                    .alert(theAlert.theMessage, isPresented: $theAlert.showAlert) {
+                        Button("OK wdhx", role: .cancel) { }
+                    }
                 // ^^^^^^^^^ ALERT MESSAGE ^^^^^^^^^^^^^
                 
             } // VStack
+            
 //            .navigationBarHidden(true) // Remove the space for the top nav bar
             .navigationBarTitleDisplayMode(.inline) // Put title on same line as tool bar
             .toolbar {
@@ -134,6 +122,7 @@ struct ContentView: View {
                 MyLog.debug("** App Moved to Background wdh")
             }
         } // NavigationView
+        
     }
 
 
