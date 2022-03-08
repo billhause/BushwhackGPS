@@ -15,6 +15,10 @@ import CoreLocation
 struct ExistingMarkerEditView: View {
     @ObservedObject var theMap_ViewModel: Map_ViewModel
     
+    @State private var showingDeleteJournalConfirm = false // Flag for Confirm Dialog
+    @State private var deleteThisMarker = false // Set to true if user clicks delete
+    
+    @State var markerID: Int64 = 0
     @State var titleText: String = ""
     @State var bodyText: String = ""
     @State var iconSymbolName: String = "multiply.circle" //"xmark.square.fill"
@@ -79,6 +83,29 @@ struct ExistingMarkerEditView: View {
                 Text("Longitude: \(lon)")
                 Spacer()
             }
+            HStack {
+                Spacer()
+                Button("Delete Journal Entry") {
+                    showingDeleteJournalConfirm = true // Flag to cause dialog to display
+                }
+                .alert(isPresented: $showingDeleteJournalConfirm) {
+                    Alert(
+                        title: Text("Are you sure you want to delete this journal entry?"),
+                        message: Text("This cannot be undone."),
+                        primaryButton: .destructive(Text("Delete")) {
+                            // Set Flag that tells the dialog to close
+                            EditExistingMarkerController.shared.showEditMarkerDialog = false
+                            
+                            // Set flag to delete the Marker in HandleOnDisappear() below
+                            deleteThisMarker = true
+                        },
+                        secondaryButton: .cancel()
+                    )
+                }
+                .foregroundColor(Color.red)
+                .padding()
+                Spacer()
+            }
         }
         .padding()
 //      .padding(EdgeInsets(top: 0.0, leading: LEFT_PADDING, bottom: 0, trailing: 10))
@@ -96,6 +123,7 @@ struct ExistingMarkerEditView: View {
         
         // We are editing an existing Marker Entity
         // Initialize the fields based on the MarkerEntity we are editig
+        markerID = mMarkerEntity.id
         titleText = mMarkerEntity.title!
         bodyText = mMarkerEntity.desc!
         iconSymbolName = mMarkerEntity.iconName!
@@ -113,7 +141,11 @@ struct ExistingMarkerEditView: View {
     func HandleOnDisappear() {
         Haptic.shared.impact(style: .heavy)
         
-        theMap_ViewModel.updateExistingMarker(theMarker: mMarkerEntity, lat: self.lat, lon: self.lon, title: titleText, body: bodyText, iconName: iconSymbolName, color: iconColor)
+        if deleteThisMarker == false {
+            theMap_ViewModel.updateExistingMarker(theMarker: mMarkerEntity, lat: self.lat, lon: self.lon, title: titleText, body: bodyText, iconName: iconSymbolName, color: iconColor)
+        } else {
+            theMap_ViewModel.setMarkerIDForDeletion(markerID: markerID)
+        }
     }
 }
 

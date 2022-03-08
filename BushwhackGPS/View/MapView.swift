@@ -129,7 +129,7 @@ struct MapView: UIViewRepresentable {
         // Refresh a MarkerAnnotation after the user changes it's icon
         // Marker Icon's don't refresh on their own after the user changes the icon.  You must remove and
         // re-add the Annotation View to get it to refresh
-        let refreshMarkerAnnotationID = theMap_ViewModel.getMarkerIDForRefresh() // Will reset to 0 after being calle
+        let refreshMarkerAnnotationID = theMap_ViewModel.getMarkerIDForRefresh() // Will reset to 0 after being called
         if refreshMarkerAnnotationID != 0 { 
             theMapView.annotations.forEach {
                 if ($0 is MarkerAnnotation) {
@@ -137,6 +137,21 @@ struct MapView: UIViewRepresentable {
                     if theMarkerAnnotation.id == refreshMarkerAnnotationID {
                         theMapView.removeAnnotation($0)
                         theMapView.addAnnotation($0)
+                    }
+                }
+            }
+        }
+        
+        // DELETE a MarkerAnnotation from the map and it's MarkerEntity from Core Data
+        let markerIDForDeletion = theMap_ViewModel.getMarkerIDForDeletion() // will reset to 0 after being called
+        if markerIDForDeletion != 0 {
+            theMapView.annotations.forEach {
+                if ($0 is MarkerAnnotation) {
+                    let theMarkerAnnotation = $0 as! MarkerAnnotation
+                    if theMarkerAnnotation.id == markerIDForDeletion {
+                        theMapView.removeAnnotation($0)
+                        let theEntityToDelete = theMarkerAnnotation.mMarkerEntity
+                        MarkerEntity.deleteMarkerEntity(theEntityToDelete)
                     }
                 }
             }

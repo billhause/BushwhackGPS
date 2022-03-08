@@ -310,6 +310,24 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         mNewMarkerAnnotationWaiting = true // This will be set to false after the marker is requested
     }
 
+    
+    
+    // vvv MARKER ID DELETION vvv
+    // Trigger a MarkerAnnotation Deletion from the map
+    private var mMarkerIDForDeletion: Int64 = 0
+    func setMarkerIDForDeletion(markerID: Int64) {
+        mMarkerIDForDeletion = markerID
+    }
+    // Set back to 0 after being called
+    func getMarkerIDForDeletion() ->Int64 {
+        let temp = mMarkerIDForDeletion
+        mMarkerIDForDeletion = 0
+        return temp
+    }
+    // ^^^ MARKER ID DELETION ^^^
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^
+    
+    
     // vvv MARKER ID REFRESH vvv
     // Trigger a MarkerAnnotation Refresh on the map
     // Marker Icon's don't refresh on their own.  You must remove and re-add the MarkerAnnotationView to get it to refresh
