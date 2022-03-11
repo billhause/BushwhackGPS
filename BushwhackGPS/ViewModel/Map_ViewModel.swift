@@ -346,7 +346,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     // ^^^ MARKER ID REFRESH ^^^
     // ^^^^^^^^^^^^^^^^^^^^^^^^^
     
-    func updateExistingMarker(theMarker: MarkerEntity, lat: Double, lon: Double, title: String, body: String, iconName: String, color: Color) { // wdhx
+    func updateExistingMarker(theMarker: MarkerEntity, lat: Double, lon: Double, title: String, body: String, iconName: String, color: Color) {
         theMarker.title = title
         theMarker.desc = body
         theMarker.iconName = iconName

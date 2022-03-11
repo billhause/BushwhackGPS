@@ -118,8 +118,6 @@ struct NewMarkerEditView: View {
         Haptic.shared.impact(style: .heavy)
     
         // We are creating a new Marker Entity so initialze the values to defaults
-
-        // Set Lat/Lon
         lat = theMap_ViewModel.getCurrentLocation()?.coordinate.latitude ?? 100.0
         lon = theMap_ViewModel.getCurrentLocation()?.coordinate.longitude ?? -100.0
 
@@ -176,6 +174,8 @@ struct TextDataInputMultiLine: View {
                 .font(.body)
                 .padding(EdgeInsets(top: 0.0, leading: 0.0, bottom: -5, trailing: 0.0))
             TextEditor(text: $userInput)
+                //.ignoresSafeArea(.container)
+                .frame(minWidth: 100, idealWidth: .infinity, maxWidth: .infinity, minHeight: 70, idealHeight: .infinity, maxHeight: .infinity, alignment: .leading) // Settings to avoid shrinking edit box to 0 when keyboard appears
                 .multilineTextAlignment(.leading)
                 .overlay( // Round the edit boundry frame
                          RoundedRectangle(cornerRadius: 5)
