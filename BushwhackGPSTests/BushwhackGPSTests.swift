@@ -113,7 +113,7 @@ class BushwhackGPSTests: XCTestCase {
         XCTAssertNotNil(te.dotColorAlpha)
         XCTAssertNotNil(te.dotSize)
         XCTAssertNotNil(te.id)
-        XCTAssertNil(te.startTime) // must be nil
+        XCTAssertNotNil(te.startTime) // must be nil
         XCTAssertNil(te.endTime)   // must be nil
         TripEntity.deleteTripEntity(te) // Remove the test TripEntity from the db
     }

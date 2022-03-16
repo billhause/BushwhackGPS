@@ -36,27 +36,14 @@ extension TripEntity: Comparable {
     }
     
     
-    
-    /*
-     title String
-     desc String
-     dotColorAlpha Double
-     dotColorBlue Double
-     dotColorRed Double
-     dotColorGreen Double
-     dotSize Double
-     endTime Date
-     startTime Date
-     uuid UUID
-     id Int64
-     */
-    
+        
     // Create a new TripEntity, save it and return it
     // Every field will be filled with a non-nil value except startTime and endTime
     @discardableResult public static func createTripEntity() -> TripEntity {
         let viewContext = PersistenceController.shared.container.viewContext
         let newTrip = TripEntity(context: viewContext)
         newTrip.id = ID_GeneratorEntity.getNextID()
+        MyLog.debug("createTripEntity id=\(newTrip.id)")
         newTrip.uuid = UUID()
         newTrip.desc = ""
         newTrip.dotColorRed = 0.0
@@ -64,8 +51,8 @@ extension TripEntity: Comparable {
         newTrip.dotColorGreen = 1.0
         newTrip.dotColorAlpha = 1.0
         newTrip.dotSize = 3.0
+        newTrip.startTime = Date()
         newTrip.endTime = nil
-        newTrip.startTime = nil
         
         // use createion date as the default title
         let dateFormatter = DateFormatter()

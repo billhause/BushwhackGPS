@@ -480,6 +480,16 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return "triangle" // default that is always there on all devices
     }
 
+    
+    // Sometimes the device will not have the first choice symbol so check first
+    // Return a default that is always present
+    func getTripButtonImageName() -> String {
+        // Check symbols in order of preference
+        if UIImage(systemName: "map") != nil { return "map" }
+        return "triangle" // default that is always there on all devices
+    }
+
+    
     // Sometimes the device will not have the first choice symbol so check first
     // Return a default that is always present
     func getCompassImageName() -> String {

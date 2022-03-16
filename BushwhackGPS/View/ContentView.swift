@@ -65,6 +65,22 @@ struct ContentView: View {
                                 .foregroundColor(Color(theColor))
                         }
                             .labelStyle(VerticalLabelStyle())
+
+
+                        // Trip List
+                        Spacer()
+//                        NavigationLink(destination: NewMarkerView(theMap_VM: theMap_ViewModel)) {
+                        NavigationLink(destination: TripListView()) {
+                                let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
+                                let tripButtonImageName = theMap_ViewModel.getTripButtonImageName()
+                                Label("Trips", systemImage: tripButtonImageName)
+                                    .foregroundColor(Color(theColor))
+                        }
+                            .labelStyle(VerticalLabelStyle())
+
+
+
+
                         Spacer()
                         Button(action: toggleMapLayers) {
                             let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
