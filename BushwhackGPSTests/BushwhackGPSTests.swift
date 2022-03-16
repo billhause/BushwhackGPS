@@ -97,6 +97,28 @@ class BushwhackGPSTests: XCTestCase {
         MarkerEntity.deleteMarkerEntity(me) // remove the test marker from the database
     }
     
+    
+    //
+    // MARK: TripEntity
+    //
+    func testTripEntity() throws {
+        let te = TripEntity.createTripEntity()
+        // Make sure none of the fields are nil except start and end date which MUST be nil
+        XCTAssertNotNil(te.uuid)
+        XCTAssertNotNil(te.title)
+        XCTAssertNotNil(te.desc)
+        XCTAssertNotNil(te.dotColorRed)
+        XCTAssertNotNil(te.dotColorBlue)
+        XCTAssertNotNil(te.dotColorGreen)
+        XCTAssertNotNil(te.dotColorAlpha)
+        XCTAssertNotNil(te.dotSize)
+        XCTAssertNotNil(te.id)
+        XCTAssertNil(te.startTime) // must be nil
+        XCTAssertNil(te.endTime)   // must be nil
+        TripEntity.deleteTripEntity(te) // Remove the test TripEntity from the db
+    }
+
+
     func testExample() throws {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
@@ -112,4 +134,5 @@ class BushwhackGPSTests: XCTestCase {
         }
     }
 
+    
 }

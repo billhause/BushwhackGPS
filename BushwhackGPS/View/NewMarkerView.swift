@@ -170,7 +170,6 @@ struct TextDataInputMultiLine: View {
     var body: some View {
         VStack(alignment: HorizontalAlignment.leading) {
             Text(title)
-//                .font(.body)
                 .font(.body)
                 .padding(EdgeInsets(top: 0.0, leading: 0.0, bottom: -5, trailing: 0.0))
             TextEditor(text: $userInput)

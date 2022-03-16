@@ -47,21 +47,23 @@ extension ID_GeneratorEntity: Comparable {
     // MARK: Intents
     
     // Get the Next ID and increment it
+    // Don't need to save the updated ID number because it will
+    // save the next time a CoreData object gets saved.
     public static func getNextID() -> Int64 {
         // Return the next ID and increment. Then save next value in core data
-        let context = PersistenceController.shared.container.viewContext
+//        let context = PersistenceController.shared.container.viewContext
         let theIDGenerator = getID_GeneratorEntity()
         let theNextID = theIDGenerator.nextIDToReturn
         theIDGenerator.nextIDToReturn += 1
         
-        do {
-            try context.save()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nsError = error as NSError
-            fatalError("Unresolved error saving ID_GeneratorEntity: \(nsError), \(nsError.userInfo)")
-        }
+//        do {
+//            try context.save()
+//        } catch {
+//            // Replace this implementation with code to handle the error appropriately.
+//            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+//            let nsError = error as NSError
+//            fatalError("Unresolved error saving ID_GeneratorEntity: \(nsError), \(nsError.userInfo)")
+//        }
         return theNextID
     }
     
