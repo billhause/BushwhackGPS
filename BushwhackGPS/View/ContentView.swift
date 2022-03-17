@@ -33,12 +33,6 @@ struct ContentView: View {
                 
             } // VStack
             
-//            .navigationBarHidden(true) // Remove the space for the top nav bar
-            .navigationBarTitleDisplayMode(.inline) // Put title on same line as tool bar
-            .navigationBarTitle("Map") // Title used on Back button for sub views
-//            .navigationBarTitleDisplayMode(.inline) // Put title on same line as buttons
-//            .navigationBarHidden(true)
-
             .toolbar {
                 // TOP TOOL BAR
                 ToolbarItemGroup(placement: .automatic) {
@@ -73,7 +67,6 @@ struct ContentView: View {
 
                         // Trip List
                         Spacer()
-//                        NavigationLink(destination: NewMarkerView(theMap_VM: theMap_ViewModel)) {
                         NavigationLink(destination: TripListView()) {
                                 let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
                                 let tripButtonImageName = theMap_ViewModel.getTripButtonImageName()
@@ -129,6 +122,12 @@ struct ContentView: View {
                         }
                             .labelStyle(VerticalLabelStyle())
                     } // Group 2
+                    .navigationTitle("Map") // Title used on Back button for sub views
+                    .navigationBarTitleDisplayMode(.inline) // Put title on same line as tool bar
+            //            .navigationBarHidden(true) // Remove the space for the top nav bar
+            //            .navigationBarTitleDisplayMode(.inline) // Put title on same line as buttons
+            //            .navigationBarHidden(true)
+
                 } // Bottom Tool Bar
             }
             // Detect moving back to foreground
@@ -142,7 +141,7 @@ struct ContentView: View {
                 MyLog.debug("** App Moved to Background wdh")
             }
         } // NavigationView
-        
+
     }
 
 

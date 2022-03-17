@@ -21,9 +21,7 @@ struct TripListView: View {
             List {
                 ForEach(tripEntities) { tripEntity in
                     NavigationLink {
-                        // Details View for the TripEntity goes here
-                        Text("I Like Apples")
-                        Text("TripEntity at \(tripEntity.title!)")
+                        TripDetailsView(theTripEntity: tripEntity)
                     } label: {
                         Text(tripEntity.title!) // Displayed in list
                     }
@@ -34,17 +32,19 @@ struct TripListView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                 }
-                ToolbarItem {
+                ToolbarItemGroup(placement: .automatic) {
                     Button(action: addTripEntity) {
                         Label("New Trip", systemImage: "plus")
                             .labelStyle(TitleOnlyLabelStyle())  // Shows the Text, not the systemImage
                     }
                 }
+                
             } // toolbar
-            .navigationBarTitle("Trip List") // Title displayed above list
-//            .navigationBarTitleDisplayMode(.inline) // Put title on same line as buttons
-//            .navigationBarHidden(true)
+            .navigationTitle("Trip List") // Title displayed above list
+            .navigationBarTitleDisplayMode(.inline) // Put title on same line as buttons
         } // NavigationView
+        .navigationViewStyle(StackNavigationViewStyle()) // Needed to avoid run-time warnings related to .navigationTitle
+        
     }
 
     private func addTripEntity() {
@@ -66,8 +66,6 @@ struct TripListView: View {
         } // withAnimation
     }
 } // TripListView Struct
-
-
 
 
 

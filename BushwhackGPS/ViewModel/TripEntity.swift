@@ -9,6 +9,16 @@ import Foundation
 import CoreData
 
 extension TripEntity: Comparable {
+    
+    public var wrappedTitle: String {
+        get {
+            title ?? "Unknown Title wdh"
+        }
+        set(newTitle) {
+            title = newTitle
+        }
+    }
+    
     public static func < (lhs: TripEntity, rhs: TripEntity) -> Bool {
         if (lhs.startTime == nil) {return false}
         if (rhs.startTime == nil) {return false}
