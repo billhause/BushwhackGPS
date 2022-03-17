@@ -35,6 +35,10 @@ struct ContentView: View {
             
 //            .navigationBarHidden(true) // Remove the space for the top nav bar
             .navigationBarTitleDisplayMode(.inline) // Put title on same line as tool bar
+            .navigationBarTitle("Map") // Title used on Back button for sub views
+//            .navigationBarTitleDisplayMode(.inline) // Put title on same line as buttons
+//            .navigationBarHidden(true)
+
             .toolbar {
                 // TOP TOOL BAR
                 ToolbarItemGroup(placement: .automatic) {

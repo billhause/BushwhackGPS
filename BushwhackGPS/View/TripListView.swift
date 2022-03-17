@@ -12,7 +12,7 @@ struct TripListView: View {
     @Environment(\.managedObjectContext) private var viewContext
 
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \TripEntity.startTime, ascending: true)],
+        sortDescriptors: [NSSortDescriptor(keyPath: \TripEntity.startTime, ascending: false)],
         animation: .default)
     private var tripEntities: FetchedResults<TripEntity>
     
@@ -21,9 +21,11 @@ struct TripListView: View {
             List {
                 ForEach(tripEntities) { tripEntity in
                     NavigationLink {
-                        Text("TripEntity at \(tripEntity.startTime!, formatter: tripListDateFormatter)")
+                        // Details View for the TripEntity goes here
+                        Text("I Like Apples")
+                        Text("TripEntity at \(tripEntity.title!)")
                     } label: {
-                        Text(tripEntity.startTime!, formatter: tripListDateFormatter)
+                        Text(tripEntity.title!) // Displayed in list
                     }
                 } // ForEach
                 .onDelete(perform: deleteTripEntities)
@@ -34,11 +36,14 @@ struct TripListView: View {
                 }
                 ToolbarItem {
                     Button(action: addTripEntity) {
-                        Label("Add Trip", systemImage: "plus")
+                        Label("New Trip", systemImage: "plus")
+                            .labelStyle(TitleOnlyLabelStyle())  // Shows the Text, not the systemImage
                     }
                 }
             } // toolbar
-            Text("Select a Trip")
+            .navigationBarTitle("Trip List") // Title displayed above list
+//            .navigationBarTitleDisplayMode(.inline) // Put title on same line as buttons
+//            .navigationBarHidden(true)
         } // NavigationView
     }
 
@@ -60,18 +65,10 @@ struct TripListView: View {
             }
         } // withAnimation
     }
-    
-    
-    
 } // TripListView Struct
 
 
-private let tripListDateFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .medium
-    return formatter
-}()
+
 
 
 struct TripListView_Previews: PreviewProvider {
