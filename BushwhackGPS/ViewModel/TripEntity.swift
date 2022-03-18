@@ -7,18 +7,36 @@
 
 import Foundation
 import CoreData
+import CryptoKit
 
 extension TripEntity: Comparable {
     
+    // MARK: Accessors
     public var wrappedTitle: String {
+        get { title ?? "Unknown Title wdh" }
+        set { title = newValue } // by default the value passed into 'set' is named newValue
+    }
+    public var wrappedDesc: String {
+        get { desc ?? "" }
+        set { desc = newValue }
+    }
+    public var wrappedStartTime: Date {
+        get { startTime ?? Date() }
+        set { startTime = newValue }
+    }
+    public var wrappedEndTime: Date {
         get {
-            title ?? "Unknown Title wdh"
+            if endTime == nil {
+                MyLog.debug("wdh *** ERROR *** This should NEVER happen - wrappedEndTime called for nil endTime")
+                return Date()
+            }
+            return endTime!
         }
-        set(newTitle) {
-            title = newTitle
-        }
+        set { endTime = newValue }
     }
     
+    
+    // MARK: Static Funcs
     public static func < (lhs: TripEntity, rhs: TripEntity) -> Bool {
         if (lhs.startTime == nil) {return false}
         if (rhs.startTime == nil) {return false}
