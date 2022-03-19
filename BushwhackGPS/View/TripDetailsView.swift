@@ -10,9 +10,8 @@ import CoreData
 
 struct TripDetailsView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    @ObservedObject var mTripEntity: TripEntity // SHOULD THIS BE @StateObject???
-    
-//    @State var dotColor: Color
+    @ObservedObject var mTripEntity: TripEntity // SHOULD THIS BE @StateObject??? No TripEntity is a class passed in from outside
+//    @State var dotColor: Color = Color(.sRGB, red: 1.0, green: 0.0, blue: 0.0) // This color will be overwritten by the actual color
     
     init(theTripEntity: TripEntity) {
         mTripEntity = theTripEntity
@@ -64,7 +63,7 @@ struct TripDetailsView: View {
                 .frame(width: 130) // must set width to keep color dot next to label
 
             // Date Picker Start Date
-            
+Add date picker next
             // Date Picker End Date
         }
         .onAppear { HandleOnAppear() }

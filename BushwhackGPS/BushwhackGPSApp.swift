@@ -15,6 +15,9 @@
 // Icon Set Generoator -
 //   Icon Builder Website: - Generate icons of the correct size
 //   https://appicon.co
+//
+// Errors and Solutions: https://docs.google.com/document/d/1fatJRZhFN3lIoUlOWzn1S3LnrzlLBcF_UUgbiqYrCyY/edit
+//
 
 import SwiftUI
 

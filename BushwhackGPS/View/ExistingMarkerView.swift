@@ -38,8 +38,6 @@ struct ExistingMarkerEditView: View {
     }
         
     var body: some View {
-//        ScrollView {
-//    NEXT: How to fix the size of the TextField or prevent keyboard from shrinking it to 0.
         VStack(alignment: .leading) {
             HStack {
                 Spacer()
@@ -110,7 +108,6 @@ struct ExistingMarkerEditView: View {
                 Spacer()
             }
         } // VStack
-//        } // ScrollView
         .padding()
 //      .padding(EdgeInsets(top: 0.0, leading: LEFT_PADDING, bottom: 0, trailing: 10))
         .navigationTitle("New Journal Marker") // Title at top of page
