@@ -88,10 +88,10 @@ struct ContentView: View {
                             .labelStyle(VerticalLabelStyle())
 //                        Spacer()
 //                        Button(action: addMarkerHandler) {
-//                            let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
+//                            let dotColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
 //                            let addMarkerImageName = theMap_ViewModel.getAddJournalEntryImageName()
 //                            Label("Marker", systemImage: addMarkerImageName)
-//                                .foregroundColor(Color(theColor))
+//                                .foregroundColor(Color(dotColor))
 //                        }
 //                            .labelStyle(VerticalLabelStyle())
                     } // Group 1

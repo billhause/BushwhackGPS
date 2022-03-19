@@ -8,6 +8,7 @@
 import Foundation
 import CoreData
 import CryptoKit
+import SwiftUI // Color
 
 extension TripEntity: Comparable {
     
@@ -34,7 +35,31 @@ extension TripEntity: Comparable {
         }
         set { endTime = newValue }
     }
-    
+
+    public var dotColor: Color {
+        get {
+            MyLog.debug("TripEntity get dotColor called")
+            return Color(.sRGB,
+                  red: dotColorRed,
+                  green: dotColorGreen,
+                  blue: dotColorBlue)
+        }
+        set {
+            var rgbRed: CGFloat = 0
+            var rgbBlue: CGFloat = 0
+            var rgbGreen: CGFloat = 0
+            var rgbAlpha: CGFloat = 0
+            let myUIColor = UIColor(newValue)
+            myUIColor.getRed(&rgbRed, green: &rgbGreen, blue: &rgbBlue, alpha: &rgbAlpha)
+            dotColorRed = rgbRed
+            dotColorBlue = rgbBlue
+            dotColorGreen = rgbGreen
+            dotColorAlpha = rgbAlpha // should always be 1.0 for display on map
+            MyLog.debug("* TripEntity set dotColor called")
+        }
+        
+    }
+
     
     // MARK: Static Funcs
     public static func < (lhs: TripEntity, rhs: TripEntity) -> Bool {
@@ -114,5 +139,7 @@ extension TripEntity: Comparable {
             MyLog.debug("wdh Error saving TripEntity in call to member func 'save()' \(nsError.userInfo)")
         }
     }
+    
+    
     
 }

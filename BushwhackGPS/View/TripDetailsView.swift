@@ -10,16 +10,17 @@ import CoreData
 
 struct TripDetailsView: View {
     @Environment(\.managedObjectContext) private var viewContext
-    @ObservedObject var theTripEntity: TripEntity
+    @ObservedObject var mTripEntity: TripEntity // SHOULD THIS BE @StateObject???
     
-    @State var dotColor: Color
+//    @State var dotColor: Color
     
     init(theTripEntity: TripEntity) {
-        self.theTripEntity = theTripEntity
-        dotColor = Color(.sRGB,
-                          red: theTripEntity.dotColorRed,
-                          green: theTripEntity.dotColorGreen,
-                          blue: theTripEntity.dotColorBlue)
+        mTripEntity = theTripEntity
+//        dotColor = mTripEntity.dotColor
+//          dotColor = Color(.sRGB,
+//                          red: mTripEntity.dotColorRed,
+//                          green: mTripEntity.dotColorGreen,
+//                          blue: mTripEntity.dotColorBlue)
     }
     
 //    newTrip.id = ID_GeneratorEntity.getNextID()
@@ -43,28 +44,24 @@ struct TripDetailsView: View {
 //            Text("Trip Details").font(.callout)
 //            Text("Trip Details").font(.subheadline)
 //            Text("Trip Details").font(.headline)
-            TextDataInput(title: "Name", userInput: $theTripEntity.wrappedTitle)
-            TextDataInputMultiLine(title: "Description", userInput: $theTripEntity.wrappedDesc)
+            TextDataInput(title: "Name", userInput: $mTripEntity.wrappedTitle)
+            TextDataInputMultiLine(title: "Description", userInput: $mTripEntity.wrappedDesc)
             
             // Dot Size Picker
             HStack {
                 Text("Dot Size: ")
-                Picker("Dot Size", selection: $theTripEntity.dotSize) {
+                Picker("Dot Size", selection: $mTripEntity.dotSize) {
                     Text("Small").tag(1.0)
                     Text("Medium").tag(2.0)
                     Text("Large").tag(3.0)
                 }
                 .pickerStyle(.segmented)
             }
-            Text("Value: \(theTripEntity.dotSize)")
+            Text("Dot Size Value: \(mTripEntity.dotSize)")
             
             // Dot Color Picker
-            HStack {
-                ColorPicker("Dot Color", selection: $dotColor, supportsOpacity: false)
-                Spacer()
-                Text("Coconuts")
-CONTINUE HERE - Figure out how to get the color dot to appear next to the 'Dot Color' label
-            }
+            ColorPicker("Dot Color", selection: $mTripEntity.dotColor, supportsOpacity: false)
+                .frame(width: 130) // must set width to keep color dot next to label
 
             // Date Picker Start Date
             
@@ -84,6 +81,7 @@ CONTINUE HERE - Figure out how to get the color dot to appear next to the 'Dot C
     
     func HandleOnDisappear() {
         MyLog.debug("HandleOnDisappear() Called for TripDetailsView")
+        mTripEntity.save()
     }
 
 }
