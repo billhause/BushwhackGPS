@@ -46,6 +46,7 @@
         <attribute name="dotSize" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="endTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="showTripDots" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="startTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="title" optional="YES" attributeType="String"/>
         <attribute name="uuid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
@@ -56,6 +57,6 @@
         <element name="ID_GeneratorEntity" positionX="-63" positionY="-9" width="128" height="44"/>
         <element name="MarkerEntity" positionX="-54" positionY="63" width="128" height="209"/>
         <element name="ParkingSpotEntity" positionX="-54" positionY="9" width="128" height="59"/>
-        <element name="TripEntity" positionX="-54" positionY="117" width="128" height="194"/>
+        <element name="TripEntity" positionX="-54" positionY="117" width="128" height="209"/>
     </elements>
 </model>

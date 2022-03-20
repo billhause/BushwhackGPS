@@ -81,10 +81,15 @@ struct NewMarkerEditView: View {
                         Label("", systemImage: $0)
                     }
                 } //.pickerStyle(MenuPickerStyle()) //.pickerStyle(SegmentedPickerStyle()) //.pickerStyle(WheelPickerStyle())
-
+                Spacer()
+                
                 // Color Picker
-                ColorPicker("Icon Color (Darker is better)", selection: $iconColor, supportsOpacity: false)
-                    .padding()
+                VStack(alignment: .leading) {
+                    Text("Icon Color")
+                    Text("(Darker is Better)").font(.footnote)
+                }
+                ColorPicker("Icon Color", selection: $iconColor, supportsOpacity: false)
+                    .labelsHidden() // don't show the label.  Use the Text lable instead
             } // HStack
 
             // Date/Time Display

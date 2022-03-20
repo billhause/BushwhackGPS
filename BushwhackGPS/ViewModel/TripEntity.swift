@@ -22,23 +22,34 @@ extension TripEntity: Comparable {
         set { desc = newValue }
     }
     public var wrappedStartTime: Date {
-        get { startTime ?? Date() }
-        set { startTime = newValue }
+//        get { startTime ?? Date() }
+        get {
+            if startTime == nil {
+                MyLog.debug("wdh *** ERROR *** This should NEVER happen - wrappedStartTime called for nil endTime")
+                return Date()
+            }
+            return startTime!
+        }
+        set {
+            startTime = newValue
+            MyLog.debug("wrappedStartTime set called for TripEntity \(newValue)")
+        }
     }
     public var wrappedEndTime: Date {
         get {
             if endTime == nil {
-                MyLog.debug("wdh *** ERROR *** This should NEVER happen - wrappedEndTime called for nil endTime")
                 return Date()
             }
             return endTime!
         }
-        set { endTime = newValue }
+        set {
+            endTime = newValue
+            MyLog.debug("wrappedEndTime set called for TripEntity \(newValue)")
+        }
     }
 
     public var dotColor: Color {
         get {
-            MyLog.debug("TripEntity get dotColor called")
             return Color(.sRGB,
                   red: dotColorRed,
                   green: dotColorGreen,
@@ -106,6 +117,7 @@ extension TripEntity: Comparable {
         newTrip.dotSize = 3.0
         newTrip.startTime = Date()
         newTrip.endTime = nil
+        newTrip.showTripDots = true
         
         // use createion date as the default title
         let dateFormatter = DateFormatter()

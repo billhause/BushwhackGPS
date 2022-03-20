@@ -11,44 +11,41 @@ import CoreData
 struct TripDetailsView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @ObservedObject var mTripEntity: TripEntity // SHOULD THIS BE @StateObject??? No TripEntity is a class passed in from outside
-//    @State var dotColor: Color = Color(.sRGB, red: 1.0, green: 0.0, blue: 0.0) // This color will be overwritten by the actual color
+
+    var earliestStartDate: Date // will be initialized to the earliest possible start date for the trip in init()
     
     init(theTripEntity: TripEntity) {
         mTripEntity = theTripEntity
-//        dotColor = mTripEntity.dotColor
-//          dotColor = Color(.sRGB,
-//                          red: mTripEntity.dotColorRed,
-//                          green: mTripEntity.dotColorGreen,
-//                          blue: mTripEntity.dotColorBlue)
+        
+        // Set the earliest Start Date for a trip to be used to initialize the Date Picker
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy/MM/dd"
+        earliestStartDate = formatter.date(from: "2022/02/01")! // Feb 1, 2022 is earliest possible trip start date
+        //        formatter.dateFormat = "yyyy/MM/dd HH:mm"
+        //        earliestStartDate = formatter.date(from: "2022/02/03 00:05")!
     }
-    
-//    newTrip.id = ID_GeneratorEntity.getNextID()
-//    newTrip.uuid = UUID()
-//    newTrip.title
-//    newTrip.desc = ""
-//    newTrip.dotColorRed = 0.0
-//    newTrip.dotColorBlue = 0.0
-//    newTrip.dotColorGreen = 1.0
-//    newTrip.dotColorAlpha = 1.0
-//    newTrip.dotSize = 3.0
-//    newTrip.startTime = Date()
-//    newTrip.endTime = nil
-
     
     var body: some View {
         VStack(alignment: .leading) {
-//            Text("Trip Details").font(.title)
-            Text("Trip Details").font(.title2)
-//            Text("Trip Details").font(.title3)
-//            Text("Trip Details").font(.callout)
-//            Text("Trip Details").font(.subheadline)
-//            Text("Trip Details").font(.headline)
-            TextDataInput(title: "Name", userInput: $mTripEntity.wrappedTitle)
+            
+            // Dot Size Picker
+            HStack {
+                Text("Trip Details").font(.title2)
+                Spacer()
+                Spacer()
+                Picker("DisplayHide", selection: $mTripEntity.showTripDots) {
+                    Text("Show on Map").tag(true)
+                    Text("Hide").tag(false)
+                }
+                .pickerStyle(.segmented)
+            }
+
+            TextDataInput(title: "Trip Name", userInput: $mTripEntity.wrappedTitle)
             TextDataInputMultiLine(title: "Description", userInput: $mTripEntity.wrappedDesc)
             
             // Dot Size Picker
             HStack {
-                Text("Dot Size: ")
+                Text("Map Dot Size: ")
                 Picker("Dot Size", selection: $mTripEntity.dotSize) {
                     Text("Small").tag(1.0)
                     Text("Medium").tag(2.0)
@@ -56,15 +53,29 @@ struct TripDetailsView: View {
                 }
                 .pickerStyle(.segmented)
             }
-            Text("Dot Size Value: \(mTripEntity.dotSize)")
+            Text("Map Dot Size Value: \(mTripEntity.dotSize)")
             
             // Dot Color Picker
-            ColorPicker("Dot Color", selection: $mTripEntity.dotColor, supportsOpacity: false)
-                .frame(width: 130) // must set width to keep color dot next to label
+            HStack {
+                Text("Map Dot Color: ")
+                ColorPicker("Dot Color", selection: $mTripEntity.dotColor, supportsOpacity: false)
+                    .labelsHidden()
+            }
 
-            // Date Picker Start Date
-Add date picker next
-            // Date Picker End Date
+            // Trip Start Date
+            DatePicker("Trip Start Time",
+                       selection: $mTripEntity.wrappedStartTime,
+                       in: earliestStartDate...Date(), // Between earliest possible start date and now
+                       displayedComponents: [.date, .hourAndMinute])
+
+            // Trip End Date
+            DatePicker("Trip End Time",
+                       selection: $mTripEntity.wrappedEndTime,
+                       in: mTripEntity.wrappedStartTime..., // must be sometime after the start time
+                       displayedComponents: [.date, .hourAndMinute])
+
+Figure out why the second date picker to be displayed does not respond to touches in the simulator but works on the iPhone
+            
         }
         .onAppear { HandleOnAppear() }
         .onDisappear { HandleOnDisappear() }
@@ -75,11 +86,11 @@ Add date picker next
     // This will be called when ever the view apears
     // Calling this from .onAppear in the Body of the view.
     func HandleOnAppear() {
-        MyLog.debug("HandleOnAppear() Called for TripDetailsView")
+//        MyLog.debug("HandleOnAppear() Called for TripDetailsView")
     }
     
     func HandleOnDisappear() {
-        MyLog.debug("HandleOnDisappear() Called for TripDetailsView")
+//        MyLog.debug("HandleOnDisappear() Called for TripDetailsView")
         mTripEntity.save()
     }
 
