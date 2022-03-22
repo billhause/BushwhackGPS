@@ -46,9 +46,9 @@ struct TripDetailsView: View {
                 HStack {
                     Text("Map Dot Size: ")
                     Picker("Dot Size", selection: $mTripEntity.dotSize) {
-                        Text("Small").tag(1.0)
-                        Text("Medium").tag(2.0)
-                        Text("Large").tag(3.0)
+                        Text("Small").tag(2.0)
+                        Text("Medium").tag(5.0)
+                        Text("Large").tag(10.0)
                     }
                     .pickerStyle(.segmented)
                 } // HStack
@@ -100,10 +100,3 @@ struct TripDetailsView_Previews: PreviewProvider {
 }
 
 
-// Added to make the keyboard go away when the user taps outside the keyboard
-//            .onTapGesture { hideKeyboard() } // wdhx
-//extension View { // wdhx
-//    func hideKeyboard() {
-//        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-//    }
-//}
