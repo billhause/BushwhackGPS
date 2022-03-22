@@ -169,17 +169,23 @@ struct TextDataInput: View {
 
 // Generic data input with a label and field to enter data
 struct TextDataInputMultiLine: View {
-    var title: String
-    @Binding var userInput: String
+    var theTitle: String
+    @Binding var theUserInput: String
+    var theIdealHeight: CGFloat
+    
+    init(title: String, userInput: Binding<String>, idealHeight: CGFloat = 150) {
+        theTitle = title
+        _theUserInput = userInput // The compiler wraps the var name with an underscore
+        theIdealHeight = idealHeight
+    }
     
     var body: some View {
         VStack(alignment: HorizontalAlignment.leading) {
-            Text(title)
+            Text(theTitle)
                 .font(.body)
                 .padding(EdgeInsets(top: 0.0, leading: 0.0, bottom: -5, trailing: 0.0))
-            TextEditor(text: $userInput)
-                //.ignoresSafeArea(.container)
-                .frame(minWidth: 100, idealWidth: .infinity, maxWidth: .infinity, minHeight: 70, idealHeight: .infinity, maxHeight: .infinity, alignment: .leading) // Settings to avoid shrinking edit box to 0 when keyboard appears
+            TextEditor(text: $theUserInput)
+                .frame(minWidth: 100, idealWidth: 10000, maxWidth: 10000, minHeight: 70, idealHeight: theIdealHeight, maxHeight: 10000, alignment: .leading) // Settings to avoid shrinking edit box to 0 when keyboard appears
                 .multilineTextAlignment(.leading)
                 .overlay( // Round the edit boundry frame
                          RoundedRectangle(cornerRadius: 5)
