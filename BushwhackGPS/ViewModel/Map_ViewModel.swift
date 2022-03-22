@@ -79,7 +79,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         "dollarsign.square.fill",
         "wifi.circle",
         "wifi",
-        "music.note", // Continue Here wdhx
+        "music.note", 
         "circle",
         "triangle",
         "square",
@@ -431,7 +431,29 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return theMKCoordinateRegion
     }
 
+    //
+    // DOT ANNOTATION COLOR AND SIZE wdhx
+    //
+    let DEFAULT_MAP_DOT_SIZE: CGFloat = 5.0
+    let DEFAULT_MAP_DOT_COLOR: UIColor = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 1.0)
+    typealias DotSizeAndUIColor = (size: CGFloat, theUIColor: UIColor)
+    func getDotSizeAndUIColor(theMKDotAnnotation: MKDotAnnotation) -> DotSizeAndUIColor {
+        MyLog.debug("getDotSizeAndUIColor Called")
+        let dotDate = theMKDotAnnotation.mDotEntity.timestamp
+        guard let theTripEntity = TripEntity.getTripEntityForDate(theDate: dotDate!) else {
+            // Return default dot size and color
+            return (size: DEFAULT_MAP_DOT_SIZE, theUIColor: DEFAULT_MAP_DOT_COLOR)
+        }
+        
+        return (size: theTripEntity.dotSize, theUIColor: theTripEntity.dotUIColor)
+    }
     
+    func getDotUIColor(theMKDotAnnotation: MKDotAnnotation) -> UIColor {
+        MyLog.debug("getDotUIColor Called")
+        return UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+    }
+    
+
     // Sometimes the device will not have the first choice symbol so check first
     // Return a default that is always present
     func getDotImageName() -> String {

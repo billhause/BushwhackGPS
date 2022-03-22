@@ -27,7 +27,7 @@ struct ContentView: View {
 
                 // vvvvvvv ALERT MESSAGE Modal Dialog vvvvvvvvv
                     .alert(theAlert.theMessage, isPresented: $theAlert.showAlert) {
-                        Button("OK wdhx", role: .cancel) { }
+                        Button("OK wdh", role: .cancel) { }
                     }
                 // ^^^^^^^^^ ALERT MESSAGE ^^^^^^^^^^^^^
                 

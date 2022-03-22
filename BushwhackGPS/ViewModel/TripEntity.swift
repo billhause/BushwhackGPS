@@ -71,6 +71,11 @@ extension TripEntity: Comparable {
         
     }
 
+    public var dotUIColor: UIColor {
+        get {
+            UIColor(red: dotColorRed, green: dotColorGreen, blue: dotColorBlue, alpha: dotColorAlpha)
+        }
+    }
     
     // MARK: Static Funcs
     public static func < (lhs: TripEntity, rhs: TripEntity) -> Bool {
@@ -80,10 +85,10 @@ extension TripEntity: Comparable {
     }
     
     // Get array of all TripEntities (could be an empty array)
-    public static func getAllTripEntities() -> [TripEntity] {
+    public static func getAllTripEntities_NewestToOldest() -> [TripEntity] {
         let viewContext = PersistenceController.shared.container.viewContext
         let request = NSFetchRequest<TripEntity>(entityName: "TripEntity")
-        let sortDesc = NSSortDescriptor(key: "startTime", ascending: true)
+        let sortDesc = NSSortDescriptor(key: "startTime", ascending: false) // Sort Newest to Oldest
         request.sortDescriptors = [sortDesc]
         
         // Get array of sorted results
@@ -92,14 +97,45 @@ extension TripEntity: Comparable {
             return results
         } catch {
             let nsError = error as NSError
-            MyLog.debug("wdh Error loading TripEnties in getAllTripEntities() \(nsError.userInfo)")
+            MyLog.debug("wdh Error loading TripEnties in getAllTripEntities_NewestToOldest() \(nsError.userInfo)")
         }
         
         // If we got this far then we had an error getting the TripEntity array so return an empty array
         return []
     }
     
-    
+    // Return the TripEntity that should be used for the specified Date
+    // If more than one TripEntity contain the specified date, return the one with the latest start date
+    // Return nil if there is no TripEntity that includes the specified Date
+    public static func getTripEntityForDate(theDate: Date) -> TripEntity? {
+        // the list will come back newest to oldest
+        let theTripEntities = getAllTripEntities_NewestToOldest()
+        for theTripEntity in theTripEntities {
+            if theTripEntity.startTime == nil {
+                MyLog.debug("ERROR - WHY DOES THIS TripEntity have no startTime? This Should Not Happen")
+                continue // skip this entity
+            } else { // start time not nil
+                if theTripEntity.startTime! > theDate {
+                    continue // The Date is not in theTripEntity's date range
+                } else { // check end time
+                    // Start time is good, now check end time
+                    if theTripEntity.endTime == nil {
+                        // nil end time means there is no end time so this is the entity to return
+                        return theTripEntity
+                    } else { // end Time not nil
+                        if theTripEntity.endTime! < theDate {
+                            // The date is in the range so This is the TripEntity to return
+                            return theTripEntity
+                        }
+                    } // end time not nil
+                } // check end time
+            } // start time not nil
+        } // Loop through TripEntities
+        
+        // If we got this far then there are not any TripEntities for this date so return nil
+        return nil
+    }
+
         
     // Create a new TripEntity, save it and return it
     // Every field will be filled with a non-nil value except startTime and endTime

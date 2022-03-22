@@ -25,6 +25,8 @@ struct TripDetailsView: View {
         //        earliestStartDate = formatter.date(from: "2022/02/03 00:05")!
     }
     
+Reload the map dots after editing a Trip
+    
     var body: some View {
         VStack { // Outer VStack needed for preview
 //            VStack(alignment: .leading)
@@ -46,7 +48,8 @@ struct TripDetailsView: View {
                 HStack {
                     Text("Map Dot Size: ")
                     Picker("Dot Size", selection: $mTripEntity.dotSize) {
-                        Text("Small").tag(2.0)
+                        // TODO: Replace with Constant from the ViewModel DEFAULT_MAP_DOT_SIZE wdhx
+                        Text("Small").tag(2.5)
                         Text("Medium").tag(5.0)
                         Text("Large").tag(10.0)
                     }
