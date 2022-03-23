@@ -111,6 +111,7 @@ extension TripEntity: Comparable {
         // the list will come back newest to oldest
         let theTripEntities = getAllTripEntities_NewestToOldest()
         for theTripEntity in theTripEntities {
+            MyLog.debug("TripEntity '\(theTripEntity.title)' Start Date: \(theTripEntity.startTime)")
             if theTripEntity.startTime == nil {
                 MyLog.debug("ERROR - WHY DOES THIS TripEntity have no startTime? This Should Not Happen")
                 continue // skip this entity
@@ -123,7 +124,7 @@ extension TripEntity: Comparable {
                         // nil end time means there is no end time so this is the entity to return
                         return theTripEntity
                     } else { // end Time not nil
-                        if theTripEntity.endTime! < theDate {
+                        if theTripEntity.endTime! > theDate {
                             // The date is in the range so This is the TripEntity to return
                             return theTripEntity
                         }

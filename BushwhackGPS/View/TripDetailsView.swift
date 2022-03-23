@@ -25,7 +25,7 @@ struct TripDetailsView: View {
         //        earliestStartDate = formatter.date(from: "2022/02/03 00:05")!
     }
     
-Reload the map dots after editing a Trip
+//Reload the map dots after editing a Trip wdhx
     
     var body: some View {
         VStack { // Outer VStack needed for preview
@@ -91,6 +91,7 @@ Reload the map dots after editing a Trip
     
     func HandleOnDisappear() {
 //        MyLog.debug("HandleOnDisappear() Called for TripDetailsView")
+Force Map to Reload all Dots
         mTripEntity.save()
     }
 

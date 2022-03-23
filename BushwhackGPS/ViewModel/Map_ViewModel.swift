@@ -295,20 +295,20 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return getParkingSpotLocation()
     }
 
-    // Add a new marker at the current location using default values
-    // Set the flag telling the Map to get the waiting markerAnnotation and add it to the map.
-    func addNewDefaultMarker() { // DELETE THIS FUNCTION AFTER IT"S NO LONGER USED TODO
-        guard let location = mLastKnownLocation else {
-            return  // we don't know where we are so we won't be adding a new marker
-        }
-        
-        // Create a new marker and save it
-        let newMarkerEntity = MarkerEntity.createMarkerEntity(lat: location.latitude, lon: location.longitude)
-        
-        // Update model with the waiting MarkerAnnotation
-        theMapModel.waitingMKMarkerAnnotation = MarkerAnnotation(theMarkerEntity: newMarkerEntity)
-        mNewMarkerAnnotationWaiting = true // This will be set to false after the marker is requested
-    }
+//    // Add a new marker at the current location using default values
+//    // Set the flag telling the Map to get the waiting markerAnnotation and add it to the map.
+//    func addNewDefaultMarker() { // DELETE THIS FUNCTION AFTER IT"S NO LONGER USED TODO
+//        guard let location = mLastKnownLocation else {
+//            return  // we don't know where we are so we won't be adding a new marker
+//        }
+//        
+//        // Create a new marker and save it
+//        let newMarkerEntity = MarkerEntity.createMarkerEntity(lat: location.latitude, lon: location.longitude)
+//        
+//        // Update model with the waiting MarkerAnnotation
+//        theMapModel.waitingMKMarkerAnnotation = MarkerAnnotation(theMarkerEntity: newMarkerEntity)
+//        mNewMarkerAnnotationWaiting = true // This will be set to false after the marker is requested
+//    }
 
     
     
