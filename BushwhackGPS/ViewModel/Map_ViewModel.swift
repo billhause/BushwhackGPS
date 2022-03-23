@@ -363,7 +363,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         theMarker.colorGreen = rgbGreen
         theMarker.colorAlpha = rgbAlpha // should always be 1.0 for display on map
         
-        theMarker.save()
+        MarkerEntity.saveAll()
         
         setMarkerIDForRefresh(markerID: theMarker.id) // Must tell the map to remove and re-add the MarkerAnnotationView to refresh the icon
         

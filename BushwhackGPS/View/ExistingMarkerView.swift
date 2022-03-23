@@ -18,7 +18,7 @@ struct ExistingMarkerEditView: View {
     @State private var showingDeleteJournalConfirm = false // Flag for Confirm Dialog
     @State private var deleteThisMarker = false // Set to true if user clicks delete
     
-    @State var markerID: Int64 = 0
+    @State var mMarkerID: Int64 = 0
     @State var titleText: String = ""
     @State var bodyText: String = ""
     @State var iconSymbolName: String = "multiply.circle" //"xmark.square.fill"
@@ -129,7 +129,7 @@ struct ExistingMarkerEditView: View {
         
         // We are editing an existing Marker Entity
         // Initialize the fields based on the MarkerEntity we are editig
-        markerID = mMarkerEntity.id
+        mMarkerID = mMarkerEntity.id
         titleText = mMarkerEntity.title!
         bodyText = mMarkerEntity.desc!
         iconSymbolName = mMarkerEntity.iconName!
@@ -150,7 +150,7 @@ struct ExistingMarkerEditView: View {
         if deleteThisMarker == false {
             theMap_ViewModel.updateExistingMarker(theMarker: mMarkerEntity, lat: self.lat, lon: self.lon, title: titleText, body: bodyText, iconName: iconSymbolName, color: iconColor)
         } else {
-            theMap_ViewModel.setMarkerIDForDeletion(markerID: markerID)
+            theMap_ViewModel.setMarkerIDForDeletion(markerID: mMarkerID)
         }
     }
 }

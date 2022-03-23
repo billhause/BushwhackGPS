@@ -145,6 +145,7 @@ struct MapView: UIViewRepresentable {
         // DELETE a MarkerAnnotation from the map and it's MarkerEntity from Core Data
         let markerIDForDeletion = theMap_ViewModel.getMarkerIDForDeletion() // will reset to 0 after being called
         if markerIDForDeletion != 0 {
+            MyLog.debug("*** Deleting Marker ID: \(markerIDForDeletion)")
             theMapView.annotations.forEach {
                 if ($0 is MarkerAnnotation) {
                     let theMarkerAnnotation = $0 as! MarkerAnnotation
