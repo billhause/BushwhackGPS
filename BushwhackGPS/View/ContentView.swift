@@ -67,7 +67,7 @@ struct ContentView: View {
 
                         // Trip List
                         Spacer()
-                        NavigationLink(destination: TripListView()) {
+                        NavigationLink(destination: TripListView(mapViewModel: theMap_ViewModel)) {
                                 let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
                                 let tripButtonImageName = theMap_ViewModel.getTripButtonImageName()
                                 Label("Trips", systemImage: tripButtonImageName)

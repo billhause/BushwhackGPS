@@ -111,7 +111,7 @@ extension TripEntity: Comparable {
         // the list will come back newest to oldest
         let theTripEntities = getAllTripEntities_NewestToOldest()
         for theTripEntity in theTripEntities {
-            MyLog.debug("TripEntity '\(theTripEntity.title)' Start Date: \(theTripEntity.startTime)")
+//            MyLog.debug("TripEntity '\(theTripEntity.title)' Start Date: \(theTripEntity.startTime)")
             if theTripEntity.startTime == nil {
                 MyLog.debug("ERROR - WHY DOES THIS TripEntity have no startTime? This Should Not Happen")
                 continue // skip this entity
@@ -140,7 +140,7 @@ extension TripEntity: Comparable {
         
     // Create a new TripEntity, save it and return it
     // Every field will be filled with a non-nil value except startTime and endTime
-    @discardableResult public static func createTripEntity() -> TripEntity {
+    @discardableResult public static func createTripEntity(dotSize: Double) -> TripEntity {
         let viewContext = PersistenceController.shared.container.viewContext
         let newTrip = TripEntity(context: viewContext)
         newTrip.id = ID_GeneratorEntity.getNextID()
@@ -151,7 +151,7 @@ extension TripEntity: Comparable {
         newTrip.dotColorBlue = 0.0
         newTrip.dotColorGreen = 1.0
         newTrip.dotColorAlpha = 1.0
-        newTrip.dotSize = 3.0
+        newTrip.dotSize = dotSize
         newTrip.startTime = Date()
         newTrip.endTime = nil
         newTrip.showTripDots = true

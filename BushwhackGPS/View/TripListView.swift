@@ -15,6 +15,11 @@ struct TripListView: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \TripEntity.startTime, ascending: false)],
         animation: .default)
     private var tripEntities: FetchedResults<TripEntity>
+    private var theMap_ViewModel: Map_ViewModel
+    
+    init(mapViewModel: Map_ViewModel) {
+        theMap_ViewModel = mapViewModel
+    }
     
     var body: some View {
         NavigationView {
@@ -49,7 +54,7 @@ struct TripListView: View {
 
     private func addTripEntity() {
         withAnimation {
-            _ = TripEntity.createTripEntity() // avoid single line return warning with _=
+            _ = TripEntity.createTripEntity(dotSize: theMap_ViewModel.DEFAULT_MAP_DOT_SIZE) // avoid single line return warning with _=
         } // withAnimation
     }
     
@@ -71,6 +76,6 @@ struct TripListView: View {
 
 struct TripListView_Previews: PreviewProvider {
     static var previews: some View {
-        TripListView()
+        TripListView(mapViewModel: Map_ViewModel())
     }
 }
