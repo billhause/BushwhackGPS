@@ -168,6 +168,8 @@ struct MapView: UIViewRepresentable {
         // RELOAD ALL DOTS If the Filter Dates Changed
         if theMap_ViewModel.dotFilterIsDirty {
             theMap_ViewModel.dotFilterIsDirty = false // turn off the flag
+            
+            MyLog.debug("REFRESHING ALL MAP DOT ANNOTATIONS")
             // Remove all dots from the map
             theMapView.annotations.forEach {
                 if ($0 is MKDotAnnotation) {

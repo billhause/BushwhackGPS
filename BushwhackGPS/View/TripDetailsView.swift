@@ -11,11 +11,13 @@ import CoreData
 struct TripDetailsView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @ObservedObject var mTripEntity: TripEntity // SHOULD THIS BE @StateObject??? No TripEntity is a class passed in from outside
-
-    var earliestStartDate: Date // will be initialized to the earliest possible start date for the trip in init()
     
-    init(theTripEntity: TripEntity) {
+    var earliestStartDate: Date // will be initialized to the earliest possible start date for the trip in init()
+    private var theMap_ViewModel: Map_ViewModel
+    
+    init(theTripEntity: TripEntity, mapViewModel: Map_ViewModel) {
         mTripEntity = theTripEntity
+        theMap_ViewModel = mapViewModel
         
         // Set the earliest Start Date for a trip to be used to initialize the Date Picker
         let formatter = DateFormatter()
@@ -48,10 +50,9 @@ struct TripDetailsView: View {
                 HStack {
                     Text("Map Dot Size: ")
                     Picker("Dot Size", selection: $mTripEntity.dotSize) {
-                        // TODO: Replace with Constant from the ViewModel DEFAULT_MAP_DOT_SIZE wdhx
-                        Text("Small").tag(2.5)
-                        Text("Medium").tag(5.0)
-                        Text("Large").tag(10.0)
+                        Text("Small").tag(theMap_ViewModel.DEFAULT_MAP_DOT_SIZE / 2)
+                        Text("Medium").tag(theMap_ViewModel.DEFAULT_MAP_DOT_SIZE)
+                        Text("Large").tag(theMap_ViewModel.DEFAULT_MAP_DOT_SIZE * 2)
                     }
                     .pickerStyle(.segmented)
                 } // HStack
@@ -93,13 +94,15 @@ struct TripDetailsView: View {
 //        MyLog.debug("HandleOnDisappear() Called for TripDetailsView")
 // wdhxForce Map to Reload all Dots
         mTripEntity.save()
+        
+        theMap_ViewModel.requestMapDotAnnotationRefresh()
     }
 
 }
 
 struct TripDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        TripDetailsView(theTripEntity: TripEntity())
+        TripDetailsView(theTripEntity: TripEntity(), mapViewModel: Map_ViewModel())
     }
 }
 

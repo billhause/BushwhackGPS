@@ -214,12 +214,11 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         // To Receive Backgroun Location Updates...
         // NOTE: MUST CHECK THE XCODE App Setting box for 'Location Updates' in the 'Background Modes' section under the 'Signing and Capabilities' tab
 
-        // TODO: try experamenting with 'significantLocationUpdate' setting to get updates every 5 minues or so
         // a comment said 'you're not handling the location key properly https://developer.apple.com/forums/thread/69152
         // There is an indication that requestLocation stops the location service once the request has been fulfilled https://developer.apple.com/library/content/documentation/Performance/Conceptual/EnergyGuide-iOS/LocationBestPractices.html
         // Try setting the CLLocationManager ActivityType to fitness vs automotiveNavigation.  This is used by iOS to pause locaiton updates in the background state to conserve power
         
-//        mLocationManager?.requestWhenInUseAuthorization()
+        // mLocationManager?.requestWhenInUseAuthorization()
         mLocationManager?.requestAlwaysAuthorization() // Request permission even when the app is not in use
         mLocationManager?.startUpdatingLocation() // Will call the delegate's didUpdateLocations function when locaiton changes
         mLocationManager?.delegate = self
@@ -231,7 +230,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         // mLocationManager?.activityType = .automotiveNavigation // will disable when indoors
         mLocationManager?.activityType = .otherNavigation // non-automotive vehicle
         // mLocationManager?.activityType = .fitness // will disable when indoors
-//        mLocationManager?.startMonitoringSignificantLocationChanges() // only updates every 5 minutes for 500 meter or more change
+        // mLocationManager?.startMonitoringSignificantLocationChanges() // only updates every 5 minutes for 500 meter or more change
         mLocationManager?.startUpdatingHeading() // Will call the delegates didUpdateHeading function when heading changes
         
         
@@ -295,22 +294,6 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return getParkingSpotLocation()
     }
 
-//    // Add a new marker at the current location using default values
-//    // Set the flag telling the Map to get the waiting markerAnnotation and add it to the map.
-//    func addNewDefaultMarker() { // DELETE THIS FUNCTION AFTER IT"S NO LONGER USED TODO
-//        guard let location = mLastKnownLocation else {
-//            return  // we don't know where we are so we won't be adding a new marker
-//        }
-//        
-//        // Create a new marker and save it
-//        let newMarkerEntity = MarkerEntity.createMarkerEntity(lat: location.latitude, lon: location.longitude)
-//        
-//        // Update model with the waiting MarkerAnnotation
-//        theMapModel.waitingMKMarkerAnnotation = MarkerAnnotation(theMarkerEntity: newMarkerEntity)
-//        mNewMarkerAnnotationWaiting = true // This will be set to false after the marker is requested
-//    }
-
-    
     
     // vvv MARKER ID DELETION vvv
     // Trigger a MarkerAnnotation Deletion from the map
@@ -432,13 +415,13 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     }
 
     //
-    // DOT ANNOTATION COLOR AND SIZE wdhx
+    // DOT ANNOTATION COLOR AND SIZE
     //
-    let DEFAULT_MAP_DOT_SIZE: CGFloat = 5.0
+    let DEFAULT_MAP_DOT_SIZE: Double = 6.0
     let DEFAULT_MAP_DOT_COLOR: UIColor = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 1.0)
     typealias DotSizeAndUIColor = (size: CGFloat, theUIColor: UIColor)
     func getDotSizeAndUIColor(theMKDotAnnotation: MKDotAnnotation) -> DotSizeAndUIColor {
-        MyLog.debug("getDotSizeAndUIColor Called")
+//        MyLog.debug("getDotSizeAndUIColor Called")
         let dotDate = theMKDotAnnotation.mDotEntity.timestamp
         guard let theTripEntity = TripEntity.getTripEntityForDate(theDate: dotDate!) else {
             // Return default dot size and color
@@ -447,11 +430,14 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         
         return (size: theTripEntity.dotSize, theUIColor: theTripEntity.dotUIColor)
     }
+
     
-    func getDotUIColor(theMKDotAnnotation: MKDotAnnotation) -> UIColor {
-        MyLog.debug("getDotUIColor Called")
-        return UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-    }
+    
+// DELETE THIS NOW
+//    func getDotUIColor2(theMKDotAnnotation: MKDotAnnotation) -> UIColor {
+//        MyLog.debug("getDotUIColor Called")
+//        return UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+//    }
     
 
     // Sometimes the device will not have the first choice symbol so check first
@@ -535,7 +521,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     }
 
     
-    // Check if the specified location is withing THRESHOLD distancce meters of any of the
+    // Check if the specified location is within THRESHOLD distancce meters of any of the
     // previous CLUSTER_TAIL_SIZE point.  Return true if it is, false otherwise
     let CLUSTER_TAIL_SIZE = 15 // How many points at the end of the array should be checked
     func pointIsClustered(theLocation: CLLocation) -> Bool {
@@ -561,7 +547,8 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         }
         return false
     }
-
+    
+    
     // MARK: LOCATION UPDATE
 
     // REQUIRED - Called EVERY TIME the location data is updated
@@ -694,6 +681,22 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     
     
     // MARK: Intent Functions
+    
+    // Tell the map to delete and reload all MapDot Annotations wdhx
+    func requestMapDotAnnotationRefresh() {
+        MyLog.debug("****** requestMapDotAnnotationRefresh() called")
+        dotFilterIsDirty = true // signal that the map should refresh all of its map dots
+    }
+    
+
+    // return true if the map should refresh all of the MapDot Annotations
+    func isMapDotRefreshNeeded() -> Bool {
+        if dotFilterIsDirty {
+            dotFilterIsDirty = false // set back to false
+            return true // Yes the map should refresh all the map dots
+        }
+        return false
+    }
     
     // Allow nil to be passed in as date to indicate no date
     func updateFilterStartDate(_ newDate: Date?) {

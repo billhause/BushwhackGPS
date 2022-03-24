@@ -26,7 +26,7 @@ struct TripListView: View {
             List {
                 ForEach(tripEntities) { tripEntity in
                     NavigationLink {
-                        TripDetailsView(theTripEntity: tripEntity)
+                        TripDetailsView(theTripEntity: tripEntity, mapViewModel: theMap_ViewModel)
                     } label: {
                         Text(tripEntity.title!) // Displayed in list
                     }
@@ -49,7 +49,9 @@ struct TripListView: View {
             .navigationBarTitleDisplayMode(.inline) // Put title on same line as buttons
         } // NavigationView
         .navigationViewStyle(StackNavigationViewStyle()) // Needed to avoid run-time warnings related to .navigationTitle
-        
+        .onAppear { HandleOnAppear() }
+        .onDisappear { HandleOnDisappear() }
+
     }
 
     private func addTripEntity() {
@@ -70,6 +72,20 @@ struct TripListView: View {
             }
         } // withAnimation
     }
+    
+    // This will be called when ever the view apears
+    // Calling this from .onAppear in the Body of the view.
+    func HandleOnAppear() {
+        MyLog.debug("HandleOnAppear() Called for TripListView")
+    }
+    
+    func HandleOnDisappear() {
+        MyLog.debug("HandleOnDisappear() Called for TripListView")
+        theMap_ViewModel.requestMapDotAnnotationRefresh()
+    }
+
+    
+    
 } // TripListView Struct
 
 
