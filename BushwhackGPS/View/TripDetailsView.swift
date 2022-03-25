@@ -92,10 +92,9 @@ struct TripDetailsView: View {
     
     func HandleOnDisappear() {
 //        MyLog.debug("HandleOnDisappear() Called for TripDetailsView")
-// wdhxForce Map to Reload all Dots
         mTripEntity.save()
         
-        theMap_ViewModel.requestMapDotAnnotationRefresh()
+        theMap_ViewModel.requestMapDotAnnotationRefresh() // wdhx
     }
 
 }

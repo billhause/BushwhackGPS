@@ -55,14 +55,14 @@ struct ContentView: View {
                 ToolbarItemGroup(placement: .bottomBar) {
                     // ViewBuilder only allows 10 static views in one container.  Must Group them
                     Group { // Group 1
-                        Spacer()
-                        Button(action: hideDotsHandler) {
-                            let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
-                            let hideDotsImageName = theMap_ViewModel.getHideDotsImageName()
-                            Label("Reset", systemImage: hideDotsImageName)
-                                .foregroundColor(Color(theColor))
-                        }
-                            .labelStyle(VerticalLabelStyle())
+//                        Spacer()
+//                        Button(action: hideDotsHandler) {
+//                            let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
+//                            let hideDotsImageName = theMap_ViewModel.getHideDotsImageName()
+//                            Label("Reset", systemImage: hideDotsImageName)
+//                                .foregroundColor(Color(theColor))
+//                        }
+//                            .labelStyle(VerticalLabelStyle())
 
 
                         // Trip List
@@ -145,12 +145,12 @@ struct ContentView: View {
     }
 
 
-    private func hideDotsHandler() {
-        MyLog.debug("hideDotsHandler() called")
-        // Update filter to start right now so that past dots are hidden
-        theMap_ViewModel.updateFilterStartDate(Date())
-        Haptic.shared.impact(style: .heavy)
-    }
+//    private func hideDotsHandler() {
+//        MyLog.debug("hideDotsHandler() called")
+//        // Update filter to start right now so that past dots are hidden
+//        theMap_ViewModel.updateFilterStartDate(Date())
+//        Haptic.shared.impact(style: .heavy)
+//    }
     
     private func toggleMapLayers() {
         theMap_ViewModel.isHybrid = !theMap_ViewModel.isHybrid // toggle

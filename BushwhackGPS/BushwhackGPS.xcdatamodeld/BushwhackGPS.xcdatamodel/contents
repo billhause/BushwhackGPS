@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21D62" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="AppSettingsEntity" representedClassName="AppSettingsEntity" syncable="YES" codeGenerationType="class">
-        <attribute name="filterEndDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="filterStartDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="metricUnits" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="orientNorth" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="usageCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
@@ -52,7 +50,7 @@
         <attribute name="uuid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
     </entity>
     <elements>
-        <element name="AppSettingsEntity" positionX="-54" positionY="9" width="128" height="104"/>
+        <element name="AppSettingsEntity" positionX="-54" positionY="9" width="128" height="74"/>
         <element name="DotEntity" positionX="-45" positionY="27" width="128" height="134"/>
         <element name="ID_GeneratorEntity" positionX="-63" positionY="-9" width="128" height="44"/>
         <element name="MarkerEntity" positionX="-54" positionY="63" width="128" height="209"/>

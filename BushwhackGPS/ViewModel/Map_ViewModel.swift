@@ -450,13 +450,13 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
 
     // Sometimes the device will not have the first choice symbol so check first
     // Return a default that is always present
-    func getHideDotsImageName() -> String {
-        // Check symbols in order of preference
-        if UIImage(systemName: "xmark.circle") != nil { return "xmark.circle" }
-        if UIImage(systemName: "minus.circle") != nil { return "minus.circle" }
-        if UIImage(systemName: "h.circle") != nil { return "h.circle" }
-        return "triangle" // default that is always there on all devices
-    }
+//    func getHideDotsImageName() -> String {
+//        // Check symbols in order of preference
+//        if UIImage(systemName: "xmark.circle") != nil { return "xmark.circle" }
+//        if UIImage(systemName: "minus.circle") != nil { return "minus.circle" }
+//        if UIImage(systemName: "h.circle") != nil { return "h.circle" }
+//        return "triangle" // default that is always there on all devices
+//    }
 
     
     // Sometimes the device will not have the first choice symbol so check first
@@ -698,28 +698,28 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return false
     }
     
-    // Allow nil to be passed in as date to indicate no date
-    func updateFilterStartDate(_ newDate: Date?) {
-        AppSettingsEntity.getAppSettingsEntity().updateFilterStartDate(newDate)
-        dotFilterIsDirty = true // Allow map to check what changed when doing its update
-    }
-    // Allow nil to be passed in as date to indicate no date
-    func updateFilterEndDate(_ newDate: Date?) {
-        AppSettingsEntity.getAppSettingsEntity().updateFilterEndDate(newDate)
-        dotFilterIsDirty = true // Allow map to check what changed when doing its update
-    }
-    func hasFilterStartDate() -> Bool {
-        if AppSettingsEntity.getAppSettingsEntity().filterStartDate == nil {
-            return false
-        }
-        return true
-    }
-    func hasFilterEndDate() -> Bool {
-        if AppSettingsEntity.getAppSettingsEntity().filterEndDate == nil {
-            return false
-        }
-        return true
-    }
+//    // Allow nil to be passed in as date to indicate no date
+//    func updateFilterStartDate(_ newDate: Date?) {
+//        AppSettingsEntity.getAppSettingsEntity().updateFilterStartDate(newDate)
+//        dotFilterIsDirty = true // Allow map to check what changed when doing its update
+//    }
+//    // Allow nil to be passed in as date to indicate no date
+//    func updateFilterEndDate(_ newDate: Date?) {
+//        AppSettingsEntity.getAppSettingsEntity().updateFilterEndDate(newDate)
+//        dotFilterIsDirty = true // Allow map to check what changed when doing its update
+//    }
+//    func hasFilterStartDate() -> Bool {
+//        if AppSettingsEntity.getAppSettingsEntity().filterStartDate == nil {
+//            return false
+//        }
+//        return true
+//    }
+//    func hasFilterEndDate() -> Bool {
+//        if AppSettingsEntity.getAppSettingsEntity().filterEndDate == nil {
+//            return false
+//        }
+//        return true
+//    }
     
     func orientMap() {
         theMapModel.orientMapFlag = true // Change Data Model to Trigger map update
@@ -784,28 +784,55 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return MKParkingAnnotation(coordinate: getParkingSpotLocation())
     }
         
-    // Get the list of DotEntities that pass the date filter
+    // Get the list of DotEntities that pass the date filter wdhx
     private func getFilteredDotEntites() -> [DotEntity] {
+        let allTripEtites = TripEntity.getAllTripEntities_NewestToOldest()
         let allDotEntities = DotEntity.getAllDotEntities()
-
+//wdhx
         // Create a new dot array with the dots that don't pass the filter removed
         let filteredDotEntities = allDotEntities.filter {
-            if hasFilterStartDate() {
-                if $0.timestamp == nil {return false} // This should never happen dots are assigned a date when created
-                if $0.timestamp! < AppSettingsEntity.getAppSettingsEntity().filterStartDate! {
-                    return false // Filter Start date is after this dot was created so don't include this dot
-                }
-            }
-            if hasFilterEndDate() {
-                if $0.timestamp == nil {return false} // This should never happen dots are assigned a date when created
-                if $0.timestamp! > AppSettingsEntity.getAppSettingsEntity().filterEndDate! {
-                    return false // Filter End date is before this dot was created so don't include the dot
-                }
-            }
+            if $0.timestamp == nil {return false} // This should never happen dots are assigned a date when created
+
+//            if hasFilterStartDate() {
+//                if $0.timestamp == nil {return false} // This should never happen dots are assigned a date when created
+//                if $0.timestamp! < AppSettingsEntity.getAppSettingsEntity().filterStartDate! {
+//                    return false // Filter Start date is after this dot was created so don't include this dot
+//                }
+//            }
+//            if hasFilterEndDate() {
+//                if $0.timestamp == nil {return false} // This should never happen dots are assigned a date when created
+//                if $0.timestamp! > AppSettingsEntity.getAppSettingsEntity().filterEndDate! {
+//                    return false // Filter End date is before this dot was created so don't include the dot
+//                }
+//            }
             return true // the dot's date is between the filter's start and end dates
         }
         return filteredDotEntities
     }
+
+//    // Get the list of DotEntities that pass the date filter
+//    private func getFilteredDotEntitesDELETE_THIS_NOW() -> [DotEntity] {
+//        let allDotEntities = DotEntity.getAllDotEntities()
+//
+//        // Create a new dot array with the dots that don't pass the filter removed
+//        let filteredDotEntities = allDotEntities.filter {
+//            if hasFilterStartDate() {
+//                if $0.timestamp == nil {return false} // This should never happen dots are assigned a date when created
+//                if $0.timestamp! < AppSettingsEntity.getAppSettingsEntity().filterStartDate! {
+//                    return false // Filter Start date is after this dot was created so don't include this dot
+//                }
+//            }
+//            if hasFilterEndDate() {
+//                if $0.timestamp == nil {return false} // This should never happen dots are assigned a date when created
+//                if $0.timestamp! > AppSettingsEntity.getAppSettingsEntity().filterEndDate! {
+//                    return false // Filter End date is before this dot was created so don't include the dot
+//                }
+//            }
+//            return true // the dot's date is between the filter's start and end dates
+//        }
+//        return filteredDotEntities
+//    }
+
     
     // Return an array of all MarkerAnnotation objects ready to be added to the map
     func getMarkerAnnotations() -> [MarkerAnnotation] {
