@@ -784,55 +784,33 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return MKParkingAnnotation(coordinate: getParkingSpotLocation())
     }
         
-    // Get the list of DotEntities that pass the date filter wdhx
+    // Get the list of DotEntities that pass the date TripEntity filters
+    // Ignore TripEntities that have showTripDots == false
+    // if the endTime is nil, then the end time is open ended
     private func getFilteredDotEntites() -> [DotEntity] {
-        let allTripEtites = TripEntity.getAllTripEntities_NewestToOldest()
+        let allTripEntities = TripEntity.getAllTripEntities_NewestToOldest()
         let allDotEntities = DotEntity.getAllDotEntities()
-//wdhx
+        
         // Create a new dot array with the dots that don't pass the filter removed
         let filteredDotEntities = allDotEntities.filter {
+            // Return TRUE if the $0 DotEntity should be displayed on the map, FALSE otherwise
+            
             if $0.timestamp == nil {return false} // This should never happen dots are assigned a date when created
 
-//            if hasFilterStartDate() {
-//                if $0.timestamp == nil {return false} // This should never happen dots are assigned a date when created
-//                if $0.timestamp! < AppSettingsEntity.getAppSettingsEntity().filterStartDate! {
-//                    return false // Filter Start date is after this dot was created so don't include this dot
-//                }
-//            }
-//            if hasFilterEndDate() {
-//                if $0.timestamp == nil {return false} // This should never happen dots are assigned a date when created
-//                if $0.timestamp! > AppSettingsEntity.getAppSettingsEntity().filterEndDate! {
-//                    return false // Filter End date is before this dot was created so don't include the dot
-//                }
-//            }
-            return true // the dot's date is between the filter's start and end dates
+            // Check each ACTIVE TripEntity and if the dot should be displyed return true
+            for theTripEntity in allTripEntities {
+                if theTripEntity.showTripDots {
+                    if ($0.timestamp! > theTripEntity.startTime!) {
+                        if theTripEntity.endTime == nil { return true } // The dot will be displayed by this TripDetailsView
+                        if $0.timestamp! < theTripEntity.endTime! { return true }
+                    }
+                }
+            }
+            
+            return false // the dot's date is will not be shown by any TripEntity
         }
         return filteredDotEntities
     }
-
-//    // Get the list of DotEntities that pass the date filter
-//    private func getFilteredDotEntitesDELETE_THIS_NOW() -> [DotEntity] {
-//        let allDotEntities = DotEntity.getAllDotEntities()
-//
-//        // Create a new dot array with the dots that don't pass the filter removed
-//        let filteredDotEntities = allDotEntities.filter {
-//            if hasFilterStartDate() {
-//                if $0.timestamp == nil {return false} // This should never happen dots are assigned a date when created
-//                if $0.timestamp! < AppSettingsEntity.getAppSettingsEntity().filterStartDate! {
-//                    return false // Filter Start date is after this dot was created so don't include this dot
-//                }
-//            }
-//            if hasFilterEndDate() {
-//                if $0.timestamp == nil {return false} // This should never happen dots are assigned a date when created
-//                if $0.timestamp! > AppSettingsEntity.getAppSettingsEntity().filterEndDate! {
-//                    return false // Filter End date is before this dot was created so don't include the dot
-//                }
-//            }
-//            return true // the dot's date is between the filter's start and end dates
-//        }
-//        return filteredDotEntities
-//    }
-
     
     // Return an array of all MarkerAnnotation objects ready to be added to the map
     func getMarkerAnnotations() -> [MarkerAnnotation] {

@@ -105,6 +105,7 @@ extension TripEntity: Comparable {
     }
     
     // Return the TripEntity that should be used for the specified Date
+    // Ignore Trips that have showTripDots == false
     // If more than one TripEntity contain the specified date, return the one with the latest start date
     // Return nil if there is no TripEntity that includes the specified Date
     public static func getTripEntityForDate(theDate: Date) -> TripEntity? {
@@ -112,6 +113,9 @@ extension TripEntity: Comparable {
         let theTripEntities = getAllTripEntities_NewestToOldest()
         for theTripEntity in theTripEntities {
 //            MyLog.debug("TripEntity '\(theTripEntity.title)' Start Date: \(theTripEntity.startTime)")
+            if theTripEntity.showTripDots == false {
+                continue 
+            }
             if theTripEntity.startTime == nil {
                 MyLog.debug("ERROR - WHY DOES THIS TripEntity have no startTime? This Should Not Happen")
                 continue // skip this entity
