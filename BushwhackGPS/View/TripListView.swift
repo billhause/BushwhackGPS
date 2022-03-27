@@ -17,18 +17,28 @@ struct TripListView: View {
     private var tripEntities: FetchedResults<TripEntity>
     private var theMap_ViewModel: Map_ViewModel
     
+    @State var dummyBool: Bool = false
+    @State var stateTripEntities: [TripEntity] = []
+    
     init(mapViewModel: Map_ViewModel) {
         theMap_ViewModel = mapViewModel
     }
+
+//Look at this to see a similar example to pull values out of the array
+//https://stackoverflow.com/questions/56615918/how-do-i-set-the-toggle-state-in-a-foreach-loop-in-swiftui/56616127#56616127
     
     var body: some View {
+        Text("Bongos")
         NavigationView {
             List {
-                ForEach(tripEntities) { tripEntity in
+                ForEach($stateTripEntities) { tripEntity in
                     NavigationLink {
-                        TripDetailsView(theTripEntity: tripEntity, mapViewModel: theMap_ViewModel)
+                        TripDetailsView(theTripEntity: tripEntity.wrappedValue, mapViewModel: theMap_ViewModel)
                     } label: {
-                        Text(tripEntity.title!) // Displayed in list
+                        Text(tripEntity.wrappedValue.wrappedTitle) // wrappedValue dereferences the @State var from Binding<> to the value
+                        Toggle(isOn: tripEntity.showTripDots) {
+                            Text("")
+                        }
                     }
                 } // ForEach
                 .onDelete(perform: deleteTripEntities)
@@ -76,6 +86,9 @@ struct TripListView: View {
     // This will be called when ever the view apears
     // Calling this from .onAppear in the Body of the view.
     func HandleOnAppear() {
+        stateTripEntities = TripEntity.getAllTripEntities_NewestToOldest()
+        MyLog.debug("stateTripEntities.count \(stateTripEntities.count)")
+
         MyLog.debug("HandleOnAppear() Called for TripListView")
     }
     
