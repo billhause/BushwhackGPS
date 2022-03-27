@@ -66,13 +66,24 @@ struct TripListView: View {
 
     private func addTripEntity() {
         withAnimation {
-            _ = TripEntity.createTripEntity(dotSize: theMap_ViewModel.DEFAULT_MAP_DOT_SIZE) // avoid single line return warning with _=
+            let newTrip = TripEntity.createTripEntity(dotSize: theMap_ViewModel.DEFAULT_MAP_DOT_SIZE) // avoid single line return warning with _=
+            
+            // Must also add the entity to the stateTripEntities array since that's what were using to display the list
+            stateTripEntities.insert(newTrip, at: 0) // add to beginning of array
+            
         } // withAnimation
+
     }
     
     private func deleteTripEntities(offsets: IndexSet) {
         withAnimation {
             offsets.map { tripEntities[$0] }.forEach(viewContext.delete)
+//            offsets.map { stateTripEntities[$0] }
+            
+            // NOTE: Must also remove the entities from the stateTripEntities array
+            // Uses extension below "mutating func remove(at indexes : IndexSet)"
+            // Obtained from here: https://stackoverflow.com/questions/26173565/removeobjectsatindexes-for-swift-arrays
+            stateTripEntities.remove(at: offsets)
             
             do {
                 try viewContext.save()
@@ -106,5 +117,21 @@ struct TripListView: View {
 struct TripListView_Previews: PreviewProvider {
     static var previews: some View {
         TripListView(mapViewModel: Map_ViewModel())
+    }
+}
+
+// Used To remove the elements in the list when the user selects Delete
+extension RangeReplaceableCollection where Self: MutableCollection, Index == Int {
+
+    mutating func remove(at indexes : IndexSet) {
+        guard var i = indexes.first, i < count else { return }
+        var j = index(after: i)
+        var k = indexes.integerGreaterThan(i) ?? endIndex
+        while j != endIndex {
+            if k != j { swapAt(i, j); formIndex(after: &i) }
+            else { k = indexes.integerGreaterThan(k) ?? endIndex }
+            formIndex(after: &j)
+        }
+        removeSubrange(i...)
     }
 }
