@@ -10,7 +10,6 @@ import CoreData
 
 struct ContentView: View {
     @ObservedObject var theMap_ViewModel: Map_ViewModel
-//    @State var mDotArray = DotEntity.getAllDotEntities()
     @Environment(\.managedObjectContext) private var viewContext
     @StateObject var theEditMarkerController = EditExistingMarkerController.shared
     @StateObject var theAlert = AlertMessage.shared // @StateObject not @ObservedObject to avoid AttributeGraph cycle warnings
@@ -18,6 +17,8 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             VStack {
+                DashboardView(theViewModel: theMap_ViewModel)
+                    .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
                 MapView(theViewModel: theMap_ViewModel)
                 // vvvvvvv Edit Marker Modal Dialog vvvvvvvvv
                     .sheet(isPresented:$theEditMarkerController.showEditMarkerDialog, onDismiss: handleEditMarkerDismiss) {
@@ -55,15 +56,6 @@ struct ContentView: View {
                 ToolbarItemGroup(placement: .bottomBar) {
                     // ViewBuilder only allows 10 static views in one container.  Must Group them
                     Group { // Group 1
-//                        Spacer()
-//                        Button(action: hideDotsHandler) {
-//                            let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
-//                            let hideDotsImageName = theMap_ViewModel.getHideDotsImageName()
-//                            Label("Reset", systemImage: hideDotsImageName)
-//                                .foregroundColor(Color(theColor))
-//                        }
-//                            .labelStyle(VerticalLabelStyle())
-
 
                         // Trip List
                         Spacer()
@@ -75,9 +67,6 @@ struct ContentView: View {
                         }
                             .labelStyle(VerticalLabelStyle())
 
-
-
-
                         Spacer()
                         Button(action: toggleMapLayers) {
                             let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
@@ -86,14 +75,6 @@ struct ContentView: View {
                                 .foregroundColor(Color(theColor))
                         }
                             .labelStyle(VerticalLabelStyle())
-//                        Spacer()
-//                        Button(action: addMarkerHandler) {
-//                            let dotColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
-//                            let addMarkerImageName = theMap_ViewModel.getAddJournalEntryImageName()
-//                            Label("Marker", systemImage: addMarkerImageName)
-//                                .foregroundColor(Color(dotColor))
-//                        }
-//                            .labelStyle(VerticalLabelStyle())
                     } // Group 1
 
                     Group { // Group 2
@@ -122,7 +103,7 @@ struct ContentView: View {
                         }
                             .labelStyle(VerticalLabelStyle())
                     } // Group 2
-                    .navigationTitle("Map") // Title used on Back button for sub views
+                    .navigationTitle("Dashboard") // Title used on Back button for sub views
                     .navigationBarTitleDisplayMode(.inline) // Put title on same line as tool bar
             //            .navigationBarHidden(true) // Remove the space for the top nav bar
             //            .navigationBarTitleDisplayMode(.inline) // Put title on same line as buttons

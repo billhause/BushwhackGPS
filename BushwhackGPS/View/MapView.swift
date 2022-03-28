@@ -454,8 +454,13 @@ struct MapView: UIViewRepresentable {
                 // vvvvvvvv Call-Out Bubble Icons, Images, Buttons etc vvvvvvvvv
                 let infoButton = UIButton(type: .detailDisclosure) // Circle with an 'i' inside it
                 annotationView.rightCalloutAccessoryView = infoButton
+
+                // TODO: Get Directions - Add button to get diredtions
+                // See example here:
+                //   https://developer.apple.com/forums/thread/693258
+
 //                let addButton = UIButton(type: .contactAdd) // Circle with + inside it
-//                annotationView.leftCalloutAccessoryView = addButton
+//                annotationView.leftCalloutAccessoryView = addButton wdhx
                 
                 // ICON - Provide an image view to use as the accessory view's detail view.
   //              annotationView.detailCalloutAccessoryView = UIImageView(image: MarkerSymbolImage)
@@ -554,13 +559,11 @@ struct MapView: UIViewRepresentable {
         func mapView(_ mapView: MKMapView, didAdd: [MKOverlayRenderer]) {
             MyLog.debug("Called19: 'func mapView(MKMapView, didAdd: [MKOverlayRenderer])'")
         }
-            
-        
+
         // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
         // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     }
-    
     
     
 }
