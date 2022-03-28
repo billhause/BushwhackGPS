@@ -497,6 +497,19 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return "triangle" // default that is always there on all devices
     }
 
+    // Convert Date to String MM/DD/YYYY
+    func getShortDateString(theDate: Date?) -> String {
+        guard let aDate = theDate else {
+            return "None"
+        }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .none
+//        dateFormatter.timeStyle = .short // .medium
+        return dateFormatter.string(from: aDate)
+    }
+
+
     
     // Sometimes the device will not have the first choice symbol so check first
     // Return a default that is always present

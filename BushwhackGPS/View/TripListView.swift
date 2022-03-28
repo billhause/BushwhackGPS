@@ -28,17 +28,24 @@ struct TripListView: View {
 //https://stackoverflow.com/questions/56615918/how-do-i-set-the-toggle-state-in-a-foreach-loop-in-swiftui/56616127#56616127
     
     var body: some View {
-        Text("Bongos")
         NavigationView {
             List {
                 ForEach($stateTripEntities) { tripEntity in
                     NavigationLink {
                         TripDetailsView(theTripEntity: tripEntity.wrappedValue, mapViewModel: theMap_ViewModel)
                     } label: {
-                        Text(tripEntity.wrappedValue.wrappedTitle) // wrappedValue dereferences the @State var from Binding<> to the value
-                        Toggle(isOn: tripEntity.showTripDots) {
-                            Text("")
-                        }
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text(tripEntity.wrappedValue.wrappedTitle) // wrappedValue dereferences the @State var from Binding<> to the value
+                                Text("   \(theMap_ViewModel.getShortDateString(theDate: tripEntity.wrappedStartTime.wrappedValue)) - \(theMap_ViewModel.getShortDateString(theDate: tripEntity.wrappedEndTime.wrappedValue))")
+                                    .font(.footnote)
+                            }
+                            Spacer() // Push the switch column to the right side
+                            // Hide/Show Slider with no labvel
+                            Toggle(isOn: tripEntity.showTripDots) {
+                                Text("Hide/Show")
+                            } .labelsHidden()
+                        } // HStack
                     }
                 } // ForEach
                 .onDelete(perform: deleteTripEntities)
@@ -80,8 +87,8 @@ struct TripListView: View {
             offsets.map { tripEntities[$0] }.forEach(viewContext.delete)
 //            offsets.map { stateTripEntities[$0] }
             
-            // NOTE: Must also remove the entities from the stateTripEntities array
-            // Uses extension below "mutating func remove(at indexes : IndexSet)"
+            // NOTE: Must also delete the entities from the stateTripEntities array
+            // Uses the extension below "mutating func remove(at indexes : IndexSet)" to delete them
             // Obtained from here: https://stackoverflow.com/questions/26173565/removeobjectsatindexes-for-swift-arrays
             stateTripEntities.remove(at: offsets)
             
