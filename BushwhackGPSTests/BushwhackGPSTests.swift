@@ -102,7 +102,7 @@ class BushwhackGPSTests: XCTestCase {
     // MARK: TripEntity
     //
     func testTripEntity() throws {
-        let te = TripEntity.createTripEntity()
+        let te = TripEntity.createTripEntity(dotSize: 6.0)
         // Make sure none of the fields are nil except start and end date which MUST be nil
         XCTAssertNotNil(te.uuid)
         XCTAssertNotNil(te.title)
@@ -118,7 +118,31 @@ class BushwhackGPSTests: XCTestCase {
         TripEntity.deleteTripEntity(te) // Remove the test TripEntity from the db
     }
 
+    //
+    // MARK: DashboardEntity
+    //
+    func testDashboardEntity() throws {
+        var de = DashboardEntity.getDashboardEntity()
+        DashboardEntity.deleteDashboardEntity(de) // Delete any old DashboardEntity that was there
+        de = DashboardEntity.getDashboardEntity() // Get new DashboardEntity
+        XCTAssertTrue(de.prevLon == 181.0) // Shold start at 181 to indicate it's not valid yet
+        XCTAssertTrue(de.prevLat == 181.0) // Shold start at 181 to indicate it's not valid yet
+        XCTAssertTrue(de.pointCount == 0)
+        XCTAssertTrue(de.avgSpeed == 0)
+        DashboardEntity.deleteDashboardEntity(de) // Delete the DashboardEntity we just created
+    }
 
+    //
+    // MARK: Map_ViewModel
+    //
+    func testMap_ViewModel() throws {
+        
+        // Test getDistanceInMeters
+        let mapViewModel = Map_ViewModel()
+        let distance = mapViewModel.getDistanceInMeters(lat1: 181, lon1: 181, lat2: 0, lon2: 0)
+        XCTAssertTrue(distance == 0.0) // Invalid input like 181 should get 0 distance returned from getDistanceInMeters
+    }
+    
     func testExample() throws {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.

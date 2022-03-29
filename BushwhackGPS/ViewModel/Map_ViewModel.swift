@@ -386,6 +386,8 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return LocationAccuracyStatus.InaccurateLocation
     }
     
+    
+    
     // Find the distance between the parking spot and the current location.
     // Make the map width/height be double that distance minus some buffer percentage
     // make sure the center stays in the center after subtracting the buffer
@@ -431,7 +433,28 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return (size: theTripEntity.dotSize, theUIColor: theTripEntity.dotUIColor)
     }
 
-    
+    // return the distance between the two lat/lon pairs.  If an imput is invalid, then return 0
+    //
+    func getDistanceInMeters(lat1:Double, lon1:Double, lat2:Double, lon2:Double) -> Double {
+        if lat1 > 180 || lat1 < -180 || lon1 > 180 || lon1 < -180 || lat2 > 180 || lat2 < -180 || lon2 > 180 || lon2 < -180 {
+            MyLog.debug("ERROR in getDistanceInMeters.  Lat1: \(lat1), Lon1: \(lon1), Lat2: \(lat2), Lon2: \(lon2)")
+            return 0
+        }
+        
+        let loc1 = CLLocationCoordinate2D(latitude: lat1, longitude: lon1)
+        let loc2 = CLLocationCoordinate2D(latitude: lat2, longitude: lon2)
+
+        // Convert from lat/lon to points so we can do distance math
+        let point1 = MKMapPoint(loc1)
+        let point2 = MKMapPoint(loc2)
+
+        // Pathagorean Theorem to find distance
+        let dx = Double(point1.x-point2.x)
+        let dy = Double(point1.y-point2.y)
+        let distance = pow((pow(dx,2) + pow(dy,2)), 0.5) // square root of A Squared plus B Squard
+        return distance
+    }
+
     
 // DELETE THIS NOW
 //    func getDotUIColor2(theMKDotAnnotation: MKDotAnnotation) -> UIColor {
