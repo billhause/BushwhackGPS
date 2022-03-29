@@ -32,8 +32,6 @@ extension AppSettingsEntity {
             let theAppSettingsEntity = AppSettingsEntity(context: context)
             theAppSettingsEntity.orientNorth = false // default to orient in direction phone is pointing
             theAppSettingsEntity.metricUnits = false // default to English Units
-//            theAppSettingsEntity.filterStartDate = nil
-//            theAppSettingsEntity.filterEndDate = nil
             do {
                 try context.save()
             } catch {
@@ -53,17 +51,6 @@ extension AppSettingsEntity {
         save()
     }
     
-//    // Allow nil to be passed in as date
-//    public func updateFilterStartDate(_ newDate: Date?) {
-//        filterStartDate = newDate
-//        save()
-//        MyLog.debug("AppSettingsEntity filter start date updated to: \(newDate)")
-//    }
-//    // Allow nil to be passed in as date
-//    public func updateFilterEndDate(_ newDate: Date?) {
-//        filterEndDate = newDate
-//        save()
-//    }
 
     public func save() {
         let context = PersistenceController.shared.container.viewContext
@@ -75,11 +62,6 @@ extension AppSettingsEntity {
         }
     }
     
-//    // Update the AppInfo usageCount and save it
-//    public func updateUsageCount(theCount: Int32) {
-//        usageCount = theCount
-//                save()
-//    }
     
     // Increment Usage Count
     public func incrementUsageCount() {

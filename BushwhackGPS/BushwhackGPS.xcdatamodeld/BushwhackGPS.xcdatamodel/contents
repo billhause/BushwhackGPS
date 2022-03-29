@@ -5,6 +5,12 @@
         <attribute name="orientNorth" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="usageCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
+    <entity name="DashboardEntity" representedClassName="DashboardEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="avgSpeed" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="distance" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="pointCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="startTime" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+    </entity>
     <entity name="DotEntity" representedClassName="DotEntity" syncable="YES" codeGenerationType="class">
         <attribute name="course" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
@@ -56,5 +62,6 @@
         <element name="MarkerEntity" positionX="-54" positionY="63" width="128" height="209"/>
         <element name="ParkingSpotEntity" positionX="-54" positionY="9" width="128" height="59"/>
         <element name="TripEntity" positionX="-54" positionY="117" width="128" height="209"/>
+        <element name="DashboardEntity" positionX="-54" positionY="144" width="128" height="89"/>
     </elements>
 </model>

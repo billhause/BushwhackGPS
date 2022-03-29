@@ -14,6 +14,7 @@
 		2842005927E283F400E0749E /* TripListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2842005827E283F400E0749E /* TripListView.swift */; };
 		2842005D27E3B59A00E0749E /* TripDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2842005C27E3B59A00E0749E /* TripDetailsView.swift */; };
 		2865292627F26F2400112093 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2865292527F26F2400112093 /* DashboardView.swift */; };
+		2865292827F33EEA00112093 /* DashboardEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2865292727F33EEA00112093 /* DashboardEntity.swift */; };
 		28817B7C278E490E004B7C4B /* BushwhackGPSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28817B7B278E490E004B7C4B /* BushwhackGPSApp.swift */; };
 		28817B7E278E490E004B7C4B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28817B7D278E490E004B7C4B /* ContentView.swift */; };
 		28817B80278E490E004B7C4B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 28817B7F278E490E004B7C4B /* Assets.xcassets */; };
@@ -61,6 +62,7 @@
 		2842005827E283F400E0749E /* TripListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripListView.swift; sourceTree = "<group>"; };
 		2842005C27E3B59A00E0749E /* TripDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripDetailsView.swift; sourceTree = "<group>"; };
 		2865292527F26F2400112093 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		2865292727F33EEA00112093 /* DashboardEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardEntity.swift; sourceTree = "<group>"; };
 		28817B78278E490E004B7C4B /* BushwhackGPS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BushwhackGPS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		28817B7B278E490E004B7C4B /* BushwhackGPSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BushwhackGPSApp.swift; sourceTree = "<group>"; };
 		28817B7D278E490E004B7C4B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -209,6 +211,7 @@
 				288BCB39279E25D8008FC368 /* DotEntity.swift */,
 				283C423127BDD9C00049505E /* MarkerEntity.swift */,
 				2842003727E152C600E0749E /* TripEntity.swift */,
+				2865292727F33EEA00112093 /* DashboardEntity.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -362,6 +365,7 @@
 				2820C3CC27D3EB8300122B7C /* ExistingMarkerView.swift in Sources */,
 				288BCB38279B721E008FC368 /* AlertMessage.swift in Sources */,
 				28817BB02790F15C004B7C4B /* AppSettingsEntity.swift in Sources */,
+				2865292827F33EEA00112093 /* DashboardEntity.swift in Sources */,
 				2820C3CA27C823D300122B7C /* NewMarkerView.swift in Sources */,
 				28817BAE2790AB21004B7C4B /* ID_GeneratorEntity.swift in Sources */,
 				28817B88278E490E004B7C4B /* BushwhackGPS.xcdatamodeld in Sources */,

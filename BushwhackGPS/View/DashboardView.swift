@@ -31,13 +31,13 @@ struct DashboardView: View {
         VStack(alignment: .leading) {
             HStack {
                 VStack(alignment: .leading) { // Column 1
-                    Text("Odometer: 1,250 ft")
-                    Text("Avg Speed: 3.75 MPH")
+                    Text("Odometer: \(DashboardEntity.getDashboardEntity().displayOdometer())")
+                    Text("Avg Speed: \(DashboardEntity.getDashboardEntity().displayAvgSpeed())")
                 }
                 Spacer()
                 VStack(alignment: .leading) { // Column 2
-                    Text("Start Time: 3/28/2022 8:53am")
-                    Text("Elapse: 3:25:21")
+                    Text("Start Time: \(DashboardEntity.getDashboardEntity().displayStartTime())")
+                    Text("Elapse: \(DashboardEntity.getDashboardEntity().displayElapseTime())")
                 }
             }
                 .font(.footnote) // .caption2, .caption, .footnote smallest to largest
