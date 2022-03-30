@@ -34,54 +34,55 @@ struct TripDetailsView: View {
 //            VStack(alignment: .leading)
             Text("Trip Details").font(.title2)
             ScrollView(showsIndicators: false) {
-                // Dot Size Picker
-                HStack {
-                    Picker("DisplayHide", selection: $mTripEntity.showTripDots) {
-                        Text("Show Dots on Map").tag(true)
-                        Text("Hide Dots").tag(false)
-                    }
-                    .pickerStyle(.segmented)
-                } // HStack
+
+//                HStack {
+//                    Picker("DisplayHide", selection: $mTripEntity.showTripDots) {
+//                        Text("Show Dots on Map").tag(true)
+//                        Text("Hide Dots").tag(false)
+//                    }
+//                    .pickerStyle(.segmented)
+//                } // HStack
 
                 TextDataInput(title: "Trip Name", userInput: $mTripEntity.wrappedTitle)
                 TextDataInputMultiLine(title: "Description", userInput: $mTripEntity.wrappedDesc, idealHeight: 125)
                 
-                // Dot Size Picker
-                HStack {
-                    Text("Map Dot Size: ")
-                    Picker("Dot Size", selection: $mTripEntity.dotSize) {
-                        Text("Small").tag(theMap_ViewModel.DEFAULT_MAP_DOT_SIZE / 2)
-                        Text("Medium").tag(theMap_ViewModel.DEFAULT_MAP_DOT_SIZE)
-                        Text("Large").tag(theMap_ViewModel.DEFAULT_MAP_DOT_SIZE * 2)
-                    }
-                    .pickerStyle(.segmented)
-                } // HStack
-                Text("Map Dot Size Value: \(mTripEntity.dotSize)")
+                VStack(alignment: .leading) {
+                    // Dot Size Picker
+                    HStack {
+                        Text("Map Dot Size: ")
+                        Picker("Dot Size", selection: $mTripEntity.dotSize) {
+                            Text("Small").tag(theMap_ViewModel.DEFAULT_MAP_DOT_SIZE / 2)
+                            Text("Medium").tag(theMap_ViewModel.DEFAULT_MAP_DOT_SIZE)
+                            Text("Large").tag(theMap_ViewModel.DEFAULT_MAP_DOT_SIZE * 2)
+                        }
+                        .pickerStyle(.segmented)
+                    } // HStack
                 
-                // Dot Color Picker
-                HStack {
-                    Text("Map Dot Color: ")
-                    ColorPicker("Dot Color", selection: $mTripEntity.dotColor, supportsOpacity: false)
-                        .labelsHidden()
+                    // Dot Color Picker
+                    HStack {
+                        Text("Map Dot Color: ")
+                        ColorPicker("Dot Color", selection: $mTripEntity.dotColor, supportsOpacity: false)
+                            .labelsHidden()
+                    }
+                    // Trip Start Date
+                    DatePicker("Trip Start Time",
+                               selection: $mTripEntity.wrappedStartTime,
+                               in: earliestStartDate...Date(), // Between earliest possible start date and now
+                               displayedComponents: [.date, .hourAndMinute])
+
+                    // Trip End Date
+                    DatePicker("Trip End Time",
+                               selection: $mTripEntity.wrappedEndTime,
+                               in: mTripEntity.wrappedStartTime..., // must be sometime after the start time
+                               displayedComponents: [.date, .hourAndMinute])
+                    
                 }
 
-                // Trip Start Date
-                DatePicker("Trip Start Time",
-                           selection: $mTripEntity.wrappedStartTime,
-                           in: earliestStartDate...Date(), // Between earliest possible start date and now
-                           displayedComponents: [.date, .hourAndMinute])
-
-                // Trip End Date
-                DatePicker("Trip End Time",
-                           selection: $mTripEntity.wrappedEndTime,
-                           in: mTripEntity.wrappedStartTime..., // must be sometime after the start time
-                           displayedComponents: [.date, .hourAndMinute])
-                
-                } // ScrollView
-            } // Outermost VStack
-            .onAppear { HandleOnAppear() }
-            .onDisappear { HandleOnDisappear() }
-            .padding()
+            } // ScrollView
+        } // Outermost VStack
+        .onAppear { HandleOnAppear() }
+        .onDisappear { HandleOnDisappear() }
+        .padding()
     } // View
     
     // This will be called when ever the view apears

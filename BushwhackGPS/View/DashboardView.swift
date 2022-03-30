@@ -12,6 +12,9 @@ struct DashboardView: View {
     @ObservedObject var theAppSettingsEntity: AppSettingsEntity // The AppSettingsEntity is like a tiny view model
     @ObservedObject var theDashboardEntity: DashboardEntity
     
+    @State private var showingDashboardResetConfirm = false // flag for Reset Confirm dialog
+    @State private var showingSaveAsTripConfirm = false // flag for confirm save as trip dialog
+
     init(theViewModel: Map_ViewModel) {
         theMap_ViewModel = theViewModel
         theAppSettingsEntity = AppSettingsEntity.getAppSettingsEntity()
@@ -47,11 +50,32 @@ struct DashboardView: View {
 
             HStack {
                 Button("Dashboard Reset") {
-                    handleResetButton()
+                    showingDashboardResetConfirm = true // show the confirm dialog
                 } // VStack
+                .alert(isPresented: $showingDashboardResetConfirm) {
+                    Alert(
+                        title: Text("Confirm Dashboard Reset"),
+                        message: Text("This cannot be undone."),
+                        primaryButton: .destructive(Text("Reset")) {
+                            handleResetButton()
+                        },
+                        secondaryButton: .cancel()
+                    )
+                }
+
                 Spacer()
                 Button("Save As Trip") {
-                    handleSaveAsTrip()
+                    showingSaveAsTripConfirm = true // show the confirm dialog
+                }
+                .alert(isPresented: $showingSaveAsTripConfirm) {
+                    Alert(
+                        title: Text("Save the Dashboard and it's map points as a Trip and reset the dashboard.  The saved Trip will be named using the Dashboard start date."),
+                        message: Text("This cannot be undone."),
+                        primaryButton: .destructive(Text("Save as Trip and Reset")) {
+                            handleSaveAsTrip()
+                        },
+                        secondaryButton: .cancel()
+                    )
                 }
             }
         } //.background(Color.yellow)
@@ -59,9 +83,13 @@ struct DashboardView: View {
     
     private func handleSaveAsTrip() {
         MyLog.debug("Save As Trip Pressed")
+        theMap_ViewModel.createTripFromDashboard()
+        DashboardEntity.getDashboardEntity().resetDashboard()
     }
+    
     private func handleResetButton() {
         MyLog.debug("Reset Pressed")
+        DashboardEntity.getDashboardEntity().resetDashboard()
     }
 }
 

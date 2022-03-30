@@ -28,36 +28,12 @@ struct Utility {
         let MILES_PER_METER = 0.000621371
         return theMeters * MILES_PER_METER
     }
-    
-//    // return the distance between the two lat/lon pairs.  If an input is invalid, then return 0
-//    static func getDistanceInFeet(lat1:Double, lon1:Double, lat2:Double, lon2:Double) -> Double {
-//        if lat1 > 180 || lat1 < -180 || lon1 > 180 || lon1 < -180 || lat2 > 180 || lat2 < -180 || lon2 > 180 || lon2 < -180 {
-//            MyLog.debug("ERROR in getDistanceInFeet.  Lat1: \(lat1), Lon1: \(lon1), Lat2: \(lat2), Lon2: \(lon2)")
-//            return 0
-//        }
-//                
-//        let distanceInMeters = getDistanceInMeters(lat1: lat1, lon1: lon1, lat2: lat2, lon2: lon2)
-//        return convertMetersToFeet(theMeters: distanceInMeters)
-//    }
-//        
-//    // return the distance between the two lat/lon pairs.  If an input is invalid, then return 0
-//    static func getDistanceInMiles(lat1:Double, lon1:Double, lat2:Double, lon2:Double) -> Double {
-//        if lat1 > 180 || lat1 < -180 || lon1 > 180 || lon1 < -180 || lat2 > 180 || lat2 < -180 || lon2 > 180 || lon2 < -180 {
-//            MyLog.debug("ERROR in getDistanceInMiles.  Lat1: \(lat1), Lon1: \(lon1), Lat2: \(lat2), Lon2: \(lon2)")
-//            return 0
-//        }
-//        
-//        let distanceInMeters = getDistanceInMeters(lat1: lat1, lon1: lon1, lat2: lat2, lon2: lon2)
-//        return convertMetersToMiles(theMeters: distanceInMeters)
-//    }
-        
 
     
     // return the distance between the two lat/lon pairs.  If an input is invalid, then return 0
     static func getDistanceInMeters(lat1:Double, lon1:Double, lat2:Double, lon2:Double) -> Double {
         if lat1 > 180 || lat1 < -180 || lon1 > 180 || lon1 < -180 || lat2 > 180 || lat2 < -180 || lon2 > 180 || lon2 < -180 {
-            MyLog.debug("ERROR in getDistanceInMeters.  Lat1: \(lat1), Lon1: \(lon1), Lat2: \(lat2), Lon2: \(lon2)")
-            return 0
+            return 0 // This is NOT AN ERROR - We're suposed to return 0 distance if one point is invalid
         }
         
         let loc1 = CLLocation(latitude: lat1, longitude: lon1)

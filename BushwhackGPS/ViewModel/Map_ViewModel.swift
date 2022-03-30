@@ -793,6 +793,23 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return theMapModel.followMode
     }
     
+    // Create a new trip based on the current dashboard values
+    func createTripFromDashboard() {
+        let newTrip = TripEntity.createTripEntity(dotSize: DEFAULT_MAP_DOT_SIZE)
+
+        // use the Dashboard start date as the default title
+        let theDashboard = DashboardEntity.getDashboardEntity()
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .short
+        newTrip.title = dateFormatter.string(from: theDashboard.wrappedStartTime)
+        newTrip.startTime = theDashboard.wrappedStartTime
+        newTrip.endTime = Date() // Use current time as the Dashboard Trip End Time
+        newTrip.desc = "Created from Dashboard"
+
+    }
+    
     
     // MARK: Getters
 

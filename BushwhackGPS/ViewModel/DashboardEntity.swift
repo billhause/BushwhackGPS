@@ -29,7 +29,7 @@ extension DashboardEntity {
             let theDashboardEntity = DashboardEntity(context: context)
             // avgSpeed, distance, pointCount and startTime
 //            theDashboardEntity.avgSpeed = 0
-            theDashboardEntity.distance = 0
+            theDashboardEntity.distance = 0 // meters
             theDashboardEntity.pointCount = 0
             theDashboardEntity.startTime = Date()
             theDashboardEntity.prevLat = 181 // Indicates not initialized yet - Get Distance will return 0 for invalid lat/lon
@@ -55,7 +55,18 @@ extension DashboardEntity {
     //
     // Member Functions
     //
+
+    // Reset to current time, 0 distance
+    public func resetDashboard() {
+        distance = 0
+        startTime = Date() // current time
+        
+        // invalid lat/lon values will trigger a new start distance of 0
+        prevLat = 181
+        prevLon = 181
+    }
     
+
     // Update the dashboard values
     //   - avg speed
     //   - total distance traveled
@@ -65,7 +76,6 @@ extension DashboardEntity {
         
         // get delta distance
         let deltaXY = Utility.getDistanceInMeters(lat1: newLat, lon1: newLon, lat2: prevLat, lon2: prevLon)
-        MyLog.debug("prevLat: \(prevLat), prevLon: \(prevLon), newLat: \(newLat), newLon: \(newLon), DeltaX: \(deltaXY)")
         
         // update the total distance traveled
         distance += deltaXY
@@ -129,9 +139,30 @@ extension DashboardEntity {
 
     
     // return the average speed in appropriate units
+    // MPH or "km/h"
+    // 3600 Seconds Per Hour
     public func displayableAvgSpeed() -> String {
-        let avgSpeed = distance / Double(elapsedSeconds)
-        return "\(avgSpeed) m/s"
+        
+        // Metric (km/h)
+        if AppSettingsEntity.getAppSettingsEntity().metricUnits {
+            let km = distance/1000 // convert meters to km
+            let hours = Double(elapsedSeconds) / 3600.0       // 3600 seconds per hour
+            var speed_km_per_hour = 0.0 // default to 0 if hours is 0
+            if hours > 0.0 {
+                speed_km_per_hour = km / hours
+            }
+            return String(format: "%.1f km/h", speed_km_per_hour)
+        }
+
+        // If we got this far then we're using Bristish Units (MPH)
+        let miles = Utility.convertMetersToMiles(theMeters: distance)
+        let hours = Double(elapsedSeconds) / 3600.0           // 3600 seconds per hour
+        var speed_miles_per_hour = 0.0 // default to 0 if hours is 0
+        if hours > 0.0 {
+            speed_miles_per_hour = miles / hours
+        }
+        return String(format: "%.1f MPH", speed_miles_per_hour)
+
     }
     
     // return start time to display
@@ -145,8 +176,19 @@ extension DashboardEntity {
     }
     
     // return elapsed time in appropriate units
+    // Hours:Minutes:Seconds
     public func displayableElapsedTime() -> String {
-        return "\(elapsedSeconds) Sec"
+        // Hours
+        let hours = Int32(trunc(Double(elapsedSeconds) / 3600.0)) // Number of hours
+        var remainingSeconds = elapsedSeconds % 3600
+
+        // Minutes
+        let minutes = Int32(trunc(Double(remainingSeconds) / 60)) // Number of minutes
+
+        // Seconds
+        remainingSeconds = remainingSeconds % 60
+        
+        return String(format: "\(hours):%02d:%02d", minutes, remainingSeconds)
     }
     
     
