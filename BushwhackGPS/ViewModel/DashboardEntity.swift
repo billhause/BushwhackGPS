@@ -101,12 +101,33 @@ extension DashboardEntity {
         }
     }
 
-    public var displayableOdometer: String {
-        get {
-            "\(distance) Meters"
+    // Return Metric or English units depending on settings
+    // For Metric
+    //    - Return Meters up to 1000 meters with no digits past the decimal
+    //    - Return KM up if over 1000 meters with two digits past the decial
+    // For British Units
+    //    - Return Feet up to 1000 feet with no digits past the decimal
+    //    - Return Miles if over 1000 feet with two diits past the decimal
+    public func displayableOdometer() -> String {
+        // Metric
+        if AppSettingsEntity.getAppSettingsEntity().metricUnits {
+            if distance < 1000 {
+                return String(format: "%.0f Meters", distance)
+            } else {
+                // return Kilometers
+                return String(format: "%.1f KM", distance/1000)
+            }
         }
+        // If we got this far then we're using Bristish Units
+        let distanceInFeet = Utility.convertMetersToFeet(theMeters: distance)
+        if distanceInFeet < 1000 {
+            return String(format: "%.0f Feet", distanceInFeet)
+        }
+        let distanceInMiles = Utility.convertMetersToMiles(theMeters: distance)
+        return String(format: "%.1f Miles", distanceInMiles)
     }
 
+    
     // return the average speed in appropriate units
     public func displayableAvgSpeed() -> String {
         let avgSpeed = distance / Double(elapsedSeconds)
