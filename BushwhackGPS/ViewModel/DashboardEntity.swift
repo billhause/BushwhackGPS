@@ -28,7 +28,7 @@ extension DashboardEntity {
         } else {
             let theDashboardEntity = DashboardEntity(context: context)
             // avgSpeed, distance, pointCount and startTime
-            theDashboardEntity.avgSpeed = 0
+//            theDashboardEntity.avgSpeed = 0
             theDashboardEntity.distance = 0
             theDashboardEntity.pointCount = 0
             theDashboardEntity.startTime = Date()
@@ -65,23 +65,24 @@ extension DashboardEntity {
         
         // get delta distance
         let deltaXY = Utility.getDistanceInMeters(lat1: newLat, lon1: newLon, lat2: prevLat, lon2: prevLon)
-        MyLog.debug("DeltaX: \(deltaXY)")
+        MyLog.debug("prevLat: \(prevLat), prevLon: \(prevLon), newLat: \(newLat), newLon: \(newLon), DeltaX: \(deltaXY)")
         
         // update the total distance traveled
         distance += deltaXY
         
-        // get the current time
-        
-        // update the total elapse time
-        deltaSeconds = Date().timeIntervalSince1970 = startTime?.timeIntervalSince1970
-        
-        
+        // update the previous point to be the current point
+        prevLat = newLat
+        prevLon = newLon
+                
         // save changes
+        save()
     }
 
     
-    
-    public var wrappedDate: Date {
+    //
+    // MARK: Calculated Vars
+    //
+    public var wrappedStartTime: Date {
         get {
             if startTime == nil {
                 MyLog.debug("ERROR - Dashboard StartTime is nil - This should NEVER HAPPEN")
@@ -93,25 +94,38 @@ extension DashboardEntity {
             startTime = newValue
         }
     }
-    
+
+    public var elapsedSeconds: Int {
+        get {
+            Int(Date().timeIntervalSince1970 - wrappedStartTime.timeIntervalSince1970)
+        }
+    }
+
+    public var displayableOdometer: String {
+        get {
+            "\(distance) Meters"
+        }
+    }
+
     // return the average speed in appropriate units
     public func displayableAvgSpeed() -> String {
-        return "3.6 MPH"
-    }
-    
-    // return the odometer reading in appropriate units
-    public func displayableOdometer() -> String {
-        return "2.4 Miles"
+        let avgSpeed = distance / Double(elapsedSeconds)
+        return "\(avgSpeed) m/s"
     }
     
     // return start time to display
     public func displayableStartTime() -> String {
-        return "3/29/2022 3:46pm"
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .short // .medium
+        let theStartTime = dateFormatter.string(from: wrappedStartTime)
+
+        return theStartTime
     }
     
-    // return elapse time in appropriate units
-    public func displayableElapseTime() -> String {
-        return "3:27:46"
+    // return elapsed time in appropriate units
+    public func displayableElapsedTime() -> String {
+        return "\(elapsedSeconds) Sec"
     }
     
     

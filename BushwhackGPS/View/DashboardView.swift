@@ -10,10 +10,12 @@ import SwiftUI
 struct DashboardView: View {
     @ObservedObject var theMap_ViewModel: Map_ViewModel
     @ObservedObject var theAppSettingsEntity: AppSettingsEntity // The AppSettingsEntity is like a tiny view model
+    @ObservedObject var theDashboardEntity: DashboardEntity
     
     init(theViewModel: Map_ViewModel) {
         theMap_ViewModel = theViewModel
         theAppSettingsEntity = AppSettingsEntity.getAppSettingsEntity()
+        theDashboardEntity = DashboardEntity.getDashboardEntity()
     }
     
 //    Fonts Smallest to Largest
@@ -31,13 +33,13 @@ struct DashboardView: View {
         VStack(alignment: .leading) {
             HStack {
                 VStack(alignment: .leading) { // Column 1
-                    Text("Odometer: \(DashboardEntity.getDashboardEntity().displayOdometer())")
-                    Text("Avg Speed: \(DashboardEntity.getDashboardEntity().displayAvgSpeed())")
+                    Text("Odometer: \(theDashboardEntity.displayableOdometer)")
+                    Text("Avg Speed: \(theDashboardEntity.displayableAvgSpeed())")
                 }
                 Spacer()
                 VStack(alignment: .leading) { // Column 2
-                    Text("Start Time: \(DashboardEntity.getDashboardEntity().displayStartTime())")
-                    Text("Elapse: \(DashboardEntity.getDashboardEntity().displayElapseTime())")
+                    Text("Start Time: \(theDashboardEntity.displayableStartTime())")
+                    Text("Elapsed: \(theDashboardEntity.displayableElapsedTime())")
                 }
             }
                 .font(.footnote) // .caption2, .caption, .footnote smallest to largest

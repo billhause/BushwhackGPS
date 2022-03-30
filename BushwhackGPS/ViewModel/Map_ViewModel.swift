@@ -456,12 +456,6 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     }
 
     
-// DELETE THIS NOW
-//    func getDotUIColor2(theMKDotAnnotation: MKDotAnnotation) -> UIColor {
-//        MyLog.debug("getDotUIColor Called")
-//        return UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-//    }
-    
 
     // Sometimes the device will not have the first choice symbol so check first
     // Return a default that is always present
@@ -470,16 +464,6 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         if UIImage(systemName: "circle.fill") != nil { return "circle.fill" }
         return "circle" // default that is always there on all devices
     }
-
-    // Sometimes the device will not have the first choice symbol so check first
-    // Return a default that is always present
-//    func getHideDotsImageName() -> String {
-//        // Check symbols in order of preference
-//        if UIImage(systemName: "xmark.circle") != nil { return "xmark.circle" }
-//        if UIImage(systemName: "minus.circle") != nil { return "minus.circle" }
-//        if UIImage(systemName: "h.circle") != nil { return "h.circle" }
-//        return "triangle" // default that is always there on all devices
-//    }
 
     
     // Sometimes the device will not have the first choice symbol so check first
@@ -600,6 +584,10 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
 
         // Update last known location
         mLastKnownLocation = currentLocation.coordinate
+        
+        // === DASHBOARD ===
+        DashboardEntity.getDashboardEntity().updateDashboardEntity(newLat: currentLocation.coordinate.latitude,
+                                                                   newLon: currentLocation.coordinate.longitude)
         
         // === ADD MAP DOT ===
         // Since we can't add the dot annotation directly to the MapView, we must add it to
