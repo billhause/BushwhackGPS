@@ -34,6 +34,16 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     private var mNewDotAnnotationWaiting = false // Set to true if there is a new dot annotation waiting to be added to the map
     private var mNewMarkerAnnotationWaiting = false // Set to true if there is a new Marker annotation waiting to be added to the map
 
+    // in iOS 10 and later, color numbers can exceed 1.0 or be negative instead of being clamped.  Not sure why
+    private var mNiceDotColors: [Color] = [Color(red: 1.1, green: -0.25, blue: -0.25, opacity: 1.0), // Full Red
+                                           Color(red: -0.4, green: 0.82, blue: -0.25, opacity: 1.0), // lightish Green
+                                           Color(red: -0.2, green: 0.5, blue: 1.1, opacity: 1.0),   // lightish blue
+                                           Color(red: 1.2, green: -0.25, blue: 1.1, opacity: 1.0),   // Magenta
+                                           Color(red: 0.67, green: 0.36, blue: 0.13, opacity: 1.0),   //  Brown
+                                           Color(red: 1.2, green: 0.63, blue: -0.25, opacity: 1.0),   // Orange / light brown
+                                           Color(red: 0.54, green: -0.1, blue: 1.04, opacity: 1.0),   // Purple
+                                        ]
+
     private var mMarkerIconList: [String] = []
     private var mMarkerIconNames = [
         "doc.richtext",
@@ -797,16 +807,27 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     func createTripFromDashboard() {
         let newTrip = TripEntity.createTripEntity(dotSize: DEFAULT_MAP_DOT_SIZE)
 
-        // use the Dashboard start date as the default title
         let theDashboard = DashboardEntity.getDashboardEntity()
+        let theSettings = AppSettingsEntity.getAppSettingsEntity()
+
+        newTrip.startTime = theDashboard.wrappedStartTime
+        newTrip.endTime = Date() // Use current time as the Dashboard Trip End Time
+        newTrip.desc = "Created from Dashboard"
         
+        // DOT COLOR - Set Dot Color
+        theSettings.nextDotColorIndex += 1 // Rotate to the next good map dot color
+        if theSettings.nextDotColorIndex > (mNiceDotColors.count - 1) {
+            theSettings.nextDotColorIndex = 0
+        }
+        newTrip.dotColor = mNiceDotColors[Int(theSettings.nextDotColorIndex)]
+        
+        // TRIP NAME use the Dashboard start date as the default title
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short
         dateFormatter.timeStyle = .short
         newTrip.title = dateFormatter.string(from: theDashboard.wrappedStartTime)
-        newTrip.startTime = theDashboard.wrappedStartTime
-        newTrip.endTime = Date() // Use current time as the Dashboard Trip End Time
-        newTrip.desc = "Created from Dashboard"
+        
+        theSettings.save()
 
     }
     

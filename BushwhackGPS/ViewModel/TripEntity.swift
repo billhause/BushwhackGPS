@@ -57,8 +57,8 @@ extension TripEntity: Comparable {
         }
         set {
             var rgbRed: CGFloat = 0
-            var rgbBlue: CGFloat = 0
             var rgbGreen: CGFloat = 0
+            var rgbBlue: CGFloat = 0
             var rgbAlpha: CGFloat = 0
             let myUIColor = UIColor(newValue)
             myUIColor.getRed(&rgbRed, green: &rgbGreen, blue: &rgbBlue, alpha: &rgbAlpha)
@@ -66,7 +66,10 @@ extension TripEntity: Comparable {
             dotColorBlue = rgbBlue
             dotColorGreen = rgbGreen
             dotColorAlpha = rgbAlpha // should always be 1.0 for display on map
-            MyLog.debug("* TripEntity set dotColor called")
+            
+            let debugString = String(format: "* TripEntity Colors red:%.2f green:%.2f blue:%.2f", rgbRed, rgbGreen, rgbBlue)
+
+            MyLog.debug(debugString)
         }
         
     }

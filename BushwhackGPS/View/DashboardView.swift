@@ -85,11 +85,13 @@ struct DashboardView: View {
         MyLog.debug("Save As Trip Pressed")
         theMap_ViewModel.createTripFromDashboard()
         DashboardEntity.getDashboardEntity().resetDashboard()
+        theMap_ViewModel.requestMapDotAnnotationRefresh()
     }
     
     private func handleResetButton() {
         MyLog.debug("Reset Pressed")
         DashboardEntity.getDashboardEntity().resetDashboard()
+        theMap_ViewModel.requestMapDotAnnotationRefresh()
     }
 }
 

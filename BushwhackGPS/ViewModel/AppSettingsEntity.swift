@@ -32,6 +32,8 @@ extension AppSettingsEntity {
             let theAppSettingsEntity = AppSettingsEntity(context: context)
             theAppSettingsEntity.orientNorth = false // default to orient in direction phone is pointing
             theAppSettingsEntity.metricUnits = false // default to English Units
+            theAppSettingsEntity.nextDotColorIndex = 0 // keep track of the dot color to use next
+            
             do {
                 try context.save()
             } catch {
