@@ -412,11 +412,12 @@ struct MapView: UIViewRepresentable {
 
                 annotationView.canShowCallout = true // Show Title and subtitle if the user taps on the annotation
                 
-                let dotSizeAndColorTuple = theMap_ViewModel.getDotSizeAndUIColor(theMKDotAnnotation: annotation as! MKDotAnnotation)
-                let dotSize = dotSizeAndColorTuple.size
-                let dotColor = dotSizeAndColorTuple.theUIColor
-
-                let DotSymbolImage = UIImage(systemName: theMap_ViewModel.getDotImageName())!.withTintColor(dotColor)
+                let dotSizeAndColorAndImageNameTuple = theMap_ViewModel.getDotSizeAndUIColorAndImageName(theMKDotAnnotation: annotation as! MKDotAnnotation)
+                let dotSize = dotSizeAndColorAndImageNameTuple.size
+                let dotColor = dotSizeAndColorAndImageNameTuple.theUIColor
+                let dotSymbolImageName = dotSizeAndColorAndImageNameTuple.theImageName // wdhx
+                
+                let DotSymbolImage = UIImage(systemName: dotSymbolImageName)!.withTintColor(dotColor)
                 let size = CGSize(width: dotSize, height: dotSize)
 
                 // Create Annotation Image and return it

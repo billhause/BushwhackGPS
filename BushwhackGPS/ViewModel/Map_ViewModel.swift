@@ -34,14 +34,18 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     private var mNewDotAnnotationWaiting = false // Set to true if there is a new dot annotation waiting to be added to the map
     private var mNewMarkerAnnotationWaiting = false // Set to true if there is a new Marker annotation waiting to be added to the map
 
+    //
+    // Standard Dot colors
+    //
     // in iOS 10 and later, color numbers can exceed 1.0 or be negative instead of being clamped.  Not sure why
-    private var mNiceDotColors: [Color] = [Color(red: 1.1, green: -0.25, blue: -0.25, opacity: 1.0), // Full Red
-                                           Color(red: -0.4, green: 0.82, blue: -0.25, opacity: 1.0), // lightish Green
-                                           Color(red: -0.2, green: 0.5, blue: 1.1, opacity: 1.0),   // lightish blue
-                                           Color(red: 1.2, green: -0.25, blue: 1.1, opacity: 1.0),   // Magenta
-                                           Color(red: 0.67, green: 0.36, blue: 0.13, opacity: 1.0),   //  Brown
-                                           Color(red: 1.2, green: 0.63, blue: -0.25, opacity: 1.0),   // Orange / light brown
-                                           Color(red: 0.54, green: -0.1, blue: 1.04, opacity: 1.0),   // Purple
+    private var mNiceDotColors: [Color] = [
+// Used for Dashboard Dots                                            Color(red: 1.1, green: -0.25, blue: -0.25, opacity: 1.0), // Full Red
+                                            Color(red: -0.4, green: 0.82, blue: -0.25, opacity: 1.0), // lightish Green
+                                            Color(red: -0.2, green: 0.5, blue: 1.1, opacity: 1.0),   // lightish blue
+                                            Color(red: 1.2, green: -0.25, blue: 1.1, opacity: 1.0),   // Magenta
+                                            Color(red: 0.67, green: 0.36, blue: 0.13, opacity: 1.0),   //  Brown
+                                            Color(red: 1.2, green: 0.63, blue: -0.25, opacity: 1.0),   // Orange / light brown
+                                            Color(red: 0.54, green: -0.1, blue: 1.04, opacity: 1.0),   // Purple
                                         ]
 
     private var mMarkerIconList: [String] = []
@@ -430,17 +434,28 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     // DOT ANNOTATION COLOR AND SIZE
     //
     let DEFAULT_MAP_DOT_SIZE: Double = 6.0
-    let DEFAULT_MAP_DOT_COLOR: UIColor = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 1.0)
-    typealias DotSizeAndUIColor = (size: CGFloat, theUIColor: UIColor)
-    func getDotSizeAndUIColor(theMKDotAnnotation: MKDotAnnotation) -> DotSizeAndUIColor {
-//        MyLog.debug("getDotSizeAndUIColor Called")
+    let DEFAULT_MAP_DOT_COLOR:  UIColor = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 1.0)
+    let DASHBOARD_DOT_COLOR:    UIColor = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 1.0) // Full Red
+    let DASHBOARD_MAP_DOT_SIZE: Double = 7.0
+    typealias DotSizeAndUIColorAndImageName = (size: CGFloat, theUIColor: UIColor, theImageName: String)
+    func getDotSizeAndUIColorAndImageName(theMKDotAnnotation: MKDotAnnotation) -> DotSizeAndUIColorAndImageName {
+
         let dotDate = theMKDotAnnotation.mDotEntity.timestamp
-        guard let theTripEntity = TripEntity.getTripEntityForDate(theDate: dotDate!) else {
-            // Return default dot size and color
-            return (size: DEFAULT_MAP_DOT_SIZE, theUIColor: DEFAULT_MAP_DOT_COLOR)
+
+        // Check for Dashboad Dot
+        let dashboardDate = DashboardEntity.getDashboardEntity().wrappedStartTime
+        if dotDate! > dashboardDate {
+            // This is a dashboard dot so return the dashboard Color, Size and Shape
+            return (size: DASHBOARD_MAP_DOT_SIZE, theUIColor: DASHBOARD_DOT_COLOR, theImageName: getDashboardDotImageName())
         }
         
-        return (size: theTripEntity.dotSize, theUIColor: theTripEntity.dotUIColor)
+        
+        guard let theTripEntity = TripEntity.getTripEntityForDate(theDate: dotDate!) else {
+            // Return default dot size and color and image
+            return (size: DEFAULT_MAP_DOT_SIZE, theUIColor: DEFAULT_MAP_DOT_COLOR, theImageName: getDotImageName())
+        }
+        
+        return (size: theTripEntity.dotSize, theUIColor: theTripEntity.dotUIColor, theImageName: getDotImageName())
     }
 
     // return the distance between the two lat/lon pairs.  If an imput is invalid, then return 0
@@ -466,7 +481,16 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     }
 
     
+    // Sometimes the device will not have the first choice symbol so check first
+    // Return a default that is always present
+    func getDashboardDotImageName() -> String {
+        // Check symbols in order of preference
+        if UIImage(systemName: "triangle.fill") != nil { return "triangle.fill" }
+        if UIImage(systemName: "square.fill") != nil { return "square.fill" }
+        return "triangle" // default that is always there on all devices
+    }
 
+    
     // Sometimes the device will not have the first choice symbol so check first
     // Return a default that is always present
     func getDotImageName() -> String {
@@ -556,7 +580,8 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     let CLUSTER_TAIL_SIZE = 15 // How many points at the end of the array should be checked
     func pointIsClustered(theLocation: CLLocation) -> Bool {
         // Look at the last X points and if the specified point is within the threshold distance, then return true
-        let dotEntityArray = getFilteredDotEntites()
+        let dotEntityArray = DotEntity.getAllDotEntities()
+//        let dotEntityArray = getFilteredDotEntites() wdhx
         let count = dotEntityArray.count
         
         // Would crash if trying to check 0 or fewer points at the end of the array
@@ -732,28 +757,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return false
     }
     
-//    // Allow nil to be passed in as date to indicate no date
-//    func updateFilterStartDate(_ newDate: Date?) {
-//        AppSettingsEntity.getAppSettingsEntity().updateFilterStartDate(newDate)
-//        dotFilterIsDirty = true // Allow map to check what changed when doing its update
-//    }
-//    // Allow nil to be passed in as date to indicate no date
-//    func updateFilterEndDate(_ newDate: Date?) {
-//        AppSettingsEntity.getAppSettingsEntity().updateFilterEndDate(newDate)
-//        dotFilterIsDirty = true // Allow map to check what changed when doing its update
-//    }
-//    func hasFilterStartDate() -> Bool {
-//        if AppSettingsEntity.getAppSettingsEntity().filterStartDate == nil {
-//            return false
-//        }
-//        return true
-//    }
-//    func hasFilterEndDate() -> Bool {
-//        if AppSettingsEntity.getAppSettingsEntity().filterEndDate == nil {
-//            return false
-//        }
-//        return true
-//    }
+
     
     func orientMap() {
         theMapModel.orientMapFlag = true // Change Data Model to Trigger map update
@@ -849,9 +853,11 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     // Get the list of DotEntities that pass the date TripEntity filters
     // Ignore TripEntities that have showTripDots == false
     // if the endTime is nil, then the end time is open ended
+    // If the dot time is after the Dashboard start time the dot should pass the filter
     private func getFilteredDotEntites() -> [DotEntity] {
         let allTripEntities = TripEntity.getAllTripEntities_NewestToOldest()
         let allDotEntities = DotEntity.getAllDotEntities()
+        let dashboardStartTime = DashboardEntity.getDashboardEntity().wrappedStartTime
         
         // Create a new dot array with the dots that don't pass the filter removed
         let filteredDotEntities = allDotEntities.filter {
@@ -859,6 +865,12 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
             
             if $0.timestamp == nil {return false} // This should never happen dots are assigned a date when created
 
+            if $0.timestamp! > dashboardStartTime {
+                MyLog.debug("Dashboard Point Passed Filter")
+                return true
+                
+            } // Shown by dashboard
+            
             // Check each ACTIVE TripEntity and if the dot should be displyed return true
             for theTripEntity in allTripEntities {
                 if theTripEntity.showTripDots {

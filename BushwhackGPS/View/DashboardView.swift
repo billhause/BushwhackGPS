@@ -69,8 +69,8 @@ struct DashboardView: View {
                 }
                 .alert(isPresented: $showingSaveAsTripConfirm) {
                     Alert(
-                        title: Text("Save the Dashboard and it's map points as a Trip and reset the dashboard.  The saved Trip will be named using the Dashboard start date."),
-                        message: Text("This cannot be undone."),
+                        title: Text("Save the Dashboard and it's map points as a Trip and reset the dashboard.  "),
+                        message: Text("The saved Trip will be named using the Dashboard start date."),
                         primaryButton: .destructive(Text("Save as Trip and Reset")) {
                             handleSaveAsTrip()
                         },
