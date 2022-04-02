@@ -430,6 +430,9 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return theMKCoordinateRegion
     }
 
+   
+    
+    
     //
     // DOT ANNOTATION COLOR AND SIZE
     //
@@ -842,6 +845,48 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return theMapModel.currentHeading
     }
     
+    typealias tripDistanceSpeedAndElapsedTime = (distance: String, speed: String, elapsedTime: String)
+    
+    // Return the Speed, Distance and Elapsed time for the specified TripEntity
+    func getTripDistanceSpeedAndElapsedTime(theTrip: TripEntity) -> tripDistanceSpeedAndElapsedTime {
+        var distance: Double = 0.0
+        var elapsedTime: Int64 = 0
+        let tripStartTime = theTrip.wrappedStartTime
+        let tripEndTime = theTrip.endTime ?? Date() // use current time if end time is nil
+        var dotsEndTime = tripStartTime // init to 0 elapsed time
+        var prevLat = 181.0
+        var prevLon = 181.0
+        
+        // Find the total distance and the time of the final dot
+        let dotEntities = DotEntity.getAllDotEntities()
+        for i in 0..<dotEntities.count {
+            let currentDot = dotEntities[i]
+            if currentDot.timestamp! > tripEndTime {
+                break // exit for loop, we're done
+            }
+            if currentDot.timestamp! > tripStartTime {
+                // This dot is contained by the trip
+                dotsEndTime = currentDot.timestamp!
+                distance += Utility.getDistanceInMeters(lat1: prevLat, lon1: prevLon, lat2: currentDot.lat, lon2: currentDot.lon)
+                prevLat = currentDot.lat
+                prevLon = currentDot.lon
+            }
+        }
+
+        elapsedTime = Int64(dotsEndTime.timeIntervalSince1970 - tripStartTime.timeIntervalSince1970)
+        
+        // We now have elapsed time in seconds and distance in meters
+        
+        let distanceString = Utility.getDisplayableDistance(useMetricUnits: AppSettingsEntity.getAppSettingsEntity().metricUnits,
+                                                            meters: distance)
+        let speedString = Utility.getDisplayableSpeed(useMetricUnits: AppSettingsEntity.getAppSettingsEntity().metricUnits,
+                                                      meters: distance,
+                                                      seconds: elapsedTime)
+        let elapsedTimeString = Utility.getDisplayableElapsedTime(seconds: elapsedTime)
+        
+        return (distance: distanceString, speed: speedString, elapsedTime: elapsedTimeString)
+    }
+    
     func getParkingSpotLocation() -> CLLocationCoordinate2D {
         return CLLocationCoordinate2D(latitude: ParkingSpotEntity.getParkingSpotEntity().lat, longitude: ParkingSpotEntity.getParkingSpotEntity().lon)
     }
@@ -866,7 +911,6 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
             if $0.timestamp == nil {return false} // This should never happen dots are assigned a date when created
 
             if $0.timestamp! > dashboardStartTime {
-                MyLog.debug("Dashboard Point Passed Filter")
                 return true
                 
             } // Shown by dashboard

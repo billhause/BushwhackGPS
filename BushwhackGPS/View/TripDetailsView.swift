@@ -11,6 +11,12 @@ import CoreData
 struct TripDetailsView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @ObservedObject var mTripEntity: TripEntity // SHOULD THIS BE @StateObject??? No TripEntity is a class passed in from outside
+    @State var mAvgSpeed: String = "None"
+    @State var mElapsedTime: String = "None"
+    @State var mDistance: String = "None"
+    
+//    Create a Map_ViewModel func to return a tuple with Distance, Speed and Elapsed Time.  Should take a TripEntity as a parameter
+
     
     var earliestStartDate: Date // will be initialized to the earliest possible start date for the trip in init()
     private var theMap_ViewModel: Map_ViewModel
@@ -18,7 +24,7 @@ struct TripDetailsView: View {
     init(theTripEntity: TripEntity, mapViewModel: Map_ViewModel) {
         mTripEntity = theTripEntity
         theMap_ViewModel = mapViewModel
-        
+                
         // Set the earliest Start Date for a trip to be used to initialize the Date Picker
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy/MM/dd"
@@ -31,17 +37,8 @@ struct TripDetailsView: View {
     
     var body: some View {
         VStack { // Outer VStack needed for preview
-//            VStack(alignment: .leading)
             Text("Trip Details").font(.title2)
             ScrollView(showsIndicators: false) {
-
-//                HStack {
-//                    Picker("DisplayHide", selection: $mTripEntity.showTripDots) {
-//                        Text("Show Dots on Map").tag(true)
-//                        Text("Hide Dots").tag(false)
-//                    }
-//                    .pickerStyle(.segmented)
-//                } // HStack
 
                 TextDataInput(title: "Trip Name", userInput: $mTripEntity.wrappedTitle)
                 TextDataInputMultiLine(title: "Description", userInput: $mTripEntity.wrappedDesc, idealHeight: 125)
@@ -76,6 +73,22 @@ struct TripDetailsView: View {
                                in: mTripEntity.wrappedStartTime..., // must be sometime after the start time
                                displayedComponents: [.date, .hourAndMinute])
                     
+                    // Dashboard
+//                    VStack(alignment: .leading) {
+                        HStack {
+                            VStack(alignment: .leading) { // Column 1
+                                Text("Distance: \(mDistance)")
+                                Text("Avg Speed: \(mAvgSpeed)")
+                            }
+                            Spacer()
+                            VStack(alignment: .leading) { // Column 2
+//                                Text("Start Time: NOT NEEDED")
+                                Text("Elapsed Time: \(mElapsedTime)")
+                                Spacer()
+                            }
+                        }
+                            .font(.footnote) // .caption2, .caption, .footnote smallest to largest
+                            .padding(EdgeInsets(top: 0, leading: 0, bottom: 1, trailing: 0))
                 }
 
             } // ScrollView
@@ -89,6 +102,10 @@ struct TripDetailsView: View {
     // Calling this from .onAppear in the Body of the view.
     func HandleOnAppear() {
 //        MyLog.debug("HandleOnAppear() Called for TripDetailsView")
+        let dashboardValues = theMap_ViewModel.getTripDistanceSpeedAndElapsedTime(theTrip: mTripEntity)
+        mAvgSpeed = dashboardValues.speed
+        mDistance = dashboardValues.distance
+        mElapsedTime = dashboardValues.elapsedTime
     }
     
     func HandleOnDisappear() {
