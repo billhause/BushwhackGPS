@@ -28,9 +28,8 @@ extension DashboardEntity {
         } else {
             let theDashboardEntity = DashboardEntity(context: context)
             // avgSpeed, distance, pointCount and startTime
-//            theDashboardEntity.avgSpeed = 0
             theDashboardEntity.distance = 0 // meters
-            theDashboardEntity.pointCount = 0
+//            theDashboardEntity.pointCount = 0
             theDashboardEntity.startTime = Date()
             theDashboardEntity.prevLat = 181 // Indicates not initialized yet - Get Distance will return 0 for invalid lat/lon
             theDashboardEntity.prevLon = 181 // Indicates not initialized yet
@@ -64,6 +63,9 @@ extension DashboardEntity {
         // invalid lat/lon values will trigger a new start distance of 0
         prevLat = 181
         prevLon = 181
+
+        // save changes
+        save()
     }
     
 
@@ -121,22 +123,6 @@ extension DashboardEntity {
     public func displayableOdometer() -> String {
         return Utility.getDisplayableDistance(useMetricUnits: AppSettingsEntity.getAppSettingsEntity().metricUnits,
                                               meters: distance)
-//        // Metric
-//        if AppSettingsEntity.getAppSettingsEntity().metricUnits {
-//            if distance < 1000 {
-//                return String(format: "%.0f Meters", distance)
-//            } else {
-//                // return Kilometers
-//                return String(format: "%.1f KM", distance/1000)
-//            }
-//        }
-//        // If we got this far then we're using Bristish Units
-//        let distanceInFeet = Utility.convertMetersToFeet(theMeters: distance)
-//        if distanceInFeet < 1000 {
-//            return String(format: "%.0f Feet", distanceInFeet)
-//        }
-//        let distanceInMiles = Utility.convertMetersToMiles(theMeters: distance)
-//        return String(format: "%.1f Miles", distanceInMiles)
     }
 
     
@@ -147,27 +133,6 @@ extension DashboardEntity {
         return Utility.getDisplayableSpeed(useMetricUnits: AppSettingsEntity.getAppSettingsEntity().metricUnits,
                                            meters: distance,
                                            seconds: Int64(elapsedSeconds))
-//
-//        // Metric (km/h)
-//        if AppSettingsEntity.getAppSettingsEntity().metricUnits {
-//            let km = distance/1000 // convert meters to km
-//            let hours = Double(elapsedSeconds) / 3600.0       // 3600 seconds per hour
-//            var speed_km_per_hour = 0.0 // default to 0 if hours is 0
-//            if hours > 0.0 {
-//                speed_km_per_hour = km / hours
-//            }
-//            return String(format: "%.1f km/h", speed_km_per_hour)
-//        }
-//
-//        // If we got this far then we're using Bristish Units (MPH)
-//        let miles = Utility.convertMetersToMiles(theMeters: distance)
-//        let hours = Double(elapsedSeconds) / 3600.0           // 3600 seconds per hour
-//        var speed_miles_per_hour = 0.0 // default to 0 if hours is 0
-//        if hours > 0.0 {
-//            speed_miles_per_hour = miles / hours
-//        }
-//        return String(format: "%.1f MPH", speed_miles_per_hour)
-
     }
     
     // return start time to display
@@ -184,18 +149,6 @@ extension DashboardEntity {
     // Hours:Minutes:Seconds
     public func displayableElapsedTime() -> String {
         return Utility.getDisplayableElapsedTime(seconds: Int64(elapsedSeconds))
-        
-//        // Hours
-//        let hours = Int32(trunc(Double(elapsedSeconds) / 3600.0)) // Number of hours
-//        var remainingSeconds = elapsedSeconds % 3600
-//
-//        // Minutes
-//        let minutes = Int32(trunc(Double(remainingSeconds) / 60)) // Number of minutes
-//
-//        // Seconds
-//        remainingSeconds = remainingSeconds % 60
-//
-//        return String(format: "\(hours):%02d:%02d", minutes, remainingSeconds)
     }
     
     

@@ -623,9 +623,6 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         // Update last known location
         mLastKnownLocation = currentLocation.coordinate
         
-        // === DASHBOARD ===
-        DashboardEntity.getDashboardEntity().updateDashboardEntity(newLat: currentLocation.coordinate.latitude,
-                                                                   newLon: currentLocation.coordinate.longitude)
         
         // === ADD MAP DOT ===
         // Since we can't add the dot annotation directly to the MapView, we must add it to
@@ -644,6 +641,10 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
                 // the map since the MapView doesn't know what data change triggered the update
                 mNewDotAnnotationWaiting = true
                 mLastDotTimeStamp = Date().timeIntervalSince1970
+                
+                // === DASHBOARD LOCATION UPDATE ===
+                DashboardEntity.getDashboardEntity().updateDashboardEntity(newLat: currentLocation.coordinate.latitude,
+                                                                           newLon: currentLocation.coordinate.longitude)
             }
         }
         

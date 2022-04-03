@@ -281,10 +281,12 @@ struct MapView: UIViewRepresentable {
                 
             // Position on the screen, CGPoint
             let location = mTapGestureRecognizer.location(in: self.parent.mMapView)
+
             // postion on map, CLLocationCoordinate2D
             let coordinate = self.parent.mMapView.convert(location, toCoordinateFrom: self.parent.mMapView)
+            
             MyLog.debug("LatLon Tapped: Lat: \(coordinate.latitude), Lon: \(coordinate.longitude)")
-//            AlertDialog.shared.Alert("wdh LatLon Tapped: Lat: \(coordinate.latitude), Lon: \(coordinate.longitude)")
+//            AlertMessage.shared.Alert("wdh LatLon Tapped: Lat: \(coordinate.latitude), Lon: \(coordinate.longitude)")
         }
 
         // NOTE: FOR SOME REASON the panHandler and pinchHandler call-backs don't ever get called
