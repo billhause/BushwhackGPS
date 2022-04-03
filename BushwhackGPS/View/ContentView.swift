@@ -126,13 +126,6 @@ struct ContentView: View {
     }
 
 
-//    private func hideDotsHandler() {
-//        MyLog.debug("hideDotsHandler() called")
-//        // Update filter to start right now so that past dots are hidden
-//        theMap_ViewModel.updateFilterStartDate(Date())
-//        Haptic.shared.impact(style: .heavy)
-//    }
-    
     private func toggleMapLayers() {
         theMap_ViewModel.isHybrid = !theMap_ViewModel.isHybrid // toggle
         Haptic.shared.impact(style: .heavy)

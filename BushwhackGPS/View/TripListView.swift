@@ -104,6 +104,8 @@ struct TripListView: View {
     // This will be called when ever the view apears
     // Calling this from .onAppear in the Body of the view.
     func HandleOnAppear() {
+//        Haptic.shared.impact(style: .heavy)
+
         stateTripEntities = TripEntity.getAllTripEntities_NewestToOldest()
         MyLog.debug("stateTripEntities.count \(stateTripEntities.count)")
 
@@ -111,6 +113,7 @@ struct TripListView: View {
     }
     
     func HandleOnDisappear() {
+//        Haptic.shared.impact(style: .heavy)
         MyLog.debug("HandleOnDisappear() Called for TripListView")
         theMap_ViewModel.requestMapDotAnnotationRefresh()
     }

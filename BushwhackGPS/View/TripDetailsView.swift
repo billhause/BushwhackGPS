@@ -101,7 +101,7 @@ struct TripDetailsView: View {
     // This will be called when ever the view apears
     // Calling this from .onAppear in the Body of the view.
     func HandleOnAppear() {
-//        MyLog.debug("HandleOnAppear() Called for TripDetailsView")
+//        Haptic.shared.impact(style: .heavy) // Not doing this because the view is refreshed mutiple times when displayed
         let dashboardValues = theMap_ViewModel.getTripDistanceSpeedAndElapsedTime(theTrip: mTripEntity)
         mAvgSpeed = dashboardValues.speed
         mDistance = dashboardValues.distance
@@ -109,7 +109,7 @@ struct TripDetailsView: View {
     }
     
     func HandleOnDisappear() {
-//        MyLog.debug("HandleOnDisappear() Called for TripDetailsView")
+//        Haptic.shared.impact(style: .heavy)
         mTripEntity.save()
         
         theMap_ViewModel.requestMapDotAnnotationRefresh() // wdhx
