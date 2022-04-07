@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreData
+import UIKit
 
 extension ImageEntity: Comparable {
     public static func < (lhs: ImageEntity, rhs: ImageEntity) -> Bool {
@@ -61,9 +62,43 @@ extension ImageEntity: Comparable {
         viewContext.delete(theImageEntity)
     }
     
+    
+    //
+    // MARK: Member Functions
+    //
+    
+    // Set image and save it
+    func setImage(_ theUIImage: UIImage) {
+        imageData = theUIImage.jpegData(compressionQuality: 1.0)
+        let viewContext = PersistenceController.shared.container.viewContext
+        do {
+            try viewContext.save()
+        } catch {
+            let nsError = error as NSError
+            print("wdh ImageEntity.setImage(): Error Saving Image to Core Data \(nsError.userInfo)")
+        }
+    }
+    
+    // Get the UIImage from the ImageEntity in Core Data
+    func getUIImage() -> UIImage {
+        // imageData will be nil if the ImageEntity was never loaded with an image yet
+        if imageData == nil {
+            return UIImage() // Return a new empty UIImage if ImageEntity.imageData is nil
+        }
+        
+        if let theUIImage = UIImage(data: imageData!) {
+            return theUIImage
+        }
+        
+        // Should not reach this unless an error happend creating the UIImage above
+        print("ERROR wdh Somehow we failed to create the UIImage from the raw imageData in getImage()")
+        return UIImage() // Should never get here but if we do, then just return an empty UIImage
+    }
+
 }
 
-Next add a button to the MarkerView to load an image.  Then create an imageEntity for the current Marker -- See the demo app for sample code
+
+
 
 
 

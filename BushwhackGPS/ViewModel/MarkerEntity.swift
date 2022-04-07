@@ -34,8 +34,7 @@ extension MarkerEntity: Comparable {
         // If we got this far then we had an error getting the MarkerEntity array so return an empty array
         return []
     }
-    
-    Next create the ImageEntity extensions class
+
     
     // Create a new MarkerEntity, save it and return it
     // Every field should be filled with a non-nil value
