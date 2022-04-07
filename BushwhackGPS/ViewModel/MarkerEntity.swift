@@ -35,6 +35,8 @@ extension MarkerEntity: Comparable {
         return []
     }
     
+    Next create the ImageEntity extensions class
+    
     // Create a new MarkerEntity, save it and return it
     // Every field should be filled with a non-nil value
     @discardableResult public static func createMarkerEntity(lat: Double, lon: Double) -> MarkerEntity {

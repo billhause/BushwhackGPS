@@ -24,6 +24,12 @@
     <entity name="ID_GeneratorEntity" representedClassName="ID_GeneratorEntity" syncable="YES" codeGenerationType="class">
         <attribute name="nextIDToReturn" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
     </entity>
+    <entity name="ImageEntity" representedClassName="ImageEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="imageData" optional="YES" attributeType="Binary"/>
+        <attribute name="timeStamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="uuid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <relationship name="marker" maxCount="1" deletionRule="Nullify" destinationEntity="MarkerEntity" inverseName="images" inverseEntity="MarkerEntity"/>
+    </entity>
     <entity name="MarkerEntity" representedClassName="MarkerEntity" syncable="YES" codeGenerationType="class">
         <attribute name="colorAlpha" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="colorBlue" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -37,6 +43,7 @@
         <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="title" optional="YES" attributeType="String" defaultValueString=""/>
         <attribute name="uuid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <relationship name="images" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ImageEntity" inverseName="marker" inverseEntity="ImageEntity"/>
     </entity>
     <entity name="ParkingSpotEntity" representedClassName="ParkingSpotEntity" syncable="YES" codeGenerationType="class">
         <attribute name="lat" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -57,12 +64,13 @@
         <attribute name="uuid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
     </entity>
     <elements>
-        <element name="AppSettingsEntity" positionX="-54" positionY="9" width="128" height="89"/>
-        <element name="DashboardEntity" positionX="-54" positionY="144" width="128" height="89"/>
-        <element name="DotEntity" positionX="-45" positionY="27" width="128" height="134"/>
-        <element name="ID_GeneratorEntity" positionX="-63" positionY="-9" width="128" height="44"/>
-        <element name="MarkerEntity" positionX="-54" positionY="63" width="128" height="209"/>
-        <element name="ParkingSpotEntity" positionX="-54" positionY="9" width="128" height="59"/>
-        <element name="TripEntity" positionX="-54" positionY="117" width="128" height="209"/>
+        <element name="AppSettingsEntity" positionX="-289.7017822265625" positionY="-62.89480590820312" width="128" height="89"/>
+        <element name="DashboardEntity" positionX="6.50390625" positionY="30.58206176757812" width="128" height="89"/>
+        <element name="DotEntity" positionX="-246.2279663085938" positionY="58.67205810546875" width="128" height="134"/>
+        <element name="ID_GeneratorEntity" positionX="40.71881103515625" positionY="-70.13198852539062" width="128" height="44"/>
+        <element name="ImageEntity" positionX="108.80322265625" positionY="217.4447326660156" width="128" height="103"/>
+        <element name="MarkerEntity" positionX="-86.79168701171875" positionY="204.027099609375" width="128" height="238"/>
+        <element name="ParkingSpotEntity" positionX="295.2486572265625" positionY="-11.0958251953125" width="128" height="59"/>
+        <element name="TripEntity" positionX="284.0818481445312" positionY="99.650146484375" width="128" height="209"/>
     </elements>
 </model>

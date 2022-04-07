@@ -251,6 +251,10 @@ struct MapView: UIViewRepresentable {
 //            self.mapView.addGestureRecognizer(thePanGestureRecognizer) // TouchDetect
             self.parent.mMapView.addGestureRecognizer(thePanGestureRecognizer) // TouchDetect
             
+            
+// wdhx Google            Swift how to detect annotation in UITapGestureRecognizer called
+            
+            
             self.mTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapHandler)) // TouchDetect
             self.mTapGestureRecognizer.delegate = self // TouchDetect
 //            self.mapView.addGestureRecognizer(mTapGestureRecognizer) // TouchDetect
@@ -285,7 +289,7 @@ struct MapView: UIViewRepresentable {
             // postion on map, CLLocationCoordinate2D
             let coordinate = self.parent.mMapView.convert(location, toCoordinateFrom: self.parent.mMapView)
             
-            MyLog.debug("LatLon Tapped: Lat: \(coordinate.latitude), Lon: \(coordinate.longitude)")
+            MyLog.debug("LatLon Tapped: Lat: \(coordinate.latitude), Lon: \(coordinate.longitude)") // wdhx
 //            AlertMessage.shared.Alert("wdh LatLon Tapped: Lat: \(coordinate.latitude), Lon: \(coordinate.longitude)")
         }
 
