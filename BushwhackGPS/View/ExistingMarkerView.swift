@@ -8,15 +8,23 @@
 import Foundation
 import SwiftUI
 import CoreLocation
+import CoreData
 
 
 // It's safe to assume we have an Accurate Location for this view because we
 // already checked in the parrent view
 struct ExistingMarkerEditView: View {
+    // Constants
+    let BUTTON_CORNER_RADIUS = 10.0
+    let BUTTON_HEIGHT        = 30.0
+    let BUTTON_FONT_SIZE     = 15.0
+
     @ObservedObject var theMap_ViewModel: Map_ViewModel
     
     @State private var showingDeleteJournalConfirm = false // Flag for Confirm Dialog
     @State private var deleteThisMarker = false // Set to true if user clicks delete
+    @State private var bShowPhotoLibrary = false // toggle picker view
+    @State private var tempUIImage = UIImage() // Temp Image Holder
     
     @State var mMarkerID: Int64 = 0
     @State var titleText: String = ""
@@ -108,13 +116,45 @@ struct ExistingMarkerEditView: View {
                         secondaryButton: .cancel()
                     )
                 }
-                .foregroundColor(Color.red)
-                .padding()
+                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: 30, alignment: .center)
+                .background(Color.red)
+                .foregroundColor(.white)
+                .cornerRadius(10)
                 Spacer()
             }
+            
+            // Add Photo Button
+            Button(action: {
+                self.bShowPhotoLibrary = true
+            }) {
+                // Button View
+                HStack {
+                    Spacer()
+                    HStack {
+                        Image(systemName: "photo") // Label Image Name
+                            .font(.system(size: BUTTON_FONT_SIZE))
+                        Text("Add Photo") // Label Text
+                            .font(.headline)
+                    }
+                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: BUTTON_HEIGHT, alignment: .center)
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(BUTTON_CORNER_RADIUS)
+//                    .padding()
+                    Spacer()
+                } // HStack
+                .sheet(isPresented: $bShowPhotoLibrary, onDismiss: handleAddPhotoButton) {
+                    ImagePicker(sourceType: .photoLibrary, selectedImage: $tempUIImage)
+                }
+
+            } // Button
+
+            // Photo List
+            Next Create list of photos where
+            Test by looking at the "Has Photos" Marker in iPhone12mini simulator
+            
         } // VStack
         .padding()
-//      .padding(EdgeInsets(top: 0.0, leading: LEFT_PADDING, bottom: 0, trailing: 10))
         .navigationTitle("New Journal Marker") // Title at top of page
         .onAppear { HandleOnAppear() }
         .onDisappear { HandleOnDisappear() }
@@ -153,12 +193,23 @@ struct ExistingMarkerEditView: View {
             theMap_ViewModel.setMarkerIDForDeletion(markerID: mMarkerID)
         }
     }
+    
+    func handleAddPhotoButton() { // called with the Add Photo button is tapped
+        MyLog.debug("handleAddPhotoButton() tapped")
+        
+        // Create a new ImageEntity for this MarkerEntity
+        let newImageEntity = ImageEntity.createImageEntity(theMarkerEntity: mMarkerEntity)
+        
+        // Set the ImageEntity imageData and save
+        newImageEntity.setImageAndSave(tempUIImage)
+        
+    }
 }
 
 
 struct ExistingMarkerEditView_Previews: PreviewProvider {
     static var previews: some View {
-        ExistingMarkerEditView(theMap_VM: Map_ViewModel(), markerEntity: MarkerEntity.createMarkerEntity(lat: 100,lon: 100)).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        ExistingMarkerEditView(theMap_VM: Map_ViewModel(), markerEntity: MarkerEntity.createMarkerEntity(lat: 100,lon: 100)).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext).previewInterfaceOrientation(.portraitUpsideDown)
     }
 }
 

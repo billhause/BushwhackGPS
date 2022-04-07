@@ -67,15 +67,17 @@ extension ImageEntity: Comparable {
     // MARK: Member Functions
     //
     
-    // Set image and save it
-    func setImage(_ theUIImage: UIImage) {
+    
+    
+    // Set image and save the database
+    func setImageAndSave(_ theUIImage: UIImage) {
         imageData = theUIImage.jpegData(compressionQuality: 1.0)
         let viewContext = PersistenceController.shared.container.viewContext
         do {
             try viewContext.save()
         } catch {
             let nsError = error as NSError
-            print("wdh ImageEntity.setImage(): Error Saving Image to Core Data \(nsError.userInfo)")
+            print("wdh ImageEntity.setImageAndSave(): Error Saving Image to Core Data \(nsError.userInfo)")
         }
     }
     
