@@ -15,9 +15,10 @@ import CoreData
 // already checked in the parrent view
 struct ExistingMarkerEditView: View {
     // Constants
-    let BUTTON_CORNER_RADIUS = 10.0
-    let BUTTON_HEIGHT        = 30.0
-    let BUTTON_FONT_SIZE     = 15.0
+    let BUTTON_CORNER_RADIUS  = 10.0
+    let BUTTON_HEIGHT         = 30.0
+    let BUTTON_FONT_SIZE      = 15.0
+    let MIN_PHOTO_LIST_HEIGHT = 500.0
 
     // NOTE: We can't initialize the @FetchRequest predicate because the MarkerEntity is passed
     // in to the init().  Therefore we need to construct the FetchRequest in the init()
@@ -65,8 +66,6 @@ struct ExistingMarkerEditView: View {
         _imageEntities = FetchRequest(fetchRequest: request) // Use '_' version to access wrapped variable
     }
         
-    Next remove the '>' next to each photo 
-    
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
@@ -78,12 +77,12 @@ struct ExistingMarkerEditView: View {
             Text("Journal Entry")
                 .font(.title)
 
+            ScrollView {
+                
             // Journal Entry Title and Body
             TextDataInput(title: "Title", userInput: $titleText)
                 .padding(EdgeInsets(top: 0.0, leading: 0.0, bottom: 10, trailing: 0.0))
-                TextDataInputMultiLine(title: "Description", userInput: $bodyText)
 
-            
             // Icon Picker and Color Picker
             HStack {
                 Text("Map Icon:")
@@ -96,31 +95,18 @@ struct ExistingMarkerEditView: View {
                 // Color Picker
                 VStack(alignment: .leading) {
                     Text("Icon Color")
-                    Text("(Darker is Better)").font(.footnote)
+//                    Text("(Darker is Better)").font(.footnote)
                 }
                 ColorPicker("Icon Color", selection: $iconColor, supportsOpacity: false)
                     .labelsHidden() // don't show the label.  Use the Text lable instead
 
             } // HStack
 
-            Group {
-                // Date/Time Display
-                HStack {
-                    Text("Time Stamp: \(dateTimeDetailText)") // Time with seconds
-                    Spacer()
-                }
                 
-                // LAT/LON Display
-                HStack {
-                    Text("Latitude: \(lat)")
-                    Spacer()
-                }
-                HStack {
-                    Text("Longitude: \(lon)")
-                    Spacer()
-                }
-            } // Group
-            
+            // Journel Entry Description
+            TextDataInputMultiLine(title: "Description", userInput: $bodyText)
+
+            // Delete Journal Entry
             HStack {
                 Spacer()
                 Button("Delete Journal Entry") {
@@ -146,6 +132,27 @@ struct ExistingMarkerEditView: View {
                 .cornerRadius(10)
                 Spacer()
             }
+            .padding(SwiftUI.EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
+
+
+            Group {
+                // Date/Time Display
+                HStack {
+                    Text("Time Stamp: \(dateTimeDetailText)") // Time with seconds
+                    Spacer()
+                }
+                
+                // LAT/LON Display
+                HStack {
+                    Text("Latitude: \(lat)")
+                    Spacer()
+                }
+                HStack {
+                    Text("Longitude: \(lon)")
+                    Spacer()
+                }
+            } // Group
+            
             
             // Add Photo Button
             Button(action: {
@@ -170,33 +177,24 @@ struct ExistingMarkerEditView: View {
                 .sheet(isPresented: $bShowPhotoLibrary, onDismiss: handleAddPhotoButton) {
                     ImagePicker(sourceType: .photoLibrary, selectedImage: $tempUIImage)
                 }
-
             } // Button
+            .padding(SwiftUI.EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
 
             // Photo List wdhx
             List {
                 ForEach(imageEntities) {theImageEntity in
-                    NavigationLink {
-                        Text("Bananas Are Here")
-//                        Text("Image Dated: \(theImageEntity.timeStamp!, formatter: itemFormatter)")
-                    } label: {
-                        Image(uiImage: theImageEntity.getUIImage())
-                            .resizable()
-                            .scaledToFill()
-                            .frame(minWidth: 0, maxWidth: .infinity)
-                            .edgesIgnoringSafeArea(.all)
-//                        Text("Bananas")
-//                        Text(theImageEntity.timeStamp!, formatter: itemFormatter)
-//                        Text(Utility.getShortDateTimeString(theDate: theImageEntity.timeStamp))
-                        
-//wdhx                        Next look at the CoreData Image example and add images to the list
-                        
-                    }
+                    Image(uiImage: theImageEntity.getUIImage())
+                        .resizable()
+                        .scaledToFill()
+                        .frame(minWidth: 0, maxWidth: .infinity)
+                        .edgesIgnoringSafeArea(.all)
                 } // ForEach
                 .onDelete(perform: deleteItems)
             } // List
-            
-            
+            .frame(minWidth: 0, maxWidth: .infinity, minHeight: MIN_PHOTO_LIST_HEIGHT, maxHeight: .infinity, alignment: .center)
+
+            } // Scroll View
+
         } // VStack
         .padding()
         .navigationTitle("New Journal Marker") // Title at top of page

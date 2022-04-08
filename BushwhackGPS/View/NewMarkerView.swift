@@ -86,7 +86,7 @@ struct NewMarkerEditView: View {
                 // Color Picker
                 VStack(alignment: .leading) {
                     Text("Icon Color")
-                    Text("(Darker is Better)").font(.footnote)
+//                    Text("(Darker is Better)").font(.footnote)
                 }
                 ColorPicker("Icon Color", selection: $iconColor, supportsOpacity: false)
                     .labelsHidden() // don't show the label.  Use the Text lable instead
@@ -173,7 +173,7 @@ struct TextDataInputMultiLine: View {
     @Binding var theUserInput: String
     var theIdealHeight: CGFloat
     
-    init(title: String, userInput: Binding<String>, idealHeight: CGFloat = 150) {
+    init(title: String, userInput: Binding<String>, idealHeight: CGFloat = 100) {
         theTitle = title
         _theUserInput = userInput // The compiler wraps the var name with an underscore
         theIdealHeight = idealHeight
