@@ -19,16 +19,14 @@ struct ExistingMarkerEditView: View {
     let BUTTON_HEIGHT        = 30.0
     let BUTTON_FONT_SIZE     = 15.0
 
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \ImageEntity.timeStamp, ascending: true)],
-        animation: .default)
-    private var imageEntities: FetchedResults<ImageEntity>
-
+    // NOTE: We can't initialize the @FetchRequest predicate because the MarkerEntity is passed
+    // in to the init().  Therefore we need to construct the FetchRequest in the init()
+    @FetchRequest var imageEntities: FetchedResults<ImageEntity>
     
-    Setup the Predecate for the Fetch Request
-        See Stanford Lesson 12 at 1:02:20
-        https://www.youtube.com/watch?v=yOhyOpXvaec
-        
+//    @FetchRequest(
+//        sortDescriptors: [NSSortDescriptor(keyPath: \ImageEntity.timeStamp, ascending: true)],
+//        animation: .default)
+//    private var imageEntities: FetchedResults<ImageEntity>
     
     @ObservedObject var theMap_ViewModel: Map_ViewModel
     
@@ -53,9 +51,22 @@ struct ExistingMarkerEditView: View {
     // Used when editing an EXISTING MarkerEntity and not creating a new one
     init(theMap_VM: Map_ViewModel, markerEntity: MarkerEntity) {
         theMap_ViewModel = theMap_VM
+        
+        // NOTE: PropertyWrapper Structs must be accessed using the underbar '_' version of the struct
+        // Put an '_' in front of the variable names to access them directly.
         _mMarkerEntity = State(initialValue: markerEntity) // Variable 'self.mMarkerEntity' used before being initialized
+        
+        // Must Setup the Predecate for the Fetch Request in the init()
+        //    See Stanford Lesson 12 at 1:02:20
+        //    https://www.youtube.com/watch?v=yOhyOpXvaec
+        let request = NSFetchRequest<ImageEntity>(entityName: "ImageEntity")
+        request.predicate = NSPredicate(format: "marker = %@", markerEntity)
+        request.sortDescriptors = [NSSortDescriptor(key: "timeStamp", ascending: false)] // Put newest at top
+        _imageEntities = FetchRequest(fetchRequest: request) // Use '_' version to access wrapped variable
     }
         
+    Next remove the '>' next to each photo 
+    
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
