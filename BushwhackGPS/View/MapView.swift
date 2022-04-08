@@ -251,10 +251,6 @@ struct MapView: UIViewRepresentable {
 //            self.mapView.addGestureRecognizer(thePanGestureRecognizer) // TouchDetect
             self.parent.mMapView.addGestureRecognizer(thePanGestureRecognizer) // TouchDetect
             
-            
-// wdhx Google            Swift how to detect annotation in UITapGestureRecognizer called
-            
-            
             self.mTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tapHandler)) // TouchDetect
             self.mTapGestureRecognizer.delegate = self // TouchDetect
 //            self.mapView.addGestureRecognizer(mTapGestureRecognizer) // TouchDetect
@@ -289,7 +285,7 @@ struct MapView: UIViewRepresentable {
             // postion on map, CLLocationCoordinate2D
             let coordinate = self.parent.mMapView.convert(location, toCoordinateFrom: self.parent.mMapView)
             
-            MyLog.debug("LatLon Tapped: Lat: \(coordinate.latitude), Lon: \(coordinate.longitude)") // wdhx
+            MyLog.debug("LatLon Tapped: Lat: \(coordinate.latitude), Lon: \(coordinate.longitude)")
 //            AlertMessage.shared.Alert("wdh LatLon Tapped: Lat: \(coordinate.latitude), Lon: \(coordinate.longitude)")
         }
 
@@ -421,7 +417,7 @@ struct MapView: UIViewRepresentable {
                 let dotSizeAndColorAndImageNameTuple = theMap_ViewModel.getDotSizeAndUIColorAndImageName(theMKDotAnnotation: annotation as! MKDotAnnotation)
                 let dotSize = dotSizeAndColorAndImageNameTuple.size
                 let dotColor = dotSizeAndColorAndImageNameTuple.theUIColor
-                let dotSymbolImageName = dotSizeAndColorAndImageNameTuple.theImageName // wdhx
+                let dotSymbolImageName = dotSizeAndColorAndImageNameTuple.theImageName
                 
                 let DotSymbolImage = UIImage(systemName: dotSymbolImageName)!.withTintColor(dotColor)
                 let size = CGSize(width: dotSize, height: dotSize)
@@ -467,7 +463,7 @@ struct MapView: UIViewRepresentable {
                 //   https://developer.apple.com/forums/thread/693258
 
 //                let addButton = UIButton(type: .contactAdd) // Circle with + inside it
-//                annotationView.leftCalloutAccessoryView = addButton wdhx
+//                annotationView.leftCalloutAccessoryView = addButton
                 
                 // ICON - Provide an image view to use as the accessory view's detail view.
   //              annotationView.detailCalloutAccessoryView = UIImageView(image: MarkerSymbolImage)

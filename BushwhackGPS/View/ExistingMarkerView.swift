@@ -19,6 +19,17 @@ struct ExistingMarkerEditView: View {
     let BUTTON_HEIGHT        = 30.0
     let BUTTON_FONT_SIZE     = 15.0
 
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \ImageEntity.timeStamp, ascending: true)],
+        animation: .default)
+    private var imageEntities: FetchedResults<ImageEntity>
+
+    
+    Setup the Predecate for the Fetch Request
+        See Stanford Lesson 12 at 1:02:20
+        https://www.youtube.com/watch?v=yOhyOpXvaec
+        
+    
     @ObservedObject var theMap_ViewModel: Map_ViewModel
     
     @State private var showingDeleteJournalConfirm = false // Flag for Confirm Dialog
@@ -42,7 +53,7 @@ struct ExistingMarkerEditView: View {
     // Used when editing an EXISTING MarkerEntity and not creating a new one
     init(theMap_VM: Map_ViewModel, markerEntity: MarkerEntity) {
         theMap_ViewModel = theMap_VM
-        mMarkerEntity = markerEntity
+        _mMarkerEntity = State(initialValue: markerEntity) // Variable 'self.mMarkerEntity' used before being initialized
     }
         
     var body: some View {
@@ -81,22 +92,24 @@ struct ExistingMarkerEditView: View {
 
             } // HStack
 
-            // Date/Time Display
-            HStack {
-                Text("Time Stamp: \(dateTimeDetailText)") // Time with seconds
-                Spacer()
-            }
+            Group {
+                // Date/Time Display
+                HStack {
+                    Text("Time Stamp: \(dateTimeDetailText)") // Time with seconds
+                    Spacer()
+                }
+                
+                // LAT/LON Display
+                HStack {
+                    Text("Latitude: \(lat)")
+                    Spacer()
+                }
+                HStack {
+                    Text("Longitude: \(lon)")
+                    Spacer()
+                }
+            } // Group
             
-            
-            // LAT/LON Display
-            HStack {
-                Text("Latitude: \(lat)")
-                Spacer()
-            }
-            HStack {
-                Text("Longitude: \(lon)")
-                Spacer()
-            }
             HStack {
                 Spacer()
                 Button("Delete Journal Entry") {
@@ -149,15 +162,52 @@ struct ExistingMarkerEditView: View {
 
             } // Button
 
-            // Photo List
-            Next Create list of photos where
-            Test by looking at the "Has Photos" Marker in iPhone12mini simulator
+            // Photo List wdhx
+            List {
+                ForEach(imageEntities) {theImageEntity in
+                    NavigationLink {
+                        Text("Bananas Are Here")
+//                        Text("Image Dated: \(theImageEntity.timeStamp!, formatter: itemFormatter)")
+                    } label: {
+                        Image(uiImage: theImageEntity.getUIImage())
+                            .resizable()
+                            .scaledToFill()
+                            .frame(minWidth: 0, maxWidth: .infinity)
+                            .edgesIgnoringSafeArea(.all)
+//                        Text("Bananas")
+//                        Text(theImageEntity.timeStamp!, formatter: itemFormatter)
+//                        Text(Utility.getShortDateTimeString(theDate: theImageEntity.timeStamp))
+                        
+//wdhx                        Next look at the CoreData Image example and add images to the list
+                        
+                    }
+                } // ForEach
+                .onDelete(perform: deleteItems)
+            } // List
+            
             
         } // VStack
         .padding()
         .navigationTitle("New Journal Marker") // Title at top of page
         .onAppear { HandleOnAppear() }
         .onDisappear { HandleOnDisappear() }
+    }
+
+    private func deleteItems(offsets: IndexSet) {
+        MyLog.debug("deleteItems() Called \(offsets)")
+        let viewContext = PersistenceController.shared.container.viewContext
+        withAnimation {
+            offsets.map { imageEntities[$0] }.forEach(viewContext.delete)
+
+            do {
+                try viewContext.save()
+            } catch {
+                // Replace this implementation with code to handle the error appropriately.
+                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                let nsError = error as NSError
+                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            }
+        }
     }
 
     
@@ -205,6 +255,13 @@ struct ExistingMarkerEditView: View {
         
     }
 }
+
+//private let itemFormatter: DateFormatter = {
+//    let formatter = DateFormatter()
+//    formatter.dateStyle = .short
+//    formatter.timeStyle = .medium
+//    return formatter
+//}()
 
 
 struct ExistingMarkerEditView_Previews: PreviewProvider {

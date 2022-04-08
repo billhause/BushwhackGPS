@@ -33,7 +33,6 @@ struct TripDetailsView: View {
         //        earliestStartDate = formatter.date(from: "2022/02/03 00:05")!
     }
     
-//Reload the map dots after editing a Trip wdhx
     
     var body: some View {
         VStack { // Outer VStack needed for preview
@@ -101,7 +100,6 @@ struct TripDetailsView: View {
     // This will be called when ever the view apears
     // Calling this from .onAppear in the Body of the view.
     func HandleOnAppear() {
-//        Haptic.shared.impact(style: .heavy) // Not doing this because the view is refreshed mutiple times when displayed
         let dashboardValues = theMap_ViewModel.getTripDistanceSpeedAndElapsedTime(theTrip: mTripEntity)
         mAvgSpeed = dashboardValues.speed
         mDistance = dashboardValues.distance
@@ -109,10 +107,9 @@ struct TripDetailsView: View {
     }
     
     func HandleOnDisappear() {
-//        Haptic.shared.impact(style: .heavy)
         mTripEntity.save()
         
-        theMap_ViewModel.requestMapDotAnnotationRefresh() // wdhx
+        theMap_ViewModel.requestMapDotAnnotationRefresh()
     }
 
 }

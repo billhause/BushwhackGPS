@@ -584,7 +584,6 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     func pointIsClustered(theLocation: CLLocation) -> Bool {
         // Look at the last X points and if the specified point is within the threshold distance, then return true
         let dotEntityArray = DotEntity.getAllDotEntities()
-//        let dotEntityArray = getFilteredDotEntites() wdhx
         let count = dotEntityArray.count
         
         // Would crash if trying to check 0 or fewer points at the end of the array
@@ -745,7 +744,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     
     // MARK: Intent Functions
     
-    // Tell the map to delete and reload all MapDot Annotations wdhx
+    // Tell the map to delete and reload all MapDot Annotations
     func requestMapDotAnnotationRefresh() {
         MyLog.debug("****** requestMapDotAnnotationRefresh() called")
         dotFilterIsDirty = true // signal that the map should refresh all of its map dots

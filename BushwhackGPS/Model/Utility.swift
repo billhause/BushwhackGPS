@@ -110,6 +110,18 @@ struct Utility {
         
         return String(format: "\(hours):%02d:%02d", minutes, remainingSeconds)
     }
+    
+    // Convert Date to String MM/DD/YYYY
+    static func getShortDateTimeString(theDate: Date?) -> String {
+        guard let aDate = theDate else {
+            return "None"
+        }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .short // .medium, .none
+        return dateFormatter.string(from: aDate)
+    }
+
  
 }
 
