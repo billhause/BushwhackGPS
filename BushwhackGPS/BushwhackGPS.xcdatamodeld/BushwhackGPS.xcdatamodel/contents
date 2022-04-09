@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21D62" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="AppSettingsEntity" representedClassName="AppSettingsEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="gasPrice" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="metricUnits" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="mpg" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="nextDotColorIndex" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="orientNorth" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="usageCount" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
@@ -64,7 +66,7 @@
         <attribute name="uuid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
     </entity>
     <elements>
-        <element name="AppSettingsEntity" positionX="-289.7017822265625" positionY="-62.89480590820312" width="128" height="89"/>
+        <element name="AppSettingsEntity" positionX="-289.7017822265625" positionY="-62.89480590820312" width="128" height="133"/>
         <element name="DashboardEntity" positionX="6.50390625" positionY="30.58206176757812" width="128" height="89"/>
         <element name="DotEntity" positionX="-246.2279663085938" positionY="58.67205810546875" width="128" height="134"/>
         <element name="ID_GeneratorEntity" positionX="40.71881103515625" positionY="-70.13198852539062" width="128" height="44"/>

@@ -448,8 +448,9 @@ struct MapView: UIViewRepresentable {
                 let MARKER_SIZE = 20 // size for Marker symbol
                 let size = CGSize(width: MARKER_SIZE, height: MARKER_SIZE)
 
-                annotationView.image = UIGraphicsImageRenderer(size: size).image {
-                    _ in MarkerSymbolImage.draw(in:CGRect(origin:.zero, size:size))
+                annotationView.image = UIGraphicsImageRenderer(size: size).image { _ in
+                    MarkerSymbolImage.draw(in:CGRect(origin:.zero, size:size))
+                    // TODO: Figuire out how to draw an additional image to indicate if photos are attached to this marker
                 }
                 
 

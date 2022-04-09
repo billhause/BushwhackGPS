@@ -515,6 +515,16 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
 
     // Sometimes the device will not have the first choice symbol so check first
     // Return a default that is always present
+    func getSettingsImageName() -> String {
+        // Check symbols in order of preference
+        if UIImage(systemName: "gear") != nil { return "gear" }
+        if UIImage(systemName: "gearshape") != nil { return "gearshape" }
+        if UIImage(systemName: "gearshape.fill") != nil { return "gearshape.fill" }
+        return "triangle" // default that is always there on all devices
+    }
+
+    // Sometimes the device will not have the first choice symbol so check first
+    // Return a default that is always present
     func getOrientMapImageName() -> String {
         // Check symbols in order of preference
         if UIImage(systemName: "dot.circle.viewfinder") != nil { return "dot.circle.viewfinder" }
@@ -541,18 +551,6 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return "triangle" // default that is always there on all devices
     }
 
-    // Convert Date to String MM/DD/YYYY
-    func getShortDateString(theDate: Date?) -> String {
-        guard let aDate = theDate else {
-            return "None"
-        }
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .none
-//        dateFormatter.timeStyle = .short // .medium
-        return dateFormatter.string(from: aDate)
-    }
-
 
     
     // Sometimes the device will not have the first choice symbol so check first
@@ -575,6 +573,19 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         if UIImage(systemName: "plus.square") != nil { return "plus.square" }
         if UIImage(systemName: "plus.app") != nil { return "plus.app" }
         return "triangle" // default that is always there on all devices
+    }
+
+    
+    // Convert Date to String MM/DD/YYYY
+    func getShortDateString(theDate: Date?) -> String {
+        guard let aDate = theDate else {
+            return "None"
+        }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+        dateFormatter.timeStyle = .none
+//        dateFormatter.timeStyle = .short // .medium
+        return dateFormatter.string(from: aDate)
     }
 
     

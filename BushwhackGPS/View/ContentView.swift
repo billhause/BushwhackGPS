@@ -17,6 +17,8 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             VStack {
+                Text("Dot Count: \(DotEntity.getAllDotEntities().count)")
+
                 DashboardView(theViewModel: theMap_ViewModel)
                     .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
                 MapView(theViewModel: theMap_ViewModel)
@@ -36,21 +38,26 @@ struct ContentView: View {
             
             .toolbar {
                 // TOP TOOL BAR
-                ToolbarItemGroup(placement: .automatic) {
-                    HStack {
-                        Text("Dot Count: \(DotEntity.getAllDotEntities().count)")
-                        Spacer()
-                        Button(action: updateParkingSpot) {
-                            let theColor = UIColor(red: 0.0, green: 0.5, blue: 0.0, alpha: 1.0)
-                            let parkingImageName = theMap_ViewModel.getParkingLocationImageName()
-                            Label("Save Spot", systemImage: parkingImageName)
+                ToolbarItem(placement: ToolbarItemPlacement.navigationBarLeading) {
+                    NavigationLink(destination: SettingsView(mapViewModel: theMap_ViewModel)) {
+                            let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
+                            let settingsButtonImageName = theMap_ViewModel.getSettingsImageName()
+                            Label("Settings", systemImage: settingsButtonImageName)
                                 .foregroundColor(Color(theColor))
-                                .padding() // Move the Parking symbol away from right border a little bit
-                        }// .font(.system(size: 25.0))
-                            .labelStyle(VerticalLabelStyle())
-                        
                     }
+                        .labelStyle(VerticalLabelStyle())
                 }
+
+                ToolbarItem(placement: ToolbarItemPlacement.navigationBarTrailing) {
+                    Button(action: updateParkingSpot) {
+                        let theColor = UIColor(red: 0.0, green: 0.5, blue: 0.0, alpha: 1.0)
+                        let parkingImageName = theMap_ViewModel.getParkingLocationImageName()
+                        Label("Save Spot", systemImage: parkingImageName)
+                            .foregroundColor(Color(theColor))
+                            .padding() // Move the Parking symbol away from right border a little bit
+                    }// .font(.system(size: 25.0))
+                        .labelStyle(VerticalLabelStyle())
+                } // ToolbarItem
 
                 // BOTTOM TOOL BAR
                 ToolbarItemGroup(placement: .bottomBar) {
@@ -107,10 +114,9 @@ struct ContentView: View {
                     .navigationBarTitleDisplayMode(.inline) // Put title on same line as tool bar
             //            .navigationBarHidden(true) // Remove the space for the top nav bar
             //            .navigationBarTitleDisplayMode(.inline) // Put title on same line as buttons
-            //            .navigationBarHidden(true)
 
-                } // Bottom Tool Bar
-            }
+                } // ToolbarItemGroup - Bottom Tool Bar
+            } // .toolbar
             // Detect moving back to foreground
             .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
                 theMap_ViewModel.orientMap() // Re-orient map when app moves back to the foreground

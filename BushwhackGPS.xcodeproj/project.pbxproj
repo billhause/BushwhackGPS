@@ -18,6 +18,7 @@
 		2865292A27F3C20C00112093 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2865292927F3C20C00112093 /* Utility.swift */; };
 		2865292C27FCCC9900112093 /* ImageEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2865292B27FCCC9900112093 /* ImageEntity.swift */; };
 		2865292E27FF8EC600112093 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2865292D27FF8EC600112093 /* ImagePicker.swift */; };
+		286529302801C46200112093 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2865292F2801C46200112093 /* SettingsView.swift */; };
 		28817B7C278E490E004B7C4B /* BushwhackGPSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28817B7B278E490E004B7C4B /* BushwhackGPSApp.swift */; };
 		28817B7E278E490E004B7C4B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28817B7D278E490E004B7C4B /* ContentView.swift */; };
 		28817B80278E490E004B7C4B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 28817B7F278E490E004B7C4B /* Assets.xcassets */; };
@@ -69,6 +70,7 @@
 		2865292927F3C20C00112093 /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		2865292B27FCCC9900112093 /* ImageEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageEntity.swift; sourceTree = "<group>"; };
 		2865292D27FF8EC600112093 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
+		2865292F2801C46200112093 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		28817B78278E490E004B7C4B /* BushwhackGPS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BushwhackGPS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		28817B7B278E490E004B7C4B /* BushwhackGPSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BushwhackGPSApp.swift; sourceTree = "<group>"; };
 		28817B7D278E490E004B7C4B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -196,6 +198,7 @@
 				2842005C27E3B59A00E0749E /* TripDetailsView.swift */,
 				2865292527F26F2400112093 /* DashboardView.swift */,
 				2865292D27FF8EC600112093 /* ImagePicker.swift */,
+				2865292F2801C46200112093 /* SettingsView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -384,6 +387,7 @@
 				283C423227BDD9C00049505E /* MarkerEntity.swift in Sources */,
 				2865292627F26F2400112093 /* DashboardView.swift in Sources */,
 				288BB0E027978C33005F3D0C /* MapView.swift in Sources */,
+				286529302801C46200112093 /* SettingsView.swift in Sources */,
 				2865292A27F3C20C00112093 /* Utility.swift in Sources */,
 				288BB0DC279760B1005F3D0C /* Map_Model.swift in Sources */,
 				288BB0E92797993E005F3D0C /* Reachability.swift in Sources */,

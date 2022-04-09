@@ -33,6 +33,8 @@ extension AppSettingsEntity {
             theAppSettingsEntity.orientNorth = false // default to orient in direction phone is pointing
             theAppSettingsEntity.metricUnits = false // default to English Units
             theAppSettingsEntity.nextDotColorIndex = 0 // keep track of the dot color to use next
+            theAppSettingsEntity.gasPrice = 4.0 // Default to $4 per gallon
+            theAppSettingsEntity.mpg = 20  // average mpg for cars / suvs
             
             do {
                 try context.save()
