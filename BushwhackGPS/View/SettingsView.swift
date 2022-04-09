@@ -14,7 +14,8 @@ struct SettingsView: View {
     var mGasPriceLabel = "Gas Price:"
     var mMPGLabel = "Vehicle MPG:"
 //    var mMPGBritishLabel = "Vehicle Miles Per Liter:"
-//    var mMPGMetricLabel = "Vehicle km per Liter"
+    var mMetricGasPriceLabel = "Gas Price Per Liter:"
+    var mMetricMPGLabel = "Vehicle km per Liter"
 
     private var theMap_ViewModel: Map_ViewModel
     
@@ -24,17 +25,16 @@ struct SettingsView: View {
         theMap_ViewModel = mapViewModel
         _mSettings = StateObject(wrappedValue: AppSettingsEntity.getAppSettingsEntity())
         
+        // Setup labels for Great Britian, US and Generic Metric Countries
+        // Great Britian uses Miles (not km) and Liters
         let countryCode = NSLocale.current.regionCode
         if countryCode == "US" {
 //            MyLog.debug("CountryCode is US: \(countryCode)")
             mGasPriceLabel = "Gas Price ($):"
+            mMPGLabel = "Vehicle MPG:"
         } else if countryCode == "GB" {
             mGasPriceLabel = "Gas Price Per Liter (£):"
             mMPGLabel = "Vehicle Miles Per Liter:"
-        } else {
-            mGasPriceLabel = "Gas Price Per Liter:"
-            mMPGLabel = "Vehicle km per Liter"
-//            MyLog.debug("CountryCode is NOT US: \(countryCode)")
         }
 
     }
@@ -64,15 +64,19 @@ struct SettingsView: View {
             .pickerStyle(.segmented)
             
             Spacer()
-            Spacer()
 
             VStack(alignment: .leading, spacing: 0) {
-                let instructions = "The Trip Fuel Cost displayed in the Dashboard, is calculated based on your vehicle's MPG and the cost of gas."
+                let instructions = "The Trip's Fuel Cost is displayed on the Dashboard. It is calculated based on your vehicle's MPG and the cost of gas."
                 Text(instructions).font(.caption)
 
                 HStack {
-                    Text(mMPGLabel)
-                        .frame(minWidth: LEFT_COLUMN_WIDTH, idealWidth: LEFT_COLUMN_WIDTH, maxWidth: LEFT_COLUMN_WIDTH, alignment: .leading)
+                    if mSettings.metricUnits {
+                        Text(mMetricMPGLabel)
+                            .frame(minWidth: LEFT_COLUMN_WIDTH, idealWidth: LEFT_COLUMN_WIDTH, maxWidth: LEFT_COLUMN_WIDTH, alignment: .leading)
+                    } else {
+                        Text(mMPGLabel)
+                            .frame(minWidth: LEFT_COLUMN_WIDTH, idealWidth: LEFT_COLUMN_WIDTH, maxWidth: LEFT_COLUMN_WIDTH, alignment: .leading)
+                    }
                     TextField(mMPGLabel, value: $mSettings.mpg, format: .number)
                         .textFieldStyle(.roundedBorder)
                         .frame(minWidth: 0, maxWidth: 75, minHeight: 0, maxHeight: .none, alignment: .leading)
@@ -87,24 +91,9 @@ struct SettingsView: View {
                         .frame(minWidth: 0, maxWidth: 75, minHeight: 0, maxHeight: .none, alignment: .leading)
                     Spacer()
                 }
+                Spacer()
             } // VStack - Instructions, MPG, Gas Price
 
-//            VStack(alignment: .leading) {
-//                if mSettings.metricUnits {
-//                    Text("Metric Units")
-//                } else {
-//                    Text("British Units")
-//                }
-//                Text("MPG: \(mSettings.mpg)")
-//                Text("Gas Price: \(mSettings.gasPrice)")
-//                if mSettings.orientNorth {
-//                    Text("Orient North")
-//                } else {
-//                    Text("Orient In Heading Direction")
-//                }
-//            } //.padding(EdgeInsets(top: 20, leading: 0, bottom: 0, trailing: 0)) // VStack
-            Spacer()
-            Spacer()
         } .padding() // VStack
         .onAppear { HandleOnAppear() }
         .onDisappear { HandleOnDisappear() }

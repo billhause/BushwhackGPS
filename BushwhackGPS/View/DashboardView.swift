@@ -38,6 +38,7 @@ struct DashboardView: View {
                 VStack(alignment: .leading) { // Column 1
                     Text("Odometer: \(theDashboardEntity.displayableOdometer())")
                     Text("Avg Speed: \(theDashboardEntity.displayableAvgSpeed())")
+                    Text("Fuel Cost: \(theDashboardEntity.displayableTripFuelCost())")
                 }
                 Spacer()
                 VStack(alignment: .leading) { // Column 2

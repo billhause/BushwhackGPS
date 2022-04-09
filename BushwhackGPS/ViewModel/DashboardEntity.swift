@@ -151,6 +151,25 @@ extension DashboardEntity {
         return Utility.getDisplayableElapsedTime(seconds: Int64(elapsedSeconds))
     }
     
+    public func displayableTripFuelCost() -> String {
+        let gasPrice = AppSettingsEntity.getAppSettingsEntity().gasPrice
+        let mpg = AppSettingsEntity.getAppSettingsEntity().mpg
+        var adjustedDistance = distance // distance in meters
+        if AppSettingsEntity.getAppSettingsEntity().metricUnits {
+            adjustedDistance = adjustedDistance / 1000 // Convert meters to km
+        } else {
+            adjustedDistance = Utility.convertMetersToMiles(theMeters: distance)
+        }
+        let totalCost = gasPrice / mpg * adjustedDistance
+        var moneySymbol = "" // No money symbol if not US or GB
+        if NSLocale.current.regionCode == "GB" { // Great Britian
+            moneySymbol = "£"
+        } else if NSLocale.current.regionCode == "US" {
+            moneySymbol = "$"
+        }
+        let dollarString = String(format: "%.2f", totalCost)
+        return "\(moneySymbol)\(dollarString)"
+    }
     
     public func save() {
         let context = PersistenceController.shared.container.viewContext
