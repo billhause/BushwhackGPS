@@ -36,28 +36,16 @@ struct TripListView: View {
                         TripDetailsView(theTripEntity: tripEntity.wrappedValue, mapViewModel: theMap_ViewModel)
                     } label: {
                         HStack {
-                                                        
-//                                Image(uiImage: theImageEntity.getUIImage())
-                            Image(uiImage: theMap_ViewModel.getDotUIImageForTripList(tripEntity: tripEntity.wrappedValue))
-//                                    .resizable()
-//                                    .scaledToFill()
-//                                    .frame(minWidth: 0, maxWidth: .infinity)
-//                                    .edgesIgnoringSafeArea(.all)
-
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
-                            
                             VStack(alignment: .leading) {
-                                Text(tripEntity.wrappedValue.wrappedTitle) // wrappedValue dereferences the @State var from Binding<> to the value
-                                Text("   \(theMap_ViewModel.getShortDateString(theDate: tripEntity.wrappedStartTime.wrappedValue)) - \(theMap_ViewModel.getShortDateString(theDate: tripEntity.wrappedEndTime.wrappedValue))")
+                                HStack {
+                                    Image(uiImage: theMap_ViewModel.getDotUIImageForTripList(tripEntity: tripEntity.wrappedValue))
+                                    //                                    .resizable()
+                                    //                                    .scaledToFill()
+                                    //                                    .frame(minWidth: 0, maxWidth: .infinity)
+                                    //                                    .edgesIgnoringSafeArea(.all)
+                                    Text(tripEntity.wrappedValue.wrappedTitle) // wrappedValue dereferences the @State var from Binding<> to the value
+                                }
+                                Text("   \(theMap_ViewModel.getShortDateTimeString(theDate: tripEntity.wrappedStartTime.wrappedValue)) - \(theMap_ViewModel.getShortDateTimeString(theDate: tripEntity.wrappedEndTime.wrappedValue))")
                                     .font(.footnote)
                             }
                             Spacer() // Push the switch column to the right side

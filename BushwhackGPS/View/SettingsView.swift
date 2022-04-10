@@ -54,6 +54,8 @@ struct SettingsView: View {
     // Format TextFields for numbers
     //https://www.hackingwithswift.com/quick-start/swiftui/how-to-format-a-textfield-for-numbers
 
+ wdhx Next: Move display logic into ViewModel
+    
     var body: some View {
         VStack(alignment: .center) {
             Text("Settings")

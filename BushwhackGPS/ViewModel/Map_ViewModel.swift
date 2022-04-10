@@ -593,7 +593,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
 
     
     // Convert Date to String MM/DD/YYYY
-    func getShortDateString(theDate: Date?) -> String {
+    func getShortDateOnlyString(theDate: Date?) -> String {
         guard let aDate = theDate else {
             return "None"
         }
@@ -601,6 +601,18 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         dateFormatter.dateStyle = .short
         dateFormatter.timeStyle = .none
 //        dateFormatter.timeStyle = .short // .medium
+        return dateFormatter.string(from: aDate)
+    }
+
+    // Convert Date to String MM/DD/YYYY HH:MM
+    func getShortDateTimeString(theDate: Date?) -> String {
+        guard let aDate = theDate else {
+            return "None"
+        }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .short
+//        dateFormatter.timeStyle = .none
+        dateFormatter.timeStyle = .short // .medium
         return dateFormatter.string(from: aDate)
     }
 
@@ -856,10 +868,11 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         newTrip.dotColor = mNiceDotColors[Int(theSettings.nextDotColorIndex)]
         
         // TRIP NAME use the Dashboard start date as the default title
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .short
-        newTrip.title = dateFormatter.string(from: theDashboard.wrappedStartTime)
+        newTrip.title = getShortDateTimeString(theDate: theDashboard.wrappedStartTime)
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateStyle = .short
+//        dateFormatter.timeStyle = .short
+//        newTrip.title = dateFormatter.string(from: theDashboard.wrappedStartTime)
         
         theSettings.save()
 
