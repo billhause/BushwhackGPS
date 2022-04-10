@@ -849,6 +849,30 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
 
     }
     
+    // Pass in the Distance in Meters
+    // return the fuel cost based on distance traveled, mpg and gas price
+    // Return as a float with 2 digits past the decimal
+    // If Local is USA us $.  If Local is GB use British Pound sign otherwise use no sign.
+    public func getDisplayableTripFuelCost(distanceInMeters: Double) -> String {
+        let gasPrice = AppSettingsEntity.getAppSettingsEntity().gasPrice
+        let mpg = AppSettingsEntity.getAppSettingsEntity().mpg
+        var adjustedDistance = distanceInMeters // distance in meters
+        if AppSettingsEntity.getAppSettingsEntity().metricUnits {
+            adjustedDistance = adjustedDistance / 1000 // Convert meters to km
+        } else {
+            adjustedDistance = Utility.convertMetersToMiles(theMeters: distanceInMeters)
+        }
+        let totalCost = gasPrice / mpg * adjustedDistance
+        var moneySymbol = "" // No money symbol if not US or GB
+        if NSLocale.current.regionCode == "GB" { // Great Britian
+            moneySymbol = "£"
+        } else if NSLocale.current.regionCode == "US" {
+            moneySymbol = "$"
+        }
+        let dollarString = String(format: "%.2f", totalCost)
+        return "\(moneySymbol)\(dollarString)"
+    }
+
     
     // MARK: Getters
 
@@ -856,10 +880,10 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return theMapModel.currentHeading
     }
     
-    typealias tripDistanceSpeedAndElapsedTime = (distance: String, speed: String, elapsedTime: String)
+    typealias tripDistanceSpeedAndElapsedTime = (distance: String, speed: String, elapsedTime: String, fuelCost: String)
     
     // Return the Speed, Distance and Elapsed time for the specified TripEntity
-    func getTripDistanceSpeedAndElapsedTime(theTrip: TripEntity) -> tripDistanceSpeedAndElapsedTime {
+    func getTripDistanceSpeedElapsedTimeAndFuelCost(theTrip: TripEntity) -> tripDistanceSpeedAndElapsedTime {
         var distance: Double = 0.0
         var elapsedTime: Int64 = 0
         let tripStartTime = theTrip.wrappedStartTime
@@ -895,8 +919,11 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
                                                       seconds: elapsedTime)
         let elapsedTimeString = Utility.getDisplayableElapsedTime(seconds: elapsedTime)
         
-        return (distance: distanceString, speed: speedString, elapsedTime: elapsedTimeString)
+        let fuelCostString = getDisplayableTripFuelCost(distanceInMeters: distance)
+        
+        return (distance: distanceString, speed: speedString, elapsedTime: elapsedTimeString, fuelCost: fuelCostString)
     }
+    
     
     func getParkingSpotLocation() -> CLLocationCoordinate2D {
         return CLLocationCoordinate2D(latitude: ParkingSpotEntity.getParkingSpotEntity().lat, longitude: ParkingSpotEntity.getParkingSpotEntity().lon)

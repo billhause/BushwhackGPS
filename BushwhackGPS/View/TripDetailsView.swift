@@ -11,12 +11,7 @@ import CoreData
 struct TripDetailsView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @ObservedObject var mTripEntity: TripEntity // SHOULD THIS BE @StateObject??? No TripEntity is a class passed in from outside
-    @State var mAvgSpeed: String = "None"
-    @State var mElapsedTime: String = "None"
-    @State var mDistance: String = "None"
     
-//    Create a Map_ViewModel func to return a tuple with Distance, Speed and Elapsed Time.  Should take a TripEntity as a parameter
-
     
     var earliestStartDate: Date // will be initialized to the earliest possible start date for the trip in init()
     private var theMap_ViewModel: Map_ViewModel
@@ -73,17 +68,15 @@ struct TripDetailsView: View {
                                displayedComponents: [.date, .hourAndMinute])
                     
                     // Dashboard
-//                    VStack(alignment: .leading) {
                         HStack {
                             VStack(alignment: .leading) { // Column 1
-                                Text("Distance: \(mDistance)")
-                                Text("Avg Speed: \(mAvgSpeed)")
+                                Text("Distance: \(theMap_ViewModel.getTripDistanceSpeedElapsedTimeAndFuelCost(theTrip: mTripEntity).distance)")
+                                Text("Avg Speed: \(theMap_ViewModel.getTripDistanceSpeedElapsedTimeAndFuelCost(theTrip: mTripEntity).speed)")
                             }
                             Spacer()
                             VStack(alignment: .leading) { // Column 2
-//                                Text("Start Time: NOT NEEDED")
-                                Text("Elapsed Time: \(mElapsedTime)")
-                                Spacer()
+                                Text("Elapsed Time: \(theMap_ViewModel.getTripDistanceSpeedElapsedTimeAndFuelCost(theTrip: mTripEntity).elapsedTime)")
+                                Text("Fuel Cost: \(theMap_ViewModel.getTripDistanceSpeedElapsedTimeAndFuelCost(theTrip: mTripEntity).fuelCost)")
                             }
                         }
                             .font(.footnote) // .caption2, .caption, .footnote smallest to largest
@@ -100,15 +93,10 @@ struct TripDetailsView: View {
     // This will be called when ever the view apears
     // Calling this from .onAppear in the Body of the view.
     func HandleOnAppear() {
-        let dashboardValues = theMap_ViewModel.getTripDistanceSpeedAndElapsedTime(theTrip: mTripEntity)
-        mAvgSpeed = dashboardValues.speed
-        mDistance = dashboardValues.distance
-        mElapsedTime = dashboardValues.elapsedTime
     }
     
     func HandleOnDisappear() {
         mTripEntity.save()
-        
         theMap_ViewModel.requestMapDotAnnotationRefresh()
     }
 

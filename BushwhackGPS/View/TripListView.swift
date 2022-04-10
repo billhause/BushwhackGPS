@@ -54,13 +54,13 @@ struct TripListView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                 }
-                ToolbarItemGroup(placement: .automatic) {
+                ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: addTripEntity) {
                         Label("New Trip", systemImage: "plus")
                             .labelStyle(TitleOnlyLabelStyle())  // Shows the Text, not the systemImage
                     }
                 }
-                
+
             } // toolbar
             .navigationTitle("Trip List") // Title displayed above list
             .navigationBarTitleDisplayMode(.inline) // Put title on same line as buttons

@@ -21,6 +21,8 @@ struct SettingsView: View {
     
     private let LEFT_COLUMN_WIDTH = 180.0
     
+    // TODO: Move calculations into the ViewModel instead of the view
+    
     init(mapViewModel: Map_ViewModel) {
         theMap_ViewModel = mapViewModel
         _mSettings = StateObject(wrappedValue: AppSettingsEntity.getAppSettingsEntity())

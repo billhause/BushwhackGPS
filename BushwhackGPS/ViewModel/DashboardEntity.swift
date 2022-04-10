@@ -171,6 +171,8 @@ extension DashboardEntity {
         return "\(moneySymbol)\(dollarString)"
     }
     
+//    Next add Fuel Cost to TripDetailsView
+    
     public func save() {
         let context = PersistenceController.shared.container.viewContext
         do {

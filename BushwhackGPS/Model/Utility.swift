@@ -95,6 +95,7 @@ struct Utility {
         return String(format: "%.1f MPH", speed_miles_per_hour)
     }
     
+    
     // return elapsed time in appropriate units
     // Hours:Minutes:Seconds
     static func getDisplayableElapsedTime(seconds: Int64) -> String {
