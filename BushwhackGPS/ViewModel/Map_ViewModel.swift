@@ -430,8 +430,24 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return theMKCoordinateRegion
     }
 
-   
-    
+    // Return the Dot to show in the TripListView for a specific TripEntity
+    let TRIP_LIST_VIEW_DOT_SIZE: Double = 18 // Could use actual dot size but this shows the color better
+    func getDotUIImageForTripList(tripEntity: TripEntity) -> UIImage {
+        
+        let dotSymbolImageName = getDotImageName()
+        let dotColor = tripEntity.dotUIColor
+        let dotSize = TRIP_LIST_VIEW_DOT_SIZE
+//        let dotSize = tripEntity.dotSize * 2 // Display the dot at twice the size it will appear on the map
+
+        let DotSymbolImage = UIImage(systemName: dotSymbolImageName)!.withTintColor(dotColor)
+        let size = CGSize(width: dotSize, height: dotSize)
+
+        let theUIImage = UIGraphicsImageRenderer(size:size).image { _ in
+            DotSymbolImage.draw(in:CGRect(origin:.zero, size:size))
+        }
+        return theUIImage
+    }
+
     
     //
     // DOT ANNOTATION COLOR AND SIZE

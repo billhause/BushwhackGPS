@@ -27,6 +27,7 @@ struct TripListView: View {
 //Look at this to see a similar example to pull values out of the array
 //https://stackoverflow.com/questions/56615918/how-do-i-set-the-toggle-state-in-a-foreach-loop-in-swiftui/56616127#56616127
     
+    
     var body: some View {
         NavigationView {
             List {
@@ -35,6 +36,25 @@ struct TripListView: View {
                         TripDetailsView(theTripEntity: tripEntity.wrappedValue, mapViewModel: theMap_ViewModel)
                     } label: {
                         HStack {
+                                                        
+//                                Image(uiImage: theImageEntity.getUIImage())
+                            Image(uiImage: theMap_ViewModel.getDotUIImageForTripList(tripEntity: tripEntity.wrappedValue))
+//                                    .resizable()
+//                                    .scaledToFill()
+//                                    .frame(minWidth: 0, maxWidth: .infinity)
+//                                    .edgesIgnoringSafeArea(.all)
+
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
                             VStack(alignment: .leading) {
                                 Text(tripEntity.wrappedValue.wrappedTitle) // wrappedValue dereferences the @State var from Binding<> to the value
                                 Text("   \(theMap_ViewModel.getShortDateString(theDate: tripEntity.wrappedStartTime.wrappedValue)) - \(theMap_ViewModel.getShortDateString(theDate: tripEntity.wrappedEndTime.wrappedValue))")
@@ -113,9 +133,17 @@ struct TripListView: View {
     }
     
     func HandleOnDisappear() {
-//        Haptic.shared.impact(style: .heavy)
         MyLog.debug("HandleOnDisappear() Called for TripListView")
         theMap_ViewModel.requestMapDotAnnotationRefresh()
+
+        let viewContext = PersistenceController.shared.container.viewContext
+        do {
+            try viewContext.save()
+        } catch {
+            let nsError = error as NSError
+            MyLog.debug("wdh Error saving in TripListView.HandleOnDisappear() \(nsError.userInfo)")
+        }
+
     }
 
     
