@@ -869,10 +869,6 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         
         // TRIP NAME use the Dashboard start date as the default title
         newTrip.title = getShortDateTimeString(theDate: theDashboard.wrappedStartTime)
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateStyle = .short
-//        dateFormatter.timeStyle = .short
-//        newTrip.title = dateFormatter.string(from: theDashboard.wrappedStartTime)
         
         theSettings.save()
 
@@ -1024,6 +1020,42 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         }
         return dotAnnotations
     }
+    
+    //
+    // SettingsView Support Functions
+    //
+    
+    func getSettingsMPGLabel(theSettings: AppSettingsEntity) -> String {
+        if theSettings.metricUnits {
+            return "Vehicle km per Liter"
+        }
+        
+        let countryCode = NSLocale.current.regionCode
+        if countryCode == "US" {
+            return "Vehicle MPG:"
+        } else if countryCode == "GB" {
+            return "Vehicle Miles Per Liter:" // Great Brittian uses Miles and Liters
+        }
+        // If we got this far then this is NOT Metric and Not US or GB
+        return "Vehicle MPG:" // return generic MPG label
+    }
+    
+    func getSettingsGasPriceLabel(theSettings: AppSettingsEntity) -> String {
+        if theSettings.metricUnits {
+            return "Gas Price Per Liter:"
+        }
+        
+        let countryCode = NSLocale.current.regionCode
+        if countryCode == "US" {
+            return "Gas Price $ Per Gallon"
+        } else if countryCode == "GB" {
+            return "Gas Price Per Liter (£):" // Great Brittian uses Miles and Liters
+        }
+        // If we got this far then this is NOT Metric and Not US or GB
+        return "Gas Price: " // return generic MPG label
+    }
+    
+
 }
 
 
