@@ -61,48 +61,6 @@ struct SettingsView: View {
             VStack(alignment: .leading, spacing: 0) {
                 let instructions = "The Trip's Fuel Cost is displayed on the Dashboard. It is calculated based on your vehicle's MPG and the cost of gas."
                 Text(instructions).font(.caption)
-
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-//                Continue watchig at 9:56
-//            https://www.youtube.com/watch?v=Sg0rfYL3utI
-                
-                Form {
-                    Section(header: Text("Input")) {
-                        VStack(alignment: .leading) {
-                            if !deleteMeNow.isEmpty {
-                                Text("Enter Something Dummy")
-                                    .font(.caption)
-                                .foregroundColor(.accentColor)
-                            }
-                            TextField("Enter Something Dummy", text: $deleteMeNow)
-                        } // VStack
-                        .animation(.default) // Make everything in the VStack use the .default animation
-
-                        PrettyTextInput("Type Something Here Dummy", text: $deleteMeToo) // Animate every change in the ZStack (including the prompt text moving up)
-                    }
-                }
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
                 
                 HStack {
                     Text(theMap_ViewModel.getSettingsMPGLabel(theSettings: mSettings))

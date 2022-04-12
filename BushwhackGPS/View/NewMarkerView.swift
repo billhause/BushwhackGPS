@@ -177,8 +177,6 @@ struct PrettyTextField: View {
 }
 
 // Generic data input with a label and field to enter data
-// Nice Looking Animated Input Controls with Animation for label
-// https://www.youtube.com/watch?v=Sg0rfYL3utI
 struct TextDataInput: View {
     var title: String
     @Binding var userInput: String
@@ -192,6 +190,7 @@ struct TextDataInput: View {
 }
 
 
+// Generic Multi-Line data input with a label and field to enter data
 struct TextDataInputMultiLine: View {
     var theTitle: String
     @Binding var theUserInput: String
