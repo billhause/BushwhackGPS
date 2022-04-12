@@ -1032,9 +1032,9 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         
         let countryCode = NSLocale.current.regionCode
         if countryCode == "US" {
-            return "Vehicle MPG:"
+            return "Vehicle MPG"
         } else if countryCode == "GB" {
-            return "Vehicle Miles Per Liter:" // Great Brittian uses Miles and Liters
+            return "Vehicle Miles Per Liter" // Great Brittian uses Miles and Liters
         }
         // If we got this far then this is NOT Metric and Not US or GB
         return "Vehicle MPG:" // return generic MPG label
@@ -1042,14 +1042,14 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     
     func getSettingsGasPriceLabel(theSettings: AppSettingsEntity) -> String {
         if theSettings.metricUnits {
-            return "Gas Price Per Liter:"
+            return "Gas Price Per Liter"
         }
         
         let countryCode = NSLocale.current.regionCode
         if countryCode == "US" {
             return "Gas Price $ Per Gallon"
         } else if countryCode == "GB" {
-            return "Gas Price Per Liter (£):" // Great Brittian uses Miles and Liters
+            return "Gas Price Per Liter (£)" // Great Brittian uses Miles and Liters
         }
         // If we got this far then this is NOT Metric and Not US or GB
         return "Gas Price: " // return generic MPG label

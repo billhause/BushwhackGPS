@@ -72,7 +72,7 @@ struct NewMarkerEditView: View {
             TextDataInput(title: "Title", userInput: $titleText)
                 .padding(EdgeInsets(top: 0.0, leading: 0.0, bottom: 10, trailing: 0.0))
             TextDataInputMultiLine(title: "Description", userInput: $bodyText)
-            
+
             // Icon Picker and Color Picker
             HStack {
                 Text("Map Icon:")
@@ -152,22 +152,46 @@ struct MarkerEditView_Previews: PreviewProvider {
 }
 
 
+
 // Generic data input with a label and field to enter data
+// Nice Looking Animated Input Controls with Animation for label
+// https://www.youtube.com/watch?v=Sg0rfYL3utI
+struct PrettyTextField: View {
+    var title: String
+    @Binding var userInput: String
+    
+    var body: some View {
+        ZStack(alignment: .leading) {
+            Text(title)
+                .zIndex(2)
+                .foregroundColor(userInput.isEmpty ? Color(.placeholderText) : .accentColor)
+                .offset(y: userInput.isEmpty ? 0 : -30) // move up if text is not empty
+                .scaleEffect(userInput.isEmpty ? 1.0 : 0.8, anchor: .leading) // 80% size after moving up
+            TextField("", text: $userInput)
+                .zIndex(1)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+        }
+        .padding(.top, 15)
+        .animation(.default)
+    }
+}
+
+// Generic data input with a label and field to enter data
+// Nice Looking Animated Input Controls with Animation for label
+// https://www.youtube.com/watch?v=Sg0rfYL3utI
 struct TextDataInput: View {
     var title: String
     @Binding var userInput: String
     
     var body: some View {
-        HStack(alignment: VerticalAlignment.center) {
-            Text(title)
-                .font(.body)
-            TextField("Enter \(title)", text: $userInput)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
+        HStack {
+            Text("\(title):")
+        TextField("\(title)", text: $userInput)                .textFieldStyle(RoundedBorderTextFieldStyle())
         }
     }
 }
 
-// Generic data input with a label and field to enter data
+
 struct TextDataInputMultiLine: View {
     var theTitle: String
     @Binding var theUserInput: String
@@ -194,5 +218,4 @@ struct TextDataInputMultiLine: View {
         }
     }
 }
-
 

@@ -36,7 +36,7 @@ struct TripDetailsView: View {
 
                 TextDataInput(title: "Trip Name", userInput: $mTripEntity.wrappedTitle)
                 TextDataInputMultiLine(title: "Description", userInput: $mTripEntity.wrappedDesc, idealHeight: 125)
-                
+
                 VStack(alignment: .leading) {
                     // Dot Size Picker
                     HStack {
