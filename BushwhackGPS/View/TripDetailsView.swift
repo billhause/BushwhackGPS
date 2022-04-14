@@ -81,8 +81,43 @@ struct TripDetailsView: View {
                         }
                             .font(.footnote) // .caption2, .caption, .footnote smallest to largest
                             .padding(EdgeInsets(top: 0, leading: 0, bottom: 1, trailing: 0))
-                }
-
+                } // VStack
+                
+                Spacer()
+                HStack {
+                    Button(action: {
+                        handleShareButton()
+                    }) { // Button Label parameter
+                        VStack {
+                            HStack {
+                                Image(systemName: "square.and.arrow.up") // Share Label Image
+                                    .font(.system(size:20))
+                                    Text("Share") // Label Text
+                                    .font(.headline)
+                            } // HStack
+                        } // VStack
+                    } // Button Label parameters
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: 50)
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(20)
+                        .padding(.horizontal)
+                    Text("Export Journal Markers (including photos) that were created between this trip's Start Time and End Time.")
+                        .fixedSize(horizontal: false, vertical: true)
+    //                                .lineLimit(nil)
+                        .font(.caption) // wdhx
+                        //    Fonts Smallest to Largest
+                        //    Text("ABCDefg caption2").font(.caption2)
+                        //    Text("ABCDefg caption").font(.caption)
+                        //    Text("ABCDefg footnote").font(.footnote)
+                        //    Text("ABCDefg subheadline").font(.subheadline)
+                        //    Text("ABCDefg callout").font(.callout)
+                        //    Text("ABCDefg body").font(.body)
+                        //    Text("ABCDefg title3").font(.title3)
+                        //    Text("ABCDefg title2").font(.title2)
+                        //    Text("ABCDefg title").font(.title)
+                } // HStack
+                Spacer()
             } // ScrollView
         } // Outermost VStack
         .onAppear { HandleOnAppear() }
@@ -100,6 +135,10 @@ struct TripDetailsView: View {
         theMap_ViewModel.requestMapDotAnnotationRefresh()
     }
 
+    func handleShareButton() {
+        MyLog.debug("Export Trip handleShareButton tapped")
+    }
+    
 }
 
 struct TripDetailsView_Previews: PreviewProvider {
