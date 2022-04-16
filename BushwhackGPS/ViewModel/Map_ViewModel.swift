@@ -774,72 +774,6 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     
     // MARK: Intent Functions
     
-    // Share - Export a Trip to another app
-    // use the iOS Share functionality to export a Trip.
-    // Export the following items
-    // - Trip Title
-    // - Trip Description
-    // - All Journal Entries made between the Trip Start Date and the Trip End Date
-    //   - Journal Title
-    //   - Journal Description
-    //   - Journal Pictures
-    func exportTrip(tripEntity: TripEntity) {
-        
-        let startDate = tripEntity.wrappedStartTime
-        let endDate = tripEntity.wrappedEndTime
-        let tripTitle = tripEntity.wrappedTitle
-        let tripDescription = tripEntity.wrappedDesc
-
-        // Fill the array of [Any] with items to export
-        var items: [Any] = []
-        let subjectline = SubjectLine("\(APP_DISPLAYABLE_NAME) Export \(tripTitle)")
-        items.append(subjectline)
-        
-        items.append(tripTitle)
-        items.append(tripDescription)
-        
-        
-        let journalMarkers = MarkerEntity.getMarkersInDateRange(startDate: startDate, endDate: endDate)
-        journalMarkers.forEach {
-            let currentJournalMarker = $0
-            items.append(currentJournalMarker.title!)
-            items.append(currentJournalMarker.desc!)
-            let journalPhotos = ImageEntity.getAllImageEntitiesForMarker(theMarker: $0)
-            journalPhotos.forEach {
-                let theImageData = $0.imageData
-                items.append(theImageData!)
-            }
-        }
-        
-        // Now export all the stuff in the array
-        ExportStuff.share(items: items)
-        MyLog.debug("exportTrip Called for \(tripEntity.wrappedTitle)")
-
-    }
-    
-//    func exportFileButtonHandler_DELETE_THIS_NOW() {
-//        print("Export Button Pressed")
-//        let imageData = image.jpegData(compressionQuality: 1.0)
-//
-//        // Fill the array of [Any] with items to export
-//        var items: [Any] = []
-//        let subjectLine = SubjectLine("My Favorite Subject")
-//        items.append(subjectLine)
-//
-//        items.append("First Text")
-//        if imageData != nil {
-//            items.append(imageData!)
-//        }
-//        items.append("Second Text")
-//        if imageData != nil {
-//            items.append(imageData!)
-//        }
-//        items.append("Third Text")
-//        items.append(URL(string: "https://google.com")!)
-//
-//        ExportStuff.share(items: items)
-//    }
-
     
     // Tell the map to delete and reload all MapDot Annotations
     func requestMapDotAnnotationRefresh() {
@@ -1116,7 +1050,155 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return "Gas Price: " // return generic MPG label
     }
     
+    // MARK: Export / Share functions
 
+    func exportTripDELETE_THIS_NOW(tripEntity: TripEntity) {
+        
+        let startDate = tripEntity.wrappedStartTime
+        let endDate = tripEntity.wrappedEndTime
+        let tripTitle = tripEntity.wrappedTitle
+        let tripDescription = tripEntity.wrappedDesc
+
+        // Fill the array of [Any] with items to export
+        var items: [Any] = []
+        let subjectline = SubjectLine("\(APP_DISPLAYABLE_NAME) Export \(tripTitle)")
+        items.append(subjectline)
+        
+        items.append(tripTitle)
+        items.append(tripDescription)
+        
+        
+        let journalMarkers = MarkerEntity.getMarkersInDateRange(startDate: startDate, endDate: endDate)
+        journalMarkers.forEach {
+            let currentJournalMarker = $0
+            items.append(currentJournalMarker.title!)
+            items.append(currentJournalMarker.desc!)
+            let journalPhotos = ImageEntity.getAllImageEntitiesForMarker(theMarker: $0)
+            journalPhotos.forEach {
+                let theImageData = $0.imageData
+                items.append(theImageData!)
+            }
+        }
+        
+        // Now export all the stuff in the array
+        ExportStuff.share(items: items)
+        MyLog.debug("exportTrip Called for \(tripEntity.wrappedTitle)")
+
+    }
+
+    // Share - Export a Trip to another app
+    // use the iOS Share functionality to export a Trip.
+    // Export the following items
+    // - Trip Title
+    // - Trip Description
+    // - All Journal Entries made between the Trip Start Date and the Trip End Date
+    //   - Journal Title
+    //   - Journal Description
+    //   - Journal Pictures
+    // String manipulatin: https://docs.swift.org/swift-book/LanguageGuide/StringsAndCharacters.html
+    //
+    func exportTrip(tripEntity: TripEntity) {
+
+        var theExportString = "" // Will hold the entire String to be exported
+        
+        let startDate = tripEntity.wrappedStartTime
+        let endDate = tripEntity.wrappedEndTime
+        let tripTitle = tripEntity.wrappedTitle
+//        let tripDescription = tripEntity.wrappedDesc
+
+        theExportString += getTripStringForExport(tripEntity: tripEntity)
+        
+        // Fill the array of [Any] with items to export
+        var items: [Any] = []
+        let subjectline = SubjectLine("\(APP_DISPLAYABLE_NAME) Export:  '\(tripTitle)'")
+        items.append(subjectline)
+        
+        let journalMarkers = MarkerEntity.getMarkersInDateRange(startDate: startDate, endDate: endDate)
+        if journalMarkers.count != 0 {
+            theExportString += "JOURNAL ENTRIES\n"
+            journalMarkers.forEach {
+                let currentJournalMarker = $0
+                theExportString += "----------\n" // Divider Line
+                theExportString += getMarkerStringForExport(markerEntity: currentJournalMarker)
+                let journalPhotos = ImageEntity.getAllImageEntitiesForMarker(theMarker: currentJournalMarker)
+                journalPhotos.forEach {
+                    let theImageData = $0.imageData
+                    items.append(theImageData!)
+                }
+            }
+        }
+        
+        items.insert(theExportString, at: 0) // Put the export string at the front of the array
+        
+        // Now export all the stuff in the array
+        ExportStuff.share(items: items)
+        MyLog.debug("exportTrip Called for \(tripEntity.wrappedTitle)")
+
+    }
+
+    
+    // TripEntity
+    // Get String for Export for a TripEntity
+    func getTripStringForExport(tripEntity: TripEntity) -> String {
+        var tripString = ""
+        
+        // Trip Name
+        tripString += tripEntity.wrappedTitle + "\n"
+        
+        // Dates
+        let startTime = getShortDateTimeString(theDate: tripEntity.wrappedStartTime)
+        let endTime = getShortDateTimeString(theDate: tripEntity.wrappedEndTime)
+        tripString += "When: \(startTime) - \(endTime)\n"
+
+        // Distance Traveled
+        let distanceString = getTripDistanceSpeedElapsedTimeAndFuelCost(theTrip: tripEntity).distance
+        tripString += "Distance: \(distanceString)\n"
+        
+        // Description - Other Details
+        let description = tripEntity.wrappedDesc
+        if description.isEmpty {
+            tripString += "Other Details: None\n"
+        } else {
+            tripString += "Other Details:\n"
+            tripString += description + "\n\n"
+        }
+        
+        return tripString
+    }
+    
+    
+    // MarkerEntity
+    // Get String for Export for a MarkerEntity
+    func getMarkerStringForExport(markerEntity: MarkerEntity) -> String {
+        var journalString = ""
+        
+        // Title
+        journalString += markerEntity.wrappedTitle + "\n"
+        
+        // Time
+        let timeString = getShortDateTimeString(theDate: markerEntity.timestamp)
+        journalString += "When: " + timeString + "\n"
+        
+        
+        // Location: Lat, Lon
+        let latString = NSString(format:"%.5f", markerEntity.lat) as String // 8 digits past dicimal max
+        let lonString = NSString(format:"%.5f", markerEntity.lon) as String
+        journalString += "Latitude: " + latString + ", Longitude: " + lonString + "\n"
+        
+        // Journal Entry Details
+        let description = markerEntity.wrappedDesc
+        if description.isEmpty {
+            journalString += "Other Details: None\n"
+        } else {
+            journalString += "Other Details: \n"
+            journalString += description + "\n"
+        }
+        
+        return journalString
+    }
+
+    but the extension point does not specify a set of allowed payload classes. The extension point's NSExtensionContext subclass must implement `+_allowedItemPayloadClasses`. This must return the set of allowed NSExtensionItem payload classes
+    
 }
 
 

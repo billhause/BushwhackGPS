@@ -113,6 +113,27 @@ extension MarkerEntity: Comparable {
     }
 
     // MARK: Member Functions
+    public var wrappedTitle: String {
+        get { title ?? "" } // If no title has been assigned, return ""
+        set { title = newValue } // by default the value passed into 'set' is named newValue
+    }
+    public var wrappedDesc: String {
+        get { desc ?? "" }
+        set { desc = newValue }
+    }
+    public var wrappedTimeStamp: Date {
+        get {
+            if timestamp == nil {
+                MyLog.debug("wdh *** ERROR *** This should NEVER happen - wrappedStartTime called for nil MarkerEntity timestamp")
+                return Date()
+            }
+            return timestamp!
+        }
+        set {
+            timestamp = newValue
+        }
+    }
+
     
     
 }
