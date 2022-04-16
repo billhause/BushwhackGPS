@@ -38,6 +38,27 @@ extension ImageEntity: Comparable {
         // If we got this far then we had an error getting the ImageEntity array so return an empty array
         return []
     }
+
+    public static func getAllImageEntitiesForMarker(theMarker: MarkerEntity) -> [ImageEntity] {
+        let viewContext = PersistenceController.shared.container.viewContext
+        let request = NSFetchRequest<ImageEntity>(entityName: "ImageEntity")
+        request.predicate = NSPredicate(format: "marker = %@", theMarker)
+        let sortDesc = NSSortDescriptor(key: "timeStamp", ascending: false) // Newest at top
+        request.sortDescriptors = [sortDesc]
+        
+        // Get array of sorted results
+        do {
+            let results = try viewContext.fetch(request)
+            return results
+        } catch {
+            let nsError = error as NSError
+            MyLog.debug("wdh Error loading ImageEntity Array in getAllImageEntities() \(nsError.userInfo)")
+        }
+        
+        // If we got this far then we had an error getting the ImageEntity array so return an empty array
+        return []
+    }
+
     
     // Create a new ImageEntity, save it and return it
     @discardableResult public static func createImageEntity(theMarkerEntity: MarkerEntity) -> ImageEntity {

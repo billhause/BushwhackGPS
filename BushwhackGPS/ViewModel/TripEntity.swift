@@ -14,7 +14,7 @@ extension TripEntity: Comparable {
     
     // MARK: Accessors
     public var wrappedTitle: String {
-        get { title ?? "Unknown Title wdh" }
+        get { title ?? "" } // If no title has been assigned, return ""
         set { title = newValue } // by default the value passed into 'set' is named newValue
     }
     public var wrappedDesc: String {

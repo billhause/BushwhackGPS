@@ -36,6 +36,30 @@ extension MarkerEntity: Comparable {
     }
 
     
+    
+    // Get array of all MarkerEntities (could be empty array)
+    public static func getMarkersInDateRange(startDate: Date, endDate: Date) -> [MarkerEntity] {
+        let viewContext = PersistenceController.shared.container.viewContext
+        let request = NSFetchRequest<MarkerEntity>(entityName: "MarkerEntity")
+        
+//        Fix the predicate string
+        request.predicate = NSPredicate(format: "timestamp >= %@ && timestamp <= %@", startDate as CVarArg, endDate as CVarArg)
+        let sortDesc = NSSortDescriptor(key: "timestamp", ascending: true)
+        request.sortDescriptors = [sortDesc]
+        
+        // Get array of sorted results
+        do {
+            let results = try viewContext.fetch(request)
+            return results
+        } catch {
+            let nsError = error as NSError
+            MyLog.debug("wdh Error loading MarkerEntities in getAllMarkerEntities() \(nsError.userInfo)")
+        }
+        
+        // If we got this far then we had an error getting the MarkerEntity array so return an empty array
+        return []
+    }
+
     // Create a new MarkerEntity, save it and return it
     // Every field should be filled with a non-nil value
     @discardableResult public static func createMarkerEntity(lat: Double, lon: Double) -> MarkerEntity {

@@ -15,6 +15,7 @@ import Network
 // MARK: Constants
 let THRESHOLD_DISTANCE = 10.0 // Minimum Number of meteres that you must move to get a new dot added to the map
 let THRESHOLD_TIME_PERIOD = 10.0 // // Minimum Number of seconds that must pass to get a new dot added to the map
+let APP_DISPLAYABLE_NAME = "Travel Journal"
 
 class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     // This class
@@ -186,15 +187,6 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         }
     }
 
-//    // Flag to signal to the map that the user wants the map re-centered and oriented in his direction
-//    private var orientMapFlag: Bool {
-//        get {
-//            return theMapModel.orientMapFlag
-//        }
-//        set(orientFlag) {
-//            theMapModel.orientMapFlag = orientFlag
-//        }
-//    }
 
     @objc func appMovedToBackground() {
         MyLog.debug("appMovedToBackground() called in Map_ViewModel")
@@ -672,7 +664,6 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
             if !pointIsClustered(theLocation: currentLocation) {
                 let newDotEntity = DotEntity.createDotEntity(lat: lat, lon: lon, speed: speed, course: course) // save to DB
                 let dotAnnotation = MKDotAnnotation(theDotEntity: newDotEntity)
-//                let dotAnnotation = MKDotAnnotation(coordinate: currentLocation.coordinate, id: newDotEntity.id)
                 theMapModel.waitingMKDotAnnotation = dotAnnotation // Update the MapModel with the new annotation to be added to the map
                 
                 // The Map_ViewModel must keep track if there is a new annotation to add to
@@ -783,6 +774,73 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     
     // MARK: Intent Functions
     
+    // Share - Export a Trip to another app
+    // use the iOS Share functionality to export a Trip.
+    // Export the following items
+    // - Trip Title
+    // - Trip Description
+    // - All Journal Entries made between the Trip Start Date and the Trip End Date
+    //   - Journal Title
+    //   - Journal Description
+    //   - Journal Pictures
+    func exportTrip(tripEntity: TripEntity) {
+        
+        let startDate = tripEntity.wrappedStartTime
+        let endDate = tripEntity.wrappedEndTime
+        let tripTitle = tripEntity.wrappedTitle
+        let tripDescription = tripEntity.wrappedDesc
+
+        // Fill the array of [Any] with items to export
+        var items: [Any] = []
+        let subjectline = SubjectLine("\(APP_DISPLAYABLE_NAME) Export \(tripTitle)")
+        items.append(subjectline)
+        
+        items.append(tripTitle)
+        items.append(tripDescription)
+        
+        
+        let journalMarkers = MarkerEntity.getMarkersInDateRange(startDate: startDate, endDate: endDate)
+        journalMarkers.forEach {
+            let currentJournalMarker = $0
+            items.append(currentJournalMarker.title!)
+            items.append(currentJournalMarker.desc!)
+            let journalPhotos = ImageEntity.getAllImageEntitiesForMarker(theMarker: $0)
+            journalPhotos.forEach {
+                let theImageData = $0.imageData
+                items.append(theImageData!)
+            }
+        }
+        
+        // Now export all the stuff in the array
+        ExportStuff.share(items: items)
+        MyLog.debug("exportTrip Called for \(tripEntity.wrappedTitle)")
+
+    }
+    
+//    func exportFileButtonHandler_DELETE_THIS_NOW() {
+//        print("Export Button Pressed")
+//        let imageData = image.jpegData(compressionQuality: 1.0)
+//
+//        // Fill the array of [Any] with items to export
+//        var items: [Any] = []
+//        let subjectLine = SubjectLine("My Favorite Subject")
+//        items.append(subjectLine)
+//
+//        items.append("First Text")
+//        if imageData != nil {
+//            items.append(imageData!)
+//        }
+//        items.append("Second Text")
+//        if imageData != nil {
+//            items.append(imageData!)
+//        }
+//        items.append("Third Text")
+//        items.append(URL(string: "https://google.com")!)
+//
+//        ExportStuff.share(items: items)
+//    }
+
+    
     // Tell the map to delete and reload all MapDot Annotations
     func requestMapDotAnnotationRefresh() {
         MyLog.debug("****** requestMapDotAnnotationRefresh() called")
@@ -887,7 +945,11 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         } else {
             adjustedDistance = Utility.convertMetersToMiles(theMeters: distanceInMeters)
         }
-        let totalCost = gasPrice / mpg * adjustedDistance
+        
+        var totalCost = gasPrice / mpg * adjustedDistance
+        if totalCost.isNaN { // Check for divide by 0
+            totalCost = 0.0
+        }
         var moneySymbol = "" // No money symbol if not US or GB
         if NSLocale.current.regionCode == "GB" { // Great Britian
             moneySymbol = "£"
@@ -1015,7 +1077,6 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         let filteredDotEntities = getFilteredDotEntites()
         for dotEntity in filteredDotEntities {
             let newMKDotAnnotation = MKDotAnnotation(theDotEntity: dotEntity)
-//            let newMKDotAnnotation = MKDotAnnotation(coordinate: CLLocationCoordinate2D(latitude: dotEntity.lat, longitude: dotEntity.lon), id: dotEntity.id)
             dotAnnotations.append(newMKDotAnnotation)
         }
         return dotAnnotations
@@ -1070,17 +1131,6 @@ class MKParkingAnnotation : NSObject, MKAnnotation {
     }
 }
 
-//class MKDotAnnotation2: NSObject, MKAnnotation {
-//    var coordinate: CLLocationCoordinate2D
-//    var title: String? = "Dot Annotation"
-//    var subtitle: String? = ""
-//    var id: Int64
-////    var timestamp: Date
-//    init(coordinate: CLLocationCoordinate2D, id: Int64) {
-//        self.coordinate = coordinate
-//        self.id = id
-//    }
-//}
 
 // NOTE: MKAnnotation REQUIRES a coordinate, title and description.
 // We provide those as computed properties calculated from the DotEntity

@@ -28,7 +28,7 @@ struct ExportStuff {
                     
         guard let source = UIApplication.shared.rootViewController
         else {
-            print("wdh ExportStuff.share unable to get rootViewController")
+            MyLog.debug("wdh ExportStuff.share unable to get rootViewController")
             return false
         }
                 
@@ -39,6 +39,7 @@ struct ExportStuff {
         vc.excludedActivityTypes = excludedActivityTypes
         vc.popoverPresentationController?.sourceView = source.view
         source.present(vc, animated: true)
+        MyLog.debug("ExportStuff.share() Done Exporting")
         return true
     }
 
@@ -58,7 +59,7 @@ class SubjectLine: NSObject, UIActivityItemSource {
         mSubjectLine = subjectLine
     }
     
-    // This used only so UIKit knows the type of data you want to share.
+    // This is used only so UIKit knows the type of data you want to share.
     // This func must return a dummy sample of the same data type that the second func returns
     func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
         return "wdh2 Dummy String Sample"
@@ -66,10 +67,9 @@ class SubjectLine: NSObject, UIActivityItemSource {
     
     // NOTE: You must make the activityViewControllerPlaceholderItem
     // func return a dummy value of the same type that this func returns
-    // The Value returned by this func will be shared
+    // The Value returned by this func WILL BE SHARED
     func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
-        print("wdh SubjectLine: activityType: \(activityType)")
-        return "wdh3 SubjectLine Some Body Text" //"wdh3 SubjectLine Placeholder Item"
+        return "" //Return an empty string so dummy text isn't shared
     }
     
     // Return the subject line

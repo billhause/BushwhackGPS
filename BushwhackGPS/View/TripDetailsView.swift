@@ -104,7 +104,6 @@ struct TripDetailsView: View {
                         .padding(.horizontal)
                     Text("Export Journal Markers (including photos) that were created between this trip's Start Time and End Time.")
                         .fixedSize(horizontal: false, vertical: true)
-    //                                .lineLimit(nil)
                         .font(.caption) // wdhx
                         //    Fonts Smallest to Largest
                         //    Text("ABCDefg caption2").font(.caption2)
@@ -117,7 +116,7 @@ struct TripDetailsView: View {
                         //    Text("ABCDefg title2").font(.title2)
                         //    Text("ABCDefg title").font(.title)
                 } // HStack
-                Spacer()
+//                Spacer()
             } // ScrollView
         } // Outermost VStack
         .onAppear { HandleOnAppear() }
@@ -137,6 +136,7 @@ struct TripDetailsView: View {
 
     func handleShareButton() {
         MyLog.debug("Export Trip handleShareButton tapped")
+        theMap_ViewModel.exportTrip(tripEntity: mTripEntity)
     }
     
 }
