@@ -84,44 +84,42 @@ struct TripDetailsView: View {
                 } // VStack
                 
                 Spacer()
-                HStack {
-                    Button(action: {
-                        handleShareButton()
-                    }) { // Button Label parameter
-                        VStack {
-                            HStack {
-                                Image(systemName: "square.and.arrow.up") // Share Label Image
-                                    .font(.system(size:20))
-                                    Text("Share") // Label Text
-                                    .font(.headline)
-                            } // HStack
-                        } // VStack
-                    } // Button Label parameters
-                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: 50)
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(20)
-                        .padding(.horizontal)
-                    Text("Export Journal Entries and Photos that were added between this trip's Start Time and End Time.")
-                        .fixedSize(horizontal: false, vertical: true)
-                        .font(.caption) // wdhx
-                        //    Fonts Smallest to Largest
-                        //    Text("ABCDefg caption2").font(.caption2)
-                        //    Text("ABCDefg caption").font(.caption)
-                        //    Text("ABCDefg footnote").font(.footnote)
-                        //    Text("ABCDefg subheadline").font(.subheadline)
-                        //    Text("ABCDefg callout").font(.callout)
-                        //    Text("ABCDefg body").font(.body)
-                        //    Text("ABCDefg title3").font(.title3)
-                        //    Text("ABCDefg title2").font(.title2)
-                        //    Text("ABCDefg title").font(.title)
-                } // HStack
-//                Spacer()
+                Button(action: {
+                    handleShareButton()
+                }) { // Button Label parameter
+                    VStack {
+                        HStack {
+                            Image(systemName: "square.and.arrow.up") // Share Label Image
+                                .font(.system(size:20))
+                                Text("Share Trip and Journal Entries") // Label Text
+                                .font(.headline)
+                        } // HStack
+                    } // VStack
+                } // Button Label parameters
+                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 30, maxHeight: 40)
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+                    .padding(.horizontal)
+                Text("(Export Journal Entries and Photos that were added between this trip's Start Time and End Time.)")
+                    .fixedSize(horizontal: false, vertical: true)
+                    .font(.caption) // wdhx
+                    //    Fonts Smallest to Largest
+                    //    Text("ABCDefg caption2").font(.caption2)
+                    //    Text("ABCDefg caption").font(.caption)
+                    //    Text("ABCDefg footnote").font(.footnote)
+                    //    Text("ABCDefg subheadline").font(.subheadline)
+                    //    Text("ABCDefg callout").font(.callout)
+                    //    Text("ABCDefg body").font(.body)
+                    //    Text("ABCDefg title3").font(.title3)
+                    //    Text("ABCDefg title2").font(.title2)
+                    //    Text("ABCDefg title").font(.title)
             } // ScrollView
         } // Outermost VStack
         .onAppear { HandleOnAppear() }
         .onDisappear { HandleOnDisappear() }
-        .padding()
+        .padding([.leading, .trailing])
+//        .padding()
     } // View
     
     // This will be called when ever the view apears
@@ -136,7 +134,10 @@ struct TripDetailsView: View {
 
     func handleShareButton() {
         MyLog.debug("Export Trip handleShareButton tapped")
-        theMap_ViewModel.exportTrip(tripEntity: mTripEntity)
+        DispatchQueue.main.async { // Not sure it this helps or hurts
+            theMap_ViewModel.exportTrip(tripEntity: mTripEntity)
+        }
+//        theMap_ViewModel.exportTrip(tripEntity: mTripEntity)
     }
     
 }
