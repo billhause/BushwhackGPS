@@ -92,7 +92,8 @@ extension ImageEntity: Comparable {
     
     // Set image and save the database
     func setImageAndSave(_ theUIImage: UIImage) {
-        imageData = theUIImage.jpegData(compressionQuality: 1.0)
+        imageData = theUIImage.jpegData(compressionQuality: 0.25) // 1.0 = No Compression, 0.0=MAX COMPRESSION Worst Quality
+        // imageData = theUIImage.pngData() // DO NOT USE PNG - WAY TOO BIG AND SLOW
         let viewContext = PersistenceController.shared.container.viewContext
         do {
             try viewContext.save()

@@ -102,7 +102,7 @@ struct TripDetailsView: View {
                         .foregroundColor(.white)
                         .cornerRadius(20)
                         .padding(.horizontal)
-                    Text("Export Journal Markers (including photos) that were created between this trip's Start Time and End Time.")
+                    Text("Export Journal Entries and Photos that were added between this trip's Start Time and End Time.")
                         .fixedSize(horizontal: false, vertical: true)
                         .font(.caption) // wdhx
                         //    Fonts Smallest to Largest

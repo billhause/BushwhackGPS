@@ -437,6 +437,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         let theUIImage = UIGraphicsImageRenderer(size:size).image { _ in
             DotSymbolImage.draw(in:CGRect(origin:.zero, size:size))
         }
+        
         return theUIImage
     }
 
@@ -1197,7 +1198,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return journalString
     }
 
-    but the extension point does not specify a set of allowed payload classes. The extension point's NSExtensionContext subclass must implement `+_allowedItemPayloadClasses`. This must return the set of allowed NSExtensionItem payload classes
+// wdhx    but the extension point does not specify a set of allowed payload classes. The extension point's NSExtensionContext subclass must implement `+_allowedItemPayloadClasses`. This must return the set of allowed NSExtensionItem payload classes
     
 }
 
