@@ -94,6 +94,7 @@ struct DashboardView: View {
         MyLog.debug("Reset Pressed")
         DashboardEntity.getDashboardEntity().resetDashboard()
         theMap_ViewModel.requestMapDotAnnotationRefresh()
+        theMap_ViewModel.requestReview() // Request a review after X runs have occured
     }
 }
 

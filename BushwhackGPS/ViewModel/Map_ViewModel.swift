@@ -15,7 +15,7 @@ import Network
 // MARK: Constants
 let THRESHOLD_DISTANCE = 10.0 // Minimum Number of meteres that you must move to get a new dot added to the map
 let THRESHOLD_TIME_PERIOD = 10.0 // // Minimum Number of seconds that must pass to get a new dot added to the map
-let APP_DISPLAYABLE_NAME = "Travel Journal"
+let APP_DISPLAYABLE_NAME = "GPS Journal"
 
 class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     // This class

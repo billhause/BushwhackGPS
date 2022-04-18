@@ -17,7 +17,7 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             VStack {
-                Text("Dot Count: \(DotEntity.getAllDotEntities().count)")
+//                Text("Dot Count: \(DotEntity.getAllDotEntities().count)")
 
                 DashboardView(theViewModel: theMap_ViewModel)
                     .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))

@@ -561,6 +561,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BushwhackGPS/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "GPS Journal";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This app needs to know where you are in order to save the path that you've taken";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app needs to know where you are in order to save the path that you've taken";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -594,6 +595,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = BushwhackGPS/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "GPS Journal";
 				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "This app needs to know where you are in order to save the path that you've taken";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "This app needs to know where you are in order to save the path that you've taken";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

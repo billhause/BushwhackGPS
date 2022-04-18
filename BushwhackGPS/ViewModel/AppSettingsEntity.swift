@@ -9,7 +9,7 @@ import Foundation
 import CoreData
 
 extension AppSettingsEntity {
-    static let REVIEW_THRESHOLD = 10 // Number of app activations needed to trigger a review request
+    static let REVIEW_THRESHOLD = 4 // Number of app activations needed to trigger a review request
 
     // Get the One and Only AppSettingsEntity or create one if it doesn't exist
     public static func getAppSettingsEntity() -> AppSettingsEntity {
