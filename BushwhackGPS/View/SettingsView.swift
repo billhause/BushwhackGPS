@@ -14,11 +14,7 @@ struct SettingsView: View {
     @State var deleteMeNow: String = ""
     @State var deleteMeToo: String = ""
     
-//    var mGasPriceLabel = "Gas Price:"
-//    var mMPGLabel = "Vehicle MPG:"
-//    var mMPGBritishLabel = "Vehicle Miles Per Liter:"
-    let mMetricGasPriceLabel = "Gas Price Per Liter:"
-//    let mMetricMPGLabel = "Vehicle km per Liter"
+//    let mMetricGasPriceLabel = "Gas Price Per Liter:"
 
     private var theMap_ViewModel: Map_ViewModel
     
@@ -94,6 +90,7 @@ struct SettingsView: View {
     }
     private func HandleOnDisappear() {
         MyLog.debug("Settings HandleOnDisappear() called")
+        mSettings.save()
     }
 
 }
