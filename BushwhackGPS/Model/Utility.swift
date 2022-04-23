@@ -123,7 +123,5 @@ struct Utility {
         return dateFormatter.string(from: aDate)
     }
 
- 
 }
-
 
