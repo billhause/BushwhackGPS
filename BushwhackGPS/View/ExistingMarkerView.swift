@@ -69,13 +69,29 @@ struct ExistingMarkerEditView: View {
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
+
+                // vvv Share Button vvv
+                Button(action: handleShareButton) {
+                    let parkingImageName = theMap_ViewModel.getParkingLocationImageName()
+                    Label("Send a Copy", systemImage: "square.and.arrow.up")
+                        .foregroundColor(.accentColor)
+//                        .padding() // Move the Parking symbol away from right border a little bit
+                } // .font(.system(size: 25.0))
+                    .labelStyle(VerticalLabelStyle())
+                // ^^^ Share Button ^^^
+                
                 Spacer()
                 Button("Done") {
                     EditExistingMarkerController.shared.showEditMarkerDialog = false // Flag that tells the dialog to close
                 }
             }
-            Text("Journal Entry")
-                .font(.title)
+            
+            HStack {
+                Spacer()
+                Text("Journal Entry")
+                    .font(.title)
+                Spacer()
+            }
 
             ScrollView {
                 
@@ -261,7 +277,25 @@ struct ExistingMarkerEditView: View {
         
         // Set the ImageEntity imageData and save
         newImageEntity.setImageAndSave(tempUIImage)
+    }
+    
+    func handleShareButton() {
+        MyLog.debug("handleShareButton() called")
+
+        // Got to get the ViewController that should present the child ViewController
+        // https://stackoverflow.com/questions/32696615/warning-attempt-to-present-on-which-is-already-presenting-null
+        // https://stackoverflow.com/questions/56533564/showing-uiactivityviewcontroller-in-swiftui
+//        Check out the 61 approved solution for SwiftUI calling UIActivityViewController AND the 15 approved addition to it.
+                                                
+//        Also Check this out to get the Top ViewController 360 up votes
+    // https://stackoverflow.com/questions/26667009/get-top-most-uiviewcontroller/26667122#26667122
+                                                
+        let theViewController = 
         
+        DispatchQueue.main.async { // Not sure it this helps or hurts
+            theMap_ViewModel.exportJournalMarker(markerEntity: mMarkerEntity)
+        }
+
     }
 }
 

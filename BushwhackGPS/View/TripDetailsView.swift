@@ -119,7 +119,6 @@ struct TripDetailsView: View {
         .onAppear { HandleOnAppear() }
         .onDisappear { HandleOnDisappear() }
         .padding([.leading, .trailing])
-//        .padding()
     } // View
     
     // This will be called when ever the view apears
@@ -137,7 +136,6 @@ struct TripDetailsView: View {
         DispatchQueue.main.async { // Not sure it this helps or hurts
             theMap_ViewModel.exportTrip(tripEntity: mTripEntity)
         }
-//        theMap_ViewModel.exportTrip(tripEntity: mTripEntity)
     }
     
 }

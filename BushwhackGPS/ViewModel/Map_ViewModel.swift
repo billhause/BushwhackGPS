@@ -1063,39 +1063,6 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     
     // MARK: Export / Share functions
 
-    func exportTripDELETE_THIS_NOW(tripEntity: TripEntity) {
-        
-        let startDate = tripEntity.wrappedStartTime
-        let endDate = tripEntity.wrappedEndTime
-        let tripTitle = tripEntity.wrappedTitle
-        let tripDescription = tripEntity.wrappedDesc
-
-        // Fill the array of [Any] with items to export
-        var items: [Any] = []
-        let subjectline = SubjectLine("\(APP_DISPLAY_NAME) Export \(tripTitle)")
-        items.append(subjectline)
-        
-        items.append(tripTitle)
-        items.append(tripDescription)
-        
-        
-        let journalMarkers = MarkerEntity.getMarkersInDateRange(startDate: startDate, endDate: endDate)
-        journalMarkers.forEach {
-            let currentJournalMarker = $0
-            items.append(currentJournalMarker.title!)
-            items.append(currentJournalMarker.desc!)
-            let journalPhotos = ImageEntity.getAllImageEntitiesForMarker(theMarker: $0)
-            journalPhotos.forEach {
-                let theImageData = $0.imageData
-                items.append(theImageData!)
-            }
-        }
-        
-        // Now export all the stuff in the array
-        ExportStuff.share(items: items)
-        MyLog.debug("exportTrip Called for \(tripEntity.wrappedTitle)")
-
-    }
 
     // Share - Export a Trip to another app
     // use the iOS Share functionality to export a Trip.
@@ -1147,6 +1114,49 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
 
     }
 
+    
+    // Share - Export a Trip to another app
+    // use the iOS Share functionality to export a Trip.
+    // Export the following items
+    // - Trip Title
+    // - Trip Description
+    // - All Journal Entries made between the Trip Start Date and the Trip End Date
+    //   - Journal Title
+    //   - Journal Description
+    //   - Journal Pictures
+    // String manipulatin: https://docs.swift.org/swift-book/LanguageGuide/StringsAndCharacters.html
+    //
+    func exportJournalMarker(markerEntity: MarkerEntity) {
+        var items: [Any] = []
+        
+        var theExportString = "" // Will hold the entire String to be exported
+        
+        let title = markerEntity.wrappedTitle
+
+        theExportString += getMarkerStringForExport(markerEntity: markerEntity)
+        MyLog.debug("theExportString = \(theExportString)")
+        
+        // Fill the array of [Any] with items to export
+        let subjectline = SubjectLine("\(APP_DISPLAY_NAME) Export:  '\(title)'")
+        items.append(subjectline)
+                
+        items.insert(theExportString, at: 0) // Put the export string at the front of the array
+        
+        // Get the Photos
+        let journalPhotos = ImageEntity.getAllImageEntitiesForMarker(theMarker: markerEntity)
+        journalPhotos.forEach {
+            let theImageData = $0.imageData
+            items.append(theImageData!)
+        }
+
+        
+        // Now export all the stuff in the array
+        ExportStuff.share(items: items)
+        MyLog.debug("exportJournalMarker() Called for \(markerEntity.wrappedTitle)")
+
+    }
+
+    
     
     // TripEntity
     // Get String for Export for a TripEntity

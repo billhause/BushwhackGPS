@@ -55,7 +55,7 @@ struct ContentView: View {
                         Label("Save Spot", systemImage: parkingImageName)
                             .foregroundColor(Color(theColor))
                             .padding() // Move the Parking symbol away from right border a little bit
-                    }// .font(.system(size: 25.0))
+                    } // .font(.system(size: 25.0))
                         .labelStyle(VerticalLabelStyle())
                 } // ToolbarItem
 
