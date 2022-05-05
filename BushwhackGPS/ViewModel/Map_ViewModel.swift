@@ -567,7 +567,6 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return "triangle" // default that is always there on all devices
     }
 
-
     
     // Sometimes the device will not have the first choice symbol so check first
     // Return a default that is always present
@@ -591,7 +590,24 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return "triangle" // default that is always there on all devices
     }
 
-    
+    // Sometimes the device will not have the first choice symbol so check first
+    // Return a default that is always present
+    func getNavigationImageName() -> String {
+        // Check symbols in order of preference
+        if UIImage(systemName: "point.topleft.down.curvedto.point.bottomright.up.fill") != nil { return "point.topleft.down.curvedto.point.bottomright.up.fill" }
+        return "triangle" // default that is always there on all devices
+    }
+
+
+    // Sometimes the device will not have the first choice symbol so check first
+    // Return a default that is always present
+    func getExportImageName() -> String {
+        // Check symbols in order of preference
+        if UIImage(systemName: "square.and.arrow.up") != nil { return "square.and.arrow.up" }
+        return "triangle" // default that is always there on all devices
+    }
+
+
     // Convert Date to String MM/DD/YYYY
     func getShortDateOnlyString(theDate: Date?) -> String {
         guard let aDate = theDate else {

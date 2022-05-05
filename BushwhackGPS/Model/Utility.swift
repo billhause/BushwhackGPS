@@ -123,5 +123,43 @@ struct Utility {
         return dateFormatter.string(from: aDate)
     }
 
+    
+    // ===== Apple Maps - Start Navigation to a Lat/Lon =====
+    
+    // NOTES: To trigger Apple Maps you must setup the URL in the plist
+    //  1- Click on the Project name in the Project Navigator
+    //  2- Click on 'info' in the nav-bar
+    //  3- Add a line called "LSApplicationQueriesSchemes" and set it's type to Array
+    //  4- Add an element to the array (which will be named 'Item 0' by default)
+    //    4a - Set the element's type to String
+    //    4b - Set the element's value to be 'maps'
+    //
+    // A more sofisticated solution is offered here with options for multiple
+    // mapping apps and ability to pass in a name for the destination.  I don not
+    // believe this other solution triggers the navigation, it only shows the
+    // destination and you must still tap the 'Directions' button.
+    // https://stackoverflow.com/questions/38250397/open-an-alert-asking-to-choose-app-to-open-map-with/60930491#60930491
+    static func appleMapDirections(lat: Double, lon: Double) {
+        
+        // saddr = start address (or lat,lon)
+        // dadder = destination address (or lat,lon)
+        // Example URL:
+        //   maps://?saddr=&daddr=39.906253,-104.946620
+        let theURL = URL(string: "maps://?&saddr=&daddr=\(lat),\(lon)")
+        // let theURL = URL(string: "maps://?q=Bananas&ll=\(lat),\(lon)")
+        // let theURL = URL(string: "http://maps.apple.com/?q=Bananas&ll=\(lat),\(lon)")
+        
+        // Verify that the URL can be opened
+        if UIApplication.shared.canOpenURL(theURL!) {
+            // put [:] for options
+            // put nil for the completion handler
+            UIApplication.shared.open(theURL!, options: [:], completionHandler: nil)
+        } else {
+            print("wdh ERROR URL NOT VALID in call to appleMapDirections()")
+        }
+    }
+
+    
+    
 }
 

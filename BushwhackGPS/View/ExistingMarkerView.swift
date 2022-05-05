@@ -72,26 +72,38 @@ struct ExistingMarkerEditView: View {
 
                 // vvv Share Button vvv
                 Button(action: handleShareButton) {
-                    let parkingImageName = theMap_ViewModel.getParkingLocationImageName()
-                    Label("Send a Copy", systemImage: "square.and.arrow.up")
+                    let exportImageName = theMap_ViewModel.getExportImageName()
+                    Label("Send a Copy", systemImage: exportImageName)
                         .foregroundColor(.accentColor)
-//                        .padding() // Move the Parking symbol away from right border a little bit
                 } // .font(.system(size: 25.0))
                     .labelStyle(VerticalLabelStyle())
                 // ^^^ Share Button ^^^
                 
                 Spacer()
+                
+                // vvv Apple Map Navigation Button vvv
+                Button(action: handleMapDirectionsButton) {
+                    let mapDirectionsImageName = theMap_ViewModel.getNavigationImageName()
+                    Label("Get Directions", systemImage: mapDirectionsImageName)
+                        .foregroundColor(.accentColor)
+                } // .font(.system(size: 25.0))
+                    .labelStyle(VerticalLabelStyle())
+                // ^^^ Apple Map Navigation Button ^^^
+                
+                Spacer()
+                
                 Button("Done") {
                     EditExistingMarkerController.shared.showEditMarkerDialog = false // Flag that tells the dialog to close
                 }
             }
             
             HStack {
-                Spacer()
+//                Spacer()
                 Text("Journal Entry")
                     .font(.title)
                 Spacer()
             }
+            .padding(.top)
 
             ScrollView {
                 
@@ -279,6 +291,13 @@ struct ExistingMarkerEditView: View {
         newImageEntity.setImageAndSave(tempUIImage)
     }
     
+    func handleMapDirectionsButton() {
+        let lat = mMarkerEntity.lat
+        let lon = mMarkerEntity.lon
+        Utility.appleMapDirections(lat: lat, lon: lon)
+        MyLog.debug("Opening Apple Map Directions for lat:\(lat), lon:\(lon)")
+    }
+    
     func handleShareButton() {
         MyLog.debug("handleShareButton() called")
 
@@ -289,9 +308,7 @@ struct ExistingMarkerEditView: View {
                                                 
 //        Also Check this out to get the Top ViewController 360 up votes
     // https://stackoverflow.com/questions/26667009/get-top-most-uiviewcontroller/26667122#26667122
-                                                
-        let theViewController = 
-        
+                                                        
         DispatchQueue.main.async { // Not sure it this helps or hurts
             theMap_ViewModel.exportJournalMarker(markerEntity: mMarkerEntity)
         }
