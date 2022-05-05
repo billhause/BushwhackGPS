@@ -456,13 +456,55 @@ struct MapView: UIViewRepresentable {
 
                 // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
                 // vvvvvvvv Call-Out Bubble Icons, Images, Buttons etc vvvvvvvvv
+//                let theMarkerEntity = markerAnnotation.mMarkerEntity
                 let infoButton = UIButton(type: .detailDisclosure) // Circle with an 'i' inside it
+//                infoButton.addTarget(self, action: #selector(testButtonHandler2), for: .touchUpInside)
                 annotationView.rightCalloutAccessoryView = infoButton
 
                 // TODO: Get Directions - Add button to get diredtions
                 // See example here:
                 //   https://developer.apple.com/forums/thread/693258
 
+                
+                
+                
+                
+                
+                
+                // vvvvvvvvvccccccccccvvvvvvvvvv
+                // vvvvvvvvv UIButton vvvvvvvvvv
+
+                
+//                let testButton = UIButton(configuration: .gray())
+//                testButton.frame = CGRect(x: 10, y: 50, width: 150, height: 50)
+//                testButton.configuration?.title = "Press Me"
+//                testButton.configuration?.subtitle = "Sub Title"
+//                testButton.configuration?.image = UIImage(systemName: theMap_ViewModel.getNavigationImageName())
+//                testButton.configuration?.imagePadding = 10
+//                testButton.configuration?.imagePlacement = .leading
+//                testButton.addTarget(self, action: #selector(testButtonHandler), for: .touchUpInside)
+//                annotationView.leftCalloutAccessoryView = testButton
+
+
+                let navigationUIImage = UIImage(systemName: theMap_ViewModel.getNavigationImageName())
+                let appleMapButton = UIButton(configuration: .plain()) // plain() needed to prevent button being blank for some reason
+                appleMapButton.frame = CGRect(x: 10, y: 50, width: 20, height: 20) // Width/Height = Size of the tappable button area
+                appleMapButton.configuration?.image = navigationUIImage
+                appleMapButton.configuration?.imagePlacement = .leading
+//                testButton.addTarget(self, action: #selector(testButtonHandler(_:)), for: .touchUpInside)
+                annotationView.leftCalloutAccessoryView = appleMapButton
+
+                // ^^^^^^^^^ UIButton ^^^^^^^^^^
+                // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                
+
+                
+                
+                
+                
+//wdhx TODO - Add a UIButton to get directions to this location
+//                annotationView.leftCalloutAccessoryView = testUIButton
+                
 //                let addButton = UIButton(type: .contactAdd) // Circle with + inside it
 //                annotationView.leftCalloutAccessoryView = addButton
                 
@@ -509,6 +551,11 @@ struct MapView: UIViewRepresentable {
             return nil // We didn't handle this Annotation so return nil to use the default annotation icon.
         }
         
+//        // DELETE THIS AFTER TESTING IS DONE
+//        @objc func testButtonHandler(_ sender:UIButton!) {
+//            MyLog.debug("wdh testButtonHandler() called \(sender)")
+//        }
+        
         
         // MARK: Optional - Managing Annotation Views
 
@@ -523,12 +570,27 @@ struct MapView: UIViewRepresentable {
 
             // MKMarkerAnnotationView was clicked On - Show Edit Marker Dialog
             
-            if (annotationView is MKMarkerAnnotationView) {
-                let tempMarkerAnnotation = annotationView.annotation as! MarkerAnnotation
-                let theMarkerEntityToEdit = tempMarkerAnnotation.mMarkerEntity
-                EditExistingMarkerController.shared.MarkerDialog(theMarkerEntityToEdit)
+            // Check if the LEFT or RIGHT Accessory Control was tapped
+            if annotationView.rightCalloutAccessoryView == calloutAccessoryControlTapped {
+                // Right Accessor is the Info cirle - Display Journal Entry Details
+                MyLog.debug("RIGHT CALL OUT ACCESSORY VIEW TAPPED")
+                if (annotationView is MKMarkerAnnotationView) {
+                    let tempMarkerAnnotation = annotationView.annotation as! MarkerAnnotation
+                    let theMarkerEntityToEdit = tempMarkerAnnotation.mMarkerEntity
+                    EditExistingMarkerController.shared.MarkerDialog(theMarkerEntityToEdit)
+                }
+            } else {
+                // Left callout is the Get Apple Map Directions accessor
+                MyLog.debug("LEFT CALL OUT ACCESSORY VIEW TAPPED")
+                if (annotationView is MKMarkerAnnotationView) {
+                    let tempMarkerAnnotation = annotationView.annotation as! MarkerAnnotation
+                    let theMarkerEntityToEdit = tempMarkerAnnotation.mMarkerEntity
+                    let lat = theMarkerEntityToEdit.lat
+                    let lon = theMarkerEntityToEdit.lon
+                    Utility.appleMapDirections(lat: lat, lon: lon)
+                }
             }
-            
+                        
         }
         
         // Asks the delegate to provide a cluster annotation object for the specified annotations.
@@ -569,6 +631,7 @@ struct MapView: UIViewRepresentable {
 
     }
     
-    
 }
+                
+                
 

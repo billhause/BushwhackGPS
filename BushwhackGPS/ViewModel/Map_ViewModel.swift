@@ -1234,8 +1234,6 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return journalString
     }
 
-// wdhx    but the extension point does not specify a set of allowed payload classes. The extension point's NSExtensionContext subclass must implement `+_allowedItemPayloadClasses`. This must return the set of allowed NSExtensionItem payload classes
-    
 }
 
 

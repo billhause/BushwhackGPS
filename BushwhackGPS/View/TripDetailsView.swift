@@ -103,7 +103,7 @@ struct TripDetailsView: View {
                     .padding(.horizontal)
                 Text("(Export Journal Entries and Photos that were added between this trip's Start Time and End Time.)")
                     .fixedSize(horizontal: false, vertical: true)
-                    .font(.caption) // wdhx
+                    .font(.caption) 
                     //    Fonts Smallest to Largest
                     //    Text("ABCDefg caption2").font(.caption2)
                     //    Text("ABCDefg caption").font(.caption)

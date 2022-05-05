@@ -208,7 +208,7 @@ struct ExistingMarkerEditView: View {
             } // Button
             .padding(SwiftUI.EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
 
-            // Photo List wdhx
+            // Photo List
             List {
                 ForEach(imageEntities) {theImageEntity in
                     Image(uiImage: theImageEntity.getUIImage())
