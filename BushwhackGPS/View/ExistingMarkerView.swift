@@ -257,7 +257,7 @@ struct ExistingMarkerEditView: View {
         // We are editing an existing Marker Entity
         // Initialize the fields based on the MarkerEntity we are editig
         mMarkerID = mMarkerEntity.id
-        titleText = mMarkerEntity.title!
+        titleText = mMarkerEntity.wrappedTitle
         bodyText = mMarkerEntity.desc!
         iconSymbolName = mMarkerEntity.iconName!
         lat = mMarkerEntity.lat

@@ -343,7 +343,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     // ^^^^^^^^^^^^^^^^^^^^^^^^^
     
     func updateExistingMarker(theMarker: MarkerEntity, lat: Double, lon: Double, title: String, body: String, iconName: String, color: Color) {
-        theMarker.title = title
+        theMarker.wrappedTitle = title
         theMarker.desc = body
         theMarker.iconName = iconName
         
@@ -1313,7 +1313,7 @@ class MarkerAnnotation: NSObject, MKAnnotation {
     }
     var title: String? { // computed property
         get {
-            return mMarkerEntity.title
+            return mMarkerEntity.wrappedTitle
         }
     }
     

@@ -42,43 +42,6 @@ struct ExportStuff {
 //        MyLog.debug("ExportStuff.share() Done Exporting")
 //        return true
 //    }
-
-    // You Must provide a ViewController to the UIActivityViewController and it must be
-    // the one used for the current top most view.
-    // This code was taken from here:
-    // https://stackoverflow.com/questions/26667009/get-top-most-uiviewcontroller/26667122#26667122
-    static func getTopViewControllerDELETE_ME_NOW() -> UIViewController? {
-        if var topController = UIApplication.shared.keyWindow?.rootViewController {
-            while let presentedViewController = topController.presentedViewController {
-                topController = presentedViewController
-            }
-
-            // topController should now be your topmost view controller
-            return topController
-        }
-        // If we got this far then we didn't find any ViewController so return nil
-        return nil
-    }
-    
-    // You Must provide a ViewController to the UIActivityViewController and it must be
-    // the one used for the current top most view.
-    // This code was taken from here:
-    // https://stackoverflow.com/questions/26667009/get-top-most-uiviewcontroller/26667122#26667122
-    static func getTopViewController_WORKS_WITH_LOTS_OF_RUNTIME_WARNINGS() -> UIViewController? {
-        let keyWindow = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
-
-        if var topController = keyWindow?.rootViewController {
-            while let presentedViewController = topController.presentedViewController {
-                topController = presentedViewController
-            }
-
-            // topController should now be your topmost view controller
-            return topController
-        }
-        
-        // If we got this far then we didn't find any ViewController so return nil
-        return nil
-    }
     
     
     

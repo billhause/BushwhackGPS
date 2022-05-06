@@ -114,7 +114,16 @@ extension MarkerEntity: Comparable {
 
     // MARK: Member Functions
     public var wrappedTitle: String {
-        get { title ?? "" } // If no title has been assigned, return ""
+        get {
+            if title == nil {
+                title = "Unnamed" // Must have a non blank name or the pop-up won't work
+            }
+            if title!.isEmpty {
+                title = "Unnamed"
+            }
+            return title!
+        }
+        
         set { title = newValue } // by default the value passed into 'set' is named newValue
     }
     public var wrappedDesc: String {

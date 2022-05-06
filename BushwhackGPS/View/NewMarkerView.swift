@@ -172,7 +172,10 @@ struct PrettyTextField: View {
                 .textFieldStyle(RoundedBorderTextFieldStyle())
         }
         .padding(.top, 15)
-        .animation(.default)
+        .animation(.easeInOut(duration: 0.5), value: userInput)
+//        .animation(Animation.default, value: false)
+//        .animation(Animation.easeInOut(duration: 1.0), value: true)
+//        .animation(.default)
     }
 }
 
