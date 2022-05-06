@@ -16,8 +16,6 @@ extension ImageEntity: Comparable {
         return lhs.timeStamp! < rhs.timeStamp!
     }
     
-    // TODO: Get array of All ImageEntites for a specific MarkerEntity
-    
     
     // Get array of ALL ImageEntities
     public static func getAllImageEntities() -> [ImageEntity] {

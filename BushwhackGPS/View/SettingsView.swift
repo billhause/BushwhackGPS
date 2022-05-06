@@ -20,8 +20,6 @@ struct SettingsView: View {
     
     private let LEFT_COLUMN_WIDTH = 180.0
     
-    // TODO: Move calculations into the ViewModel instead of the view
-    
     init(mapViewModel: Map_ViewModel) {
         theMap_ViewModel = mapViewModel
         _mSettings = StateObject(wrappedValue: AppSettingsEntity.getAppSettingsEntity())
@@ -30,11 +28,7 @@ struct SettingsView: View {
     
     // How to FORCE Input Fields to be Floating Point etc.
     // https://www.hackingwithswift.com/quick-start/swiftui/how-to-format-a-textfield-for-numbers
-    
-    // TODO: Make text fields look professional - See video below
-    // Nice Looking Animated Input Controls with Animation
-    // https://www.youtube.com/watch?v=Sg0rfYL3utI
-    
+        
     // How to validate Input - Form Validation
     // https://www.youtube.com/watch?v=kl7LgoBuphM
     
@@ -101,6 +95,13 @@ struct SettingsView_Previews: PreviewProvider {
     }
 }
 
+
+// Nice Looking Animated Input Controls with Animation
+// https://www.youtube.com/watch?v=Sg0rfYL3utI
+// How to validate Input - Form Validation
+// https://www.youtube.com/watch?v=kl7LgoBuphM
+// Format TextFields for numbers
+//https://www.hackingwithswift.com/quick-start/swiftui/how-to-format-a-textfield-for-numbers
 struct PrettyTextInput: View {
     var title: String
     @Binding var text: String
@@ -122,6 +123,7 @@ struct PrettyTextInput: View {
             TextField("", text: $text)
         }
         .padding(.top, 15) // Ad some padding to make room for the prompt to float up
-        .animation(.default)
+        .animation(.easeInOut(duration: 0.5), value: text)
+//        .animation(.default)
     }
 }

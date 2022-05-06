@@ -456,25 +456,9 @@ struct MapView: UIViewRepresentable {
 
                 // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
                 // vvvvvvvv Call-Out Bubble Icons, Images, Buttons etc vvvvvvvvv
-//                let theMarkerEntity = markerAnnotation.mMarkerEntity
                 let infoButton = UIButton(type: .detailDisclosure) // Circle with an 'i' inside it
-//                infoButton.addTarget(self, action: #selector(testButtonHandler2), for: .touchUpInside)
                 annotationView.rightCalloutAccessoryView = infoButton
-
-                // TODO: Get Directions - Add button to get diredtions
-                // See example here:
-                //   https://developer.apple.com/forums/thread/693258
-
-                
-                
-                
-                
-                
-                
-                // vvvvvvvvvccccccccccvvvvvvvvvv
-                // vvvvvvvvv UIButton vvvvvvvvvv
-
-                
+                                
 //                let testButton = UIButton(configuration: .gray())
 //                testButton.frame = CGRect(x: 10, y: 50, width: 150, height: 50)
 //                testButton.configuration?.title = "Press Me"
@@ -493,23 +477,7 @@ struct MapView: UIViewRepresentable {
                 appleMapButton.configuration?.imagePlacement = .leading
 //                testButton.addTarget(self, action: #selector(testButtonHandler(_:)), for: .touchUpInside)
                 annotationView.leftCalloutAccessoryView = appleMapButton
-
-                // ^^^^^^^^^ UIButton ^^^^^^^^^^
-                // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
                 
-
-                
-                
-                
-                
-//wdhx TODO - Add a UIButton to get directions to this location
-//                annotationView.leftCalloutAccessoryView = testUIButton
-                
-//                let addButton = UIButton(type: .contactAdd) // Circle with + inside it
-//                annotationView.leftCalloutAccessoryView = addButton
-                
-                // ICON - Provide an image view to use as the accessory view's detail view.
-  //              annotationView.detailCalloutAccessoryView = UIImageView(image: MarkerSymbolImage)
                 //  ^^^^^^^^^ Call-Out Bubble Icons, Images, Buttons etc ^^^^^^^^^^
                 //  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
