@@ -126,10 +126,17 @@ extension MarkerEntity: Comparable {
         
         set { title = newValue } // by default the value passed into 'set' is named newValue
     }
+    
     public var wrappedDesc: String {
         get { desc ?? "" }
         set { desc = newValue }
     }
+    
+    public var wrappedIconName: String {
+        get { iconName ?? "triangle" }
+        set { iconName = newValue }
+    }
+
     public var wrappedTimeStamp: Date {
         get {
             if timestamp == nil {

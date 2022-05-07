@@ -30,7 +30,7 @@ import Foundation
 
 
 class MyLog {
-    static let NO_LOG = false // Set to true to remove ALL logging via optimizing compiler
+    static let NO_LOG = true // Set to true to remove ALL logging via optimizing compiler
     static private let FILE_LOGGING_ENABLED = true // Hard code to True or False to turn on/off
     
     static private var disabledFlag = false // This is changed programatically to turn logging on/off

@@ -94,6 +94,15 @@ class BushwhackGPSTests: XCTestCase {
         XCTAssertNotNil(me.timestamp)
         XCTAssertNotNil(me.title)
         XCTAssertNotNil(me.uuid)
+        
+        // When the title is nil, the wrappedTitle should come back as "Unnamed"
+        // The map pop-up bubbles will not work if the wrappedTitle is an empty string ""
+        me.title = nil
+        XCTAssertEqual(me.wrappedTitle, "Unnamed")
+        me.title = ""
+        XCTAssertEqual(me.wrappedTitle, "Unnamed")
+
+        
         MarkerEntity.deleteMarkerEntity(me) // remove the test marker from the database
     }
     
@@ -127,8 +136,6 @@ class BushwhackGPSTests: XCTestCase {
         de = DashboardEntity.getDashboardEntity() // Get new DashboardEntity
         XCTAssertTrue(de.prevLon == 181.0) // Shold start at 181 to indicate it's not valid yet
         XCTAssertTrue(de.prevLat == 181.0) // Shold start at 181 to indicate it's not valid yet
-        XCTAssertTrue(de.pointCount == 0)
-        XCTAssertTrue(de.avgSpeed == 0)
         DashboardEntity.deleteDashboardEntity(de) // Delete the DashboardEntity we just created
     }
 

@@ -251,15 +251,35 @@ struct ExistingMarkerEditView: View {
     // This will be called when ever the view apears
     // Calling this from .onAppear in the Body of the view.
     func HandleOnAppear() {
+        
         Haptic.shared.impact(style: .heavy)
         MyLog.debug("HandleOnAppear() Existing Marker Entity called")
+        
+        // Check if the marker entity has been removed from it's context and if so, don't open the window
+        // This could happen when the users deletes the marker and
+        // then it's still showing on the map and they tap the Info
+        // icon in the pop-up bubble
+//        let theMarkerAnnotation = annotationView.annotation as! MarkerAnnotation
+        if mMarkerEntity.managedObjectContext != nil {
+            // All Is Well
+            MyLog.debug("GOOD - The Marker Entity is NOT nil")
+        } else {
+            MyLog.debug(("MarkerEntity IS nil"))
+            
+            // Immediately Hide the ExistingMarkerDialog view
+            EditExistingMarkerController.shared.showEditMarkerDialog = false // hide the dialog
+            return // We can't show the edit view with a nil Marker Entity
+        }
+
+        
+
         
         // We are editing an existing Marker Entity
         // Initialize the fields based on the MarkerEntity we are editig
         mMarkerID = mMarkerEntity.id
         titleText = mMarkerEntity.wrappedTitle
-        bodyText = mMarkerEntity.desc!
-        iconSymbolName = mMarkerEntity.iconName!
+        bodyText = mMarkerEntity.wrappedDesc
+        iconSymbolName = mMarkerEntity.wrappedIconName
         lat = mMarkerEntity.lat
         lon = mMarkerEntity.lon
         iconColor = Color(.sRGB, red: mMarkerEntity.colorRed, green: mMarkerEntity.colorGreen, blue: mMarkerEntity.colorBlue)
@@ -268,7 +288,7 @@ struct ExistingMarkerEditView: View {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .short
         dateFormatter.timeStyle = .medium
-        dateTimeDetailText = dateFormatter.string(from: mMarkerEntity.timestamp!)
+        dateTimeDetailText = dateFormatter.string(from: mMarkerEntity.wrappedTimeStamp)
     }
     
     func HandleOnDisappear() {
