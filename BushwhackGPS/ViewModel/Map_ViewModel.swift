@@ -1161,8 +1161,11 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         // Get the Photos
         let journalPhotos = ImageEntity.getAllImageEntitiesForMarker(theMarker: markerEntity)
         journalPhotos.forEach {
-            let theImageData = $0.imageData
-            items.append(theImageData!)
+            guard let theImageData = $0.imageData else {
+                MyLog.debug("wdh ERROR nil image data in exportJournalMarker() Title:\(title)")
+                return
+            }
+            items.append(theImageData)
         }
 
         
