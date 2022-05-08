@@ -255,6 +255,9 @@ struct ExistingMarkerEditView: View {
         Haptic.shared.impact(style: .heavy)
         MyLog.debug("HandleOnAppear() Existing Marker Entity called")
         
+        theMap_ViewModel.requestReview() // Request a review after X runs have occured
+        
+
         // Check if the marker entity has been removed from it's context and if so, don't open the window
         // This could happen when the users deletes the marker and
         // then it's still showing on the map and they tap the Info

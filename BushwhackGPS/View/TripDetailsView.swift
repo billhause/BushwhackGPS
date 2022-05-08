@@ -124,6 +124,7 @@ struct TripDetailsView: View {
     // This will be called when ever the view apears
     // Calling this from .onAppear in the Body of the view.
     func HandleOnAppear() {
+        theMap_ViewModel.requestReview() // Request a review after X runs have occured
     }
     
     func HandleOnDisappear() {
