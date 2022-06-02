@@ -69,7 +69,16 @@ struct ContentView: View {
                         NavigationLink(destination: TripListView(mapViewModel: theMap_ViewModel)) {
                                 let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
                                 let tripButtonImageName = theMap_ViewModel.getTripButtonImageName()
-                                Label("Trips", systemImage: tripButtonImageName)
+                                Label("Trip List", systemImage: tripButtonImageName)
+                                    .foregroundColor(Color(theColor))
+                        }
+                            .labelStyle(VerticalLabelStyle())
+
+                        Spacer()
+                        NavigationLink(destination: MarkerListView(mapViewModel: theMap_ViewModel)) {
+                                let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
+                                let markerButtonImageName = theMap_ViewModel.getMarkerButtonImageName()
+                                Label("Marker List", systemImage: markerButtonImageName)
                                     .foregroundColor(Color(theColor))
                         }
                             .labelStyle(VerticalLabelStyle())
@@ -78,7 +87,7 @@ struct ContentView: View {
                         Button(action: toggleMapLayers) {
                             let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
                             let mapLayersImageName = theMap_ViewModel.getMapLayerImageName()
-                            Label("Aerial Layer", systemImage: mapLayersImageName)
+                            Label("Map Layers", systemImage: mapLayersImageName)
                                 .foregroundColor(Color(theColor))
                         }
                             .labelStyle(VerticalLabelStyle())
@@ -89,7 +98,7 @@ struct ContentView: View {
                         NavigationLink(destination: NewMarkerView(theMap_VM: theMap_ViewModel)) {
                                 let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
                                 let journalImageName = theMap_ViewModel.getAddJournalEntryImageName()
-                                Label("Journal Marker", systemImage: journalImageName)
+                                Label("New Marker", systemImage: journalImageName)
                                     .foregroundColor(Color(theColor))
                         }
                             .labelStyle(VerticalLabelStyle())

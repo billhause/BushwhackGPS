@@ -558,7 +558,19 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return "triangle" // default that is always there on all devices
     }
 
-    
+    // Sometimes the device will not have the first choice symbol so check first
+    // Return a default that is always present
+    func getMarkerButtonImageName() -> String {
+        // Check symbols in order of preference
+        if UIImage(systemName: "list.dash") != nil { return "list.dash" }
+        if UIImage(systemName: "list.bullet") != nil { return "list.bullet" }
+        if UIImage(systemName: "list.triangle") != nil { return "list.triangle" }
+        if UIImage(systemName: "text.justify") != nil { return "text.justify" }
+        if UIImage(systemName: "line.3.horizontal") != nil { return "line.3.horizontal" }
+        return "triangle" // default that is always there on all devices
+    }
+
+
     // Sometimes the device will not have the first choice symbol so check first
     // Return a default that is always present
     func getTripButtonImageName() -> String {
@@ -837,7 +849,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         
     func requestReview() {
         // Comment out the next line to turn on Review Request wdhx
-//        if !MyLog.NO_LOG {return} // Don't request reviews unless we're live and Logging is turned off.
+        if !MyLog.NO_LOG {return} // Don't request reviews unless we're live and Logging is turned off.
         
         if AppSettingsEntity.getAppSettingsEntity().usageCount > AppSettingsEntity.REVIEW_THRESHOLD {
         // NOTE: If not connected to Internet, then requestReview will lock the interface

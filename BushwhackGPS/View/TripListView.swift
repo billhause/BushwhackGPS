@@ -17,7 +17,6 @@ struct TripListView: View {
     private var tripEntities: FetchedResults<TripEntity>
     private var theMap_ViewModel: Map_ViewModel
     
-    @State var dummyBool: Bool = false
     @State var stateTripEntities: [TripEntity] = []
     
     init(mapViewModel: Map_ViewModel) {
@@ -93,7 +92,6 @@ struct TripListView: View {
     private func deleteTripEntities(offsets: IndexSet) {
         withAnimation {
             offsets.map { tripEntities[$0] }.forEach(viewContext.delete)
-//            offsets.map { stateTripEntities[$0] }
             
             // NOTE: Must also delete the entities from the stateTripEntities array
             // Uses the extension below "mutating func remove(at indexes : IndexSet)" to delete them
@@ -112,11 +110,7 @@ struct TripListView: View {
     // This will be called when ever the view apears
     // Calling this from .onAppear in the Body of the view.
     func HandleOnAppear() {
-//        Haptic.shared.impact(style: .heavy)
-
         stateTripEntities = TripEntity.getAllTripEntities_NewestToOldest()
-        MyLog.debug("stateTripEntities.count \(stateTripEntities.count)")
-
         MyLog.debug("HandleOnAppear() Called for TripListView")
     }
     

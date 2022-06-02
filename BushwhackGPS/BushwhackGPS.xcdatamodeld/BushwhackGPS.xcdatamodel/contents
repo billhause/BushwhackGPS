@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21D62" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="20086" systemVersion="21F79" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="AppSettingsEntity" representedClassName="AppSettingsEntity" syncable="YES" codeGenerationType="class">
         <attribute name="gasPrice" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="metricUnits" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
@@ -42,6 +42,7 @@
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="lat" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="lon" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="sortOrder" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="title" optional="YES" attributeType="String" defaultValueString=""/>
         <attribute name="uuid" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
@@ -71,7 +72,7 @@
         <element name="DotEntity" positionX="-246.2279663085938" positionY="58.67205810546875" width="128" height="134"/>
         <element name="ID_GeneratorEntity" positionX="40.71881103515625" positionY="-70.13198852539062" width="128" height="44"/>
         <element name="ImageEntity" positionX="108.80322265625" positionY="217.4447326660156" width="128" height="103"/>
-        <element name="MarkerEntity" positionX="-86.79168701171875" positionY="204.027099609375" width="128" height="238"/>
+        <element name="MarkerEntity" positionX="-86.79168701171875" positionY="204.027099609375" width="128" height="239"/>
         <element name="ParkingSpotEntity" positionX="295.2486572265625" positionY="-11.0958251953125" width="128" height="59"/>
         <element name="TripEntity" positionX="284.0818481445312" positionY="99.650146484375" width="128" height="209"/>
     </elements>

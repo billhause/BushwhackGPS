@@ -66,6 +66,7 @@ extension MarkerEntity: Comparable {
         let viewContext = PersistenceController.shared.container.viewContext
         let newMarker = MarkerEntity(context: viewContext)
         newMarker.id = ID_GeneratorEntity.getNextID()
+        newMarker.sortOrder = newMarker.id
         newMarker.uuid = UUID()
         newMarker.timestamp = Date()
         newMarker.lat = lat

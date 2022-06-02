@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2818BCA2284585B900BE45DC /* MarkerListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2818BCA1284585B900BE45DC /* MarkerListView.swift */; };
+		2818BCA42846EE1100BE45DC /* MarkerDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2818BCA32846EE1100BE45DC /* MarkerDetailsView.swift */; };
 		2820C3CA27C823D300122B7C /* NewMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2820C3C927C823D300122B7C /* NewMarkerView.swift */; };
 		2820C3CC27D3EB8300122B7C /* ExistingMarkerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2820C3CB27D3EB8300122B7C /* ExistingMarkerView.swift */; };
 		283C423227BDD9C00049505E /* MarkerEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 283C423127BDD9C00049505E /* MarkerEntity.swift */; };
@@ -61,6 +63,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2818BCA1284585B900BE45DC /* MarkerListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkerListView.swift; sourceTree = "<group>"; };
+		2818BCA32846EE1100BE45DC /* MarkerDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkerDetailsView.swift; sourceTree = "<group>"; };
 		2820C3C927C823D300122B7C /* NewMarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMarkerView.swift; sourceTree = "<group>"; };
 		2820C3CB27D3EB8300122B7C /* ExistingMarkerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExistingMarkerView.swift; sourceTree = "<group>"; };
 		283C423127BDD9C00049505E /* MarkerEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkerEntity.swift; sourceTree = "<group>"; };
@@ -204,6 +208,8 @@
 				2865292527F26F2400112093 /* DashboardView.swift */,
 				2865292D27FF8EC600112093 /* ImagePicker.swift */,
 				2865292F2801C46200112093 /* SettingsView.swift */,
+				2818BCA1284585B900BE45DC /* MarkerListView.swift */,
+				2818BCA32846EE1100BE45DC /* MarkerDetailsView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -380,6 +386,7 @@
 				288BB0E4279796C2005F3D0C /* Haptic.swift in Sources */,
 				288BCB3A279E25D8008FC368 /* DotEntity.swift in Sources */,
 				28817B7C278E490E004B7C4B /* BushwhackGPSApp.swift in Sources */,
+				2818BCA2284585B900BE45DC /* MarkerListView.swift in Sources */,
 				2842003827E152C600E0749E /* TripEntity.swift in Sources */,
 				2820C3CC27D3EB8300122B7C /* ExistingMarkerView.swift in Sources */,
 				288BCB38279B721E008FC368 /* AlertMessage.swift in Sources */,
@@ -401,6 +408,7 @@
 				2865292C27FCCC9900112093 /* ImageEntity.swift in Sources */,
 				287137702808B42A009AD8D1 /* ExportStuff.swift in Sources */,
 				2842005D27E3B59A00E0749E /* TripDetailsView.swift in Sources */,
+				2818BCA42846EE1100BE45DC /* MarkerDetailsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

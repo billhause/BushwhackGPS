@@ -225,7 +225,7 @@ struct ExistingMarkerEditView: View {
 
         } // VStack
         .padding()
-        .navigationTitle("New Journal Marker") // Title at top of page
+        .navigationTitle("Journal Marker") // Title at top of page
         .onAppear { HandleOnAppear() }
         .onDisappear { HandleOnDisappear() }
     }
@@ -318,7 +318,7 @@ struct ExistingMarkerEditView: View {
         let lat = mMarkerEntity.lat
         let lon = mMarkerEntity.lon
         Utility.appleMapDirections(lat: lat, lon: lon)
-        MyLog.debug("Opening Apple Map Directions for lat:\(lat), lon:\(lon)")
+        MyLog.debug("ExistingMarkerView: Opening Apple Map Directions for lat:\(lat), lon:\(lon)")
     }
     
     func handleShareButton() {
@@ -327,10 +327,9 @@ struct ExistingMarkerEditView: View {
         // Got to get the ViewController that should present the child ViewController
         // https://stackoverflow.com/questions/32696615/warning-attempt-to-present-on-which-is-already-presenting-null
         // https://stackoverflow.com/questions/56533564/showing-uiactivityviewcontroller-in-swiftui
-//        Check out the 61 approved solution for SwiftUI calling UIActivityViewController AND the 15 approved addition to it.
-                                                
-//        Also Check this out to get the Top ViewController 360 up votes
-    // https://stackoverflow.com/questions/26667009/get-top-most-uiviewcontroller/26667122#26667122
+        //        Check out the 61 approved solution for SwiftUI calling UIActivityViewController AND the 15 approved addition to it.
+        //        Also Check this out to get the Top ViewController 360 up votes
+        // https://stackoverflow.com/questions/26667009/get-top-most-uiviewcontroller/26667122#26667122
                                                         
         DispatchQueue.main.async { // Not sure it this helps or hurts
             theMap_ViewModel.exportJournalMarker(markerEntity: mMarkerEntity)
@@ -339,12 +338,7 @@ struct ExistingMarkerEditView: View {
     }
 }
 
-//private let itemFormatter: DateFormatter = {
-//    let formatter = DateFormatter()
-//    formatter.dateStyle = .short
-//    formatter.timeStyle = .medium
-//    return formatter
-//}()
+
 
 
 struct ExistingMarkerEditView_Previews: PreviewProvider {
@@ -355,21 +349,7 @@ struct ExistingMarkerEditView_Previews: PreviewProvider {
 
 
 
-// Example Call:
-//   EditMarkerController.shared.MarkerDialog(theMarkerEntityToEdit)
-//
-// NOTE: The ContentView must have a view that is setup to show an EditMarkerController dialog like this:
-//   @StateObject var theMarkerEditDialog = EditMarkerController.shared
-// AND a View (like a Spacer) with a .sheet property
-//if #available(iOS 15.0, *) {
-//    Spacer()
-//    .sheet(isPresented:$theMarkerEditDialog.showEditMarkerDialog) {
-//        MarkerEditView(theMap_VM: theMap_ViewModel, markerEntity: theMarkerEditDialog.theMarkerEntity!)
-//    }
-//} else {
-//    // Fallback on earlier versions
-//    Spacer()
-//}
+
 
 
 class EditExistingMarkerController: ObservableObject {
