@@ -10,7 +10,12 @@ import CoreData
 import CoreLocation
 
 struct MarkerDetailsView: View {
-    
+    // Constants
+    let BUTTON_CORNER_RADIUS  = 10.0
+    let BUTTON_HEIGHT         = 30.0
+    let BUTTON_FONT_SIZE      = 15.0
+    let MIN_PHOTO_LIST_HEIGHT = 500.0
+
     // NOTE: We can't initialize the @FetchRequest predicate because the MarkerEntity is passed
     // in to the init().  Therefore we need to construct the FetchRequest in the init()
     @FetchRequest var imageEntities: FetchedResults<ImageEntity>
@@ -18,6 +23,10 @@ struct MarkerDetailsView: View {
     @ObservedObject var theMap_ViewModel: Map_ViewModel
 
     @State var mMarkerEntity: MarkerEntity // non-nil if we are editing an existing marker
+    @State private var tempUIImage = UIImage() // Temp Image Holder
+    @State private var bShowPhotoLibrary = false // toggle picker view
+
+
 
         
     // Used when editing an EXISTING MarkerEntity and not creating a new one
@@ -68,19 +77,106 @@ struct MarkerDetailsView: View {
                     .labelStyle(VerticalLabelStyle())
                 // ^^^ Apple Map Navigation Button ^^^
                 Spacer()
-            }
+            } // HStack - Share and Directions buttons
+            
+            
+            // We must scroll to avoid overwriting the nav controls at the
+            // top and because this is a tall view with a list of photos
+            ScrollView {
+                // TITLE
+                TextDataInput(title: "Title", userInput: $mMarkerEntity.wrappedTitle)
+                
+                
+                // Icon Picker and Color Picker
+                HStack {
+                    Text("Map Icon:")
+                    Picker("mapIcon", selection: $mMarkerEntity.wrappedIconName) {
+                        ForEach(theMap_ViewModel.getMarkerIconList(), id: \.self) {
+                            Label("", systemImage: $0)
+                        }
+                    }
+                    Spacer()
+                    Text("Icon Color")
+                    ColorPicker("Icon Color", selection: $mMarkerEntity.wrappedColor, supportsOpacity: false)
+                        .labelsHidden() // Don't show the label, use the Text Label instead
+                } // HStack - Icon Picker and Color Picker
+                
+                
+                // DESCRIPTION
+                TextDataInputMultiLine(title: "Description", userInput: $mMarkerEntity.wrappedDesc)
+                
+                
+                // TIME STAMP, LATITUDE, LONGITUDE
+                Group {
+                    // Date/Time Display
+                    HStack {
+    //                    Text("Time Stamp: \(mMarkerEntity.wrappedTimeStamp)") // Time with seconds
+                        Text("Time Stamp: \(Utility.getShortDateTimeString(theDate: mMarkerEntity.wrappedTimeStamp))") // Time with seconds
+                        Spacer()
+                    }
+                    
+                    // LAT/LON Display
+                    HStack {
+                        Text("Latitude: \(mMarkerEntity.lat)")
+                        Spacer()
+                    }
+                    HStack {
+                        Text("Longitude: \(mMarkerEntity.lon)")
+                        Spacer()
+                    }
+                } // Group
+                
 
-        } // VStack
+                // PHOTOS
+                Button(action: {
+                    self.bShowPhotoLibrary = true
+                }) {
+                    // Add Photo Button View
+                    HStack {
+                        Spacer()
+                        HStack {
+                            Image(systemName: "photo") // Label Image Name
+                                .font(.system(size: BUTTON_FONT_SIZE))
+                            Text("Add Photo") // Label Text
+                                .font(.headline)
+                        }
+                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: BUTTON_HEIGHT, alignment: .center)
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(BUTTON_CORNER_RADIUS)
+    //                    .padding()
+                        Spacer()
+                    } // HStack
+                    .sheet(isPresented: $bShowPhotoLibrary, onDismiss: handleAddPhotoButton) {
+                        ImagePicker(sourceType: .photoLibrary, selectedImage: $tempUIImage)
+                    }
+                } // Add Photo Button
+                .padding(SwiftUI.EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
+
+                // Photo List
+                List {
+                    ForEach(imageEntities) {theImageEntity in
+                        Image(uiImage: theImageEntity.getUIImage())
+                            .resizable()
+                            .scaledToFill()
+                            .frame(minWidth: 0, maxWidth: .infinity)
+                            .edgesIgnoringSafeArea(.all)
+                    } // ForEach
+                    .onDelete(perform: deleteItems)
+                } // List
+                .frame(minWidth: 0, maxWidth: .infinity, minHeight: MIN_PHOTO_LIST_HEIGHT, maxHeight: .infinity, alignment: .center)
+
+            } // ScrollView
+
+            
+        } // VStack - Outer Wrapper
         .navigationTitle("Journal Entry") // Title at top of page
+        .padding()
+        .onAppear {handleOnAppear()}
+        .onDisappear {handleOnDisappear()}
 
-        
-        
-        Spacer()
-        Text("Marker Entity: \(mMarkerEntity.wrappedTitle)")
-        Spacer()
-        Text("Future Marker Details View - displayed by selecting a marker from a list.")
-        Spacer()
-    }
+    } // var body: some View
+    
     
     func handleShareButton() {
         MyLog.debug("handleShareButton() called")
@@ -104,8 +200,47 @@ struct MarkerDetailsView: View {
         MyLog.debug("MarkerDetailsView: Opening Apple Map Directions for lat:\(lat), lon:\(lon)")
     }
 
+    // Handlers
+    
+    func handleOnDisappear() {
+        Haptic.shared.impact(style: .heavy)
+        theMap_ViewModel.setMarkerIDForRefresh(markerID: mMarkerEntity.id) // refresh the map
+        MarkerEntity.saveAll()
+    }
+    
+    func handleOnAppear() {
+        Haptic.shared.impact(style: .heavy)
+    }
 
-}
+    func handleAddPhotoButton() { // called with the Add Photo button is tapped
+        MyLog.debug("ExistingMarkerView.handleAddPhotoButton() tapped")
+        
+        // Create a new ImageEntity for this MarkerEntity
+        let newImageEntity = ImageEntity.createImageEntity(theMarkerEntity: mMarkerEntity)
+        
+        // Set the ImageEntity imageData and save
+        newImageEntity.setImageAndSave(tempUIImage)
+    }
+    
+    private func deleteItems(offsets: IndexSet) {
+        MyLog.debug("ExistingMarkerView.deleteItems() Called \(offsets)")
+        let viewContext = PersistenceController.shared.container.viewContext
+        withAnimation {
+            offsets.map { imageEntities[$0] }.forEach(viewContext.delete)
+
+            do {
+                try viewContext.save()
+            } catch {
+                // Replace this implementation with code to handle the error appropriately.
+                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                let nsError = error as NSError
+                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            }
+        }
+    }
+
+    
+} // MarkerDetailsView struct
 
 struct MarkerDetailsView_Previews: PreviewProvider {
     static var previews: some View {

@@ -7,12 +7,16 @@
 
 import Foundation
 import CoreData
+import CoreGraphics // CGFloat is defined here
+import UIKit // UIColor is defined here
+import SwiftUI // Color is defined here
 
 extension MarkerEntity: Comparable {
     public static func < (lhs: MarkerEntity, rhs: MarkerEntity) -> Bool {
-        if (lhs.timestamp == nil) {return false}
-        if (rhs.timestamp == nil) {return true}
-        return lhs.timestamp! < rhs.timestamp!
+        return lhs.sortOrder < rhs.sortOrder
+//        if (lhs.timestamp == nil) {return false}
+//        if (rhs.timestamp == nil) {return true}
+//        return lhs.timestamp! < rhs.timestamp!
     }
     
     // Get array of all MarkerEntities (could be empty array)
@@ -151,6 +155,27 @@ extension MarkerEntity: Comparable {
         }
     }
 
+    
+    // Getter and Setter using Color type
+    public var wrappedColor: Color {
+        get {
+            Color(.sRGB, red: colorRed, green: colorGreen, blue: colorBlue)
+        }
+        set {
+            // Extract the RGB color values and save them in the Entity
+            var rgbRed: CGFloat = 0
+            var rgbBlue: CGFloat = 0
+            var rgbGreen: CGFloat = 0
+            var rgbAlpha: CGFloat = 0
+            let myUIColor = UIColor(newValue)
+            myUIColor.getRed(&rgbRed, green: &rgbGreen, blue: &rgbBlue, alpha: &rgbAlpha)
+            colorRed = rgbRed
+            colorBlue = rgbBlue
+            colorGreen = rgbGreen
+            colorAlpha = rgbAlpha // should always be 1.0 for display on map
+        }
+    }
+    
     
     
 }

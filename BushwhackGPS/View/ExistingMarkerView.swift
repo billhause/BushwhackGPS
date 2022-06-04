@@ -226,12 +226,12 @@ struct ExistingMarkerEditView: View {
         } // VStack
         .padding()
         .navigationTitle("Journal Marker") // Title at top of page
-        .onAppear { HandleOnAppear() }
-        .onDisappear { HandleOnDisappear() }
+        .onAppear { handleOnAppear() }
+        .onDisappear { handleOnDisappear() }
     }
 
     private func deleteItems(offsets: IndexSet) {
-        MyLog.debug("deleteItems() Called \(offsets)")
+        MyLog.debug("ExistingMarkerView.deleteItems() Called \(offsets)")
         let viewContext = PersistenceController.shared.container.viewContext
         withAnimation {
             offsets.map { imageEntities[$0] }.forEach(viewContext.delete)
@@ -250,10 +250,10 @@ struct ExistingMarkerEditView: View {
     
     // This will be called when ever the view apears
     // Calling this from .onAppear in the Body of the view.
-    func HandleOnAppear() {
+    func handleOnAppear() {
         
         Haptic.shared.impact(style: .heavy)
-        MyLog.debug("HandleOnAppear() Existing Marker Entity called")
+        MyLog.debug("handleOnAppear() Existing Marker Entity called")
         
         theMap_ViewModel.requestReview() // Request a review after X runs have occured
         
@@ -288,13 +288,14 @@ struct ExistingMarkerEditView: View {
         iconColor = Color(.sRGB, red: mMarkerEntity.colorRed, green: mMarkerEntity.colorGreen, blue: mMarkerEntity.colorBlue)
         
         // Use creation date as the default title
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .medium
-        dateTimeDetailText = dateFormatter.string(from: mMarkerEntity.wrappedTimeStamp)
+        dateTimeDetailText = Utility.getShortDateTimeString(theDate: mMarkerEntity.wrappedTimeStamp)
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateStyle = .short
+//        dateFormatter.timeStyle = .medium
+//        dateTimeDetailText = dateFormatter.string(from: mMarkerEntity.wrappedTimeStamp)
     }
     
-    func HandleOnDisappear() {
+    func handleOnDisappear() {
         Haptic.shared.impact(style: .heavy)
         
         if deleteThisMarker == false {
@@ -305,7 +306,7 @@ struct ExistingMarkerEditView: View {
     }
     
     func handleAddPhotoButton() { // called with the Add Photo button is tapped
-        MyLog.debug("handleAddPhotoButton() tapped")
+        MyLog.debug("ExistingMarkerView.handleAddPhotoButton() tapped")
         
         // Create a new ImageEntity for this MarkerEntity
         let newImageEntity = ImageEntity.createImageEntity(theMarkerEntity: mMarkerEntity)

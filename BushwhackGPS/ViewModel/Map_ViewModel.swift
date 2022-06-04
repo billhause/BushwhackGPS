@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import MapKit
 import CoreLocation
-import StoreKit
+import StoreKit // SKStoreReviewController is in this Framework
 import Network
 
 // MARK: Constants
@@ -346,6 +346,8 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         theMarker.wrappedTitle = title
         theMarker.desc = body
         theMarker.iconName = iconName
+        
+        // TODO: wdhx Replace these colors with the wrappedColor MarkerEndity exteneded calculated var - Should eliminate this function entirely
         
         // Extract the RGB color values and save them in the Entity
         var rgbRed: CGFloat = 0
