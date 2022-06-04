@@ -68,7 +68,6 @@ struct MarkerDetailsView: View {
                 
                 Spacer()
                 
-                
                 // vvv Apple Map Navigation Button vvv
                 Button(action: handleMapDirectionsButton) {
                     let mapDirectionsImageName = theMap_ViewModel.getNavigationImageName()
