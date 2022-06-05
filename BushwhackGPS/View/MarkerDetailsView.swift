@@ -52,7 +52,7 @@ struct MarkerDetailsView: View {
     
     var body: some View {
         
-// wdhx        Next Step: Flesh out the MarkerDetailsView based on the ExistingMarkerEditView
+// wdhx       Next Step: Flesh out the MarkerDetailsView based on the ExistingMarkerEditView struct
         
         VStack(alignment: .leading) {
             HStack {

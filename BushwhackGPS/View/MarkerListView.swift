@@ -27,20 +27,21 @@ struct MarkerListView: View {
                 ForEach(markerEntities) { markerEntity in
                     NavigationLink {
                         MarkerDetailsView(theMap_VM: theMap_ViewModel, markerEntity: markerEntity)
-//                        ExistingMarkerEditView(theMap_VM: theMap_ViewModel, markerEntity: markerEntity)
-//                        TripDetailsView(theTripEntity: tripEntity.wrappedValue, mapViewModel: theMap_ViewModel)
                     } label: {
-                        HStack {
-                            VStack(alignment: .leading) {
-                                HStack {
-                                    Text(markerEntity.wrappedTitle)
-                                }
-                                Text("wdh Some Marker Sub-Text")
+                        VStack(alignment: .leading) {
+                            Text(markerEntity.wrappedTitle)
+                            HStack {
+Replace this with the actual distance
+                                Text("Distance: 2.3 miles")
+                                    .font(.footnote)
+                                Spacer()
+                                Text(theMap_ViewModel.getShortDateTimeString(theDate: markerEntity.wrappedTimeStamp))
                                     .font(.footnote)
                             }
-                            Spacer() // Push the switch column to the right side
                             // Hide/Show Slider with no labvel
-                            Text("wdh Some Marker Text")
+//                            Text(markerEntity.wrappedDesc.prefix(100))
+                            Text(getDisplayDesc(markerEntity.wrappedDesc))
+                                .font(.footnote)
                         } // HStack
                     }
                 } // ForEach
@@ -99,7 +100,16 @@ struct MarkerListView: View {
             let nsError = error as NSError
             MyLog.debug("wdh Error saving in MarkerListView.HandleOnDisappear() \(nsError.userInfo)")
         }
-
+    }
+    
+    let MAX_DISP_LEN = 150
+    func getDisplayDesc(_ theText: String) -> String {
+        if theText.count == 0 {
+            return ""
+        } else if theText.count < MAX_DISP_LEN {
+            return theText
+        }
+        return theText.prefix(MAX_DISP_LEN) + " ..."
     }
 
 }
