@@ -378,7 +378,6 @@ struct MapView: UIViewRepresentable {
             
             // Center the map on the current location
             if theMap_ViewModel.shouldKeepMapCentered() { // Check if the user wants the map to stay centered
-//                mapView.setCenter(theMap_ViewModel.getLastKnownLocation(), animated: true)
                 mapView.setCenter(didUpdate.coordinate, animated: true)
             }
         }

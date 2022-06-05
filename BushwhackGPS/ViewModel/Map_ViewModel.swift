@@ -299,7 +299,14 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     
     private var mLastKnownLocation: CLLocationCoordinate2D?
     // This will ALWAYS return a location even if it's not current
-    func getLastKnownLocation() -> CLLocationCoordinate2D {
+    func getLastKnownLocation() -> CLLocationCoordinate2D { // wdhx
+        
+        // Update to the latest location if we have one. wdhx added 6/5/2022
+        if let currentLocation = getCurrentLocation() {
+            mLastKnownLocation = currentLocation.coordinate
+        }
+        
+        
         // Get current location.  IF none, then use the parking spot location as the current location
         if mLastKnownLocation != nil {
             return mLastKnownLocation!
@@ -986,6 +993,14 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return (distance: distanceString, speed: speedString, elapsedTime: elapsedTimeString, fuelCost: fuelCostString)
     }
     
+    
+    // Return a display string with the distance from the current location to the specified lat/lon
+    func getDisplayableDistanceFromCurrentLocation(_ targetLat: Double, _ targetLon: Double) -> String {
+        let currentLocation = getLastKnownLocation()
+        let distanceInMeters = Utility.getDistanceInMeters(lat1: targetLat, lon1: targetLon, lat2: currentLocation.latitude, lon2: currentLocation.longitude)
+        let isMetric = AppSettingsEntity.getAppSettingsEntity().metricUnits
+        return Utility.getDisplayableDistance(useMetricUnits: isMetric, meters: distanceInMeters)
+    }
     
     func getParkingSpotLocation() -> CLLocationCoordinate2D {
         return CLLocationCoordinate2D(latitude: ParkingSpotEntity.getParkingSpotEntity().lat, longitude: ParkingSpotEntity.getParkingSpotEntity().lon)

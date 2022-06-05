@@ -31,8 +31,7 @@ struct MarkerListView: View {
                         VStack(alignment: .leading) {
                             Text(markerEntity.wrappedTitle)
                             HStack {
-Replace this with the actual distance
-                                Text("Distance: 2.3 miles")
+                                Text("Distance: \(theMap_ViewModel.getDisplayableDistanceFromCurrentLocation(markerEntity.lat, markerEntity.lon))")
                                     .font(.footnote)
                                 Spacer()
                                 Text(theMap_ViewModel.getShortDateTimeString(theDate: markerEntity.wrappedTimeStamp))
