@@ -1266,7 +1266,39 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         return journalString
     }
 
-}
+    // Sort the markers in the MarkerEntities list for display in the ListView
+    func sortMarkerEntities(by: String) {
+        var markerArray = MarkerEntity.getAllMarkerEntities()
+        let myLoc = getLastKnownLocation()
+        
+        if by == "Date" {
+            markerArray.sort() {
+                // sort by date with newest (biggest date) first
+                $0.wrappedTimeStamp < $1.wrappedTimeStamp
+            }
+        } else if by == "Name" {
+            markerArray.sort() { // Alphabetically (smallest to biggest letter)
+                $0.wrappedTitle > $1.wrappedTitle
+            }
+        } else if by == "Distance" {
+            // Sort by distance from current location with closest at the top
+            markerArray.sort() {
+                let d0 = getDistanceInMeters(lat1: $0.lat, lon1: $0.lon, lat2: myLoc.latitude, lon2: myLoc.longitude)
+                let d1 = getDistanceInMeters(lat1: $1.lat, lon1: $1.lon, lat2: myLoc.latitude, lon2: myLoc.longitude)
+                return d0 > d1
+            }
+        } else {
+            MyLog.debug("ERROR wdh Invalid Sort Specifier passed to Map_ViewModel.sortMarkerEntities(): \(by)")
+        }
+        
+        // Now that the Markers are sorted, renumber the sortOrder field
+        for i in 0..<markerArray.count {
+            markerArray[i].sortOrder = Int64(i+1) // sort starting at 1
+        }
+
+    }
+    
+} // Map_ViewModel class
 
 
 // MARK: Annotation Types

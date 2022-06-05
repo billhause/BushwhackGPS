@@ -203,13 +203,11 @@ struct MarkerDetailsView: View {
     // Handlers
     
     func handleOnDisappear() {
-        Haptic.shared.impact(style: .heavy)
         theMap_ViewModel.setMarkerIDForRefresh(markerID: mMarkerEntity.id) // refresh the map
         MarkerEntity.saveAll()
     }
     
     func handleOnAppear() {
-        Haptic.shared.impact(style: .heavy)
     }
 
     func handleAddPhotoButton() { // called with the Add Photo button is tapped

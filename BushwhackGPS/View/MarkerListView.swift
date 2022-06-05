@@ -65,8 +65,8 @@ struct MarkerListView: View {
                         }
                         .pickerStyle(.segmented)
                         .onChange(of: mAppSettingsEntity.wrappedMarkerListSortOrder) { tag in
-                            print("Sort Order Changed to \(tag)")
-                            Continue here - call code to update the sort order on the Marker List
+                            theMap_ViewModel.sortMarkerEntities(by: tag) // wdhx
+                            Haptic.shared.impact(style: .heavy)
                         }
                     }
                 }
@@ -106,6 +106,11 @@ struct MarkerListView: View {
     // Calling this from .onAppear in the Body of the view.
     func HandleOnAppear() {
         MyLog.debug("HandleOnAppear() Called for MarkerListView")
+        
+        // Must always resort before displaying because we might be
+        // sorting by distance and be in a new location
+        let sortType = AppSettingsEntity.getAppSettingsEntity().wrappedMarkerListSortOrder
+        theMap_ViewModel.sortMarkerEntities(by: sortType) // wdhx
     }
     
     func HandleOnDisappear() {
