@@ -11,18 +11,23 @@ import CoreData
 struct MarkerListView: View {
     @Environment(\.managedObjectContext) private var viewContext
     
+    @ObservedObject var mAppSettingsEntity: AppSettingsEntity // Tracks the marker sort order
+    
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \MarkerEntity.timestamp, ascending: false)],
+        sortDescriptors: [NSSortDescriptor(keyPath: \MarkerEntity.sortOrder, ascending: false)],
         animation: .default)
     private var markerEntities: FetchedResults<MarkerEntity>
+
     private var theMap_ViewModel: Map_ViewModel
 
     init(mapViewModel: Map_ViewModel) {
         theMap_ViewModel = mapViewModel
+        mAppSettingsEntity = AppSettingsEntity.getAppSettingsEntity()
     }
     
     var body: some View {
         NavigationView {
+
             List {
                 ForEach(markerEntities) { markerEntity in
                     NavigationLink {
@@ -50,10 +55,25 @@ struct MarkerListView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                 }
+                ToolbarItem(placement: .navigationBarLeading) {
+                    HStack {
+                        Text("Sort Order: ")
+                        Picker("Sorting order", selection: $mAppSettingsEntity.wrappedMarkerListSortOrder) {
+                            Text("Date").tag("Date")
+                            Text("Name").tag("Name")
+                            Text("Distance").tag("Distance")
+                        }
+                        .pickerStyle(.segmented)
+                        .onChange(of: mAppSettingsEntity.wrappedMarkerListSortOrder) { tag in
+                            print("Sort Order Changed to \(tag)")
+                            Continue here - call code to update the sort order on the Marker List
+                        }
+                    }
+                }
 
             } // toolbar
             .navigationTitle("Journal Marker List") // Title displayed above list
-            .navigationBarTitleDisplayMode(.inline) // Put title on same line as buttons
+//            .navigationBarTitleDisplayMode(.inline) // Put title on same line as buttons
         } // NavigationView
         .navigationViewStyle(StackNavigationViewStyle()) // Needed to avoid run-time warnings related to .navigationTitle
         .onAppear { HandleOnAppear() }

@@ -35,6 +35,7 @@ extension AppSettingsEntity {
             theAppSettingsEntity.nextDotColorIndex = 0 // keep track of the dot color to use next
             theAppSettingsEntity.gasPrice = 4.0 // Default to $4 per gallon
             theAppSettingsEntity.mpg = 20  // average mpg for cars / suvs
+            theAppSettingsEntity.markerListSortOrder = "Date"
             
             do {
                 try context.save()
@@ -73,5 +74,18 @@ extension AppSettingsEntity {
         save()
     }
 
+    // Accessors
+    public var wrappedMarkerListSortOrder: String {
+        get {
+            if markerListSortOrder == nil {
+                return "Date"
+            }
+            return markerListSortOrder!
+        }
+
+        set { markerListSortOrder = newValue }
+        
+    }
+    
     
 }
