@@ -13,9 +13,15 @@ struct MarkerListView: View {
     
     @ObservedObject var mAppSettingsEntity: AppSettingsEntity // Tracks the marker sort order
     
+// wdhx    change aniation to something interesting
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \MarkerEntity.sortOrder, ascending: false)],
-        animation: .default)
+        animation: Animation.default) // .default, .none,
+    // Animation.easeInOut(duration: 10)
+    // Animation.easeIn
+    // Animation.linear(duration:2)
+    // .interpolatingSpring(stiffness: 1, damping: 10)
+    // .spring(response: 5.75, dampingFraction: 0.5, blendDuration: 0)
     private var markerEntities: FetchedResults<MarkerEntity>
 
     private var theMap_ViewModel: Map_ViewModel
@@ -35,9 +41,12 @@ struct MarkerListView: View {
                     } label: {
                         VStack(alignment: .leading) {
                             Text(markerEntity.wrappedTitle)
+                                .foregroundColor(.accentColor)
                             HStack {
-                                Text("Distance: \(theMap_ViewModel.getDisplayableDistanceFromCurrentLocation(markerEntity.lat, markerEntity.lon))")
+                                Text("Distance: ")
                                     .font(.footnote)
+                                Text("\(theMap_ViewModel.getDisplayableDistanceFromCurrentLocation(markerEntity.lat, markerEntity.lon))")
+                                    .font(.caption.weight(.semibold))
                                 Spacer()
                                 Text(theMap_ViewModel.getShortDateTimeString(theDate: markerEntity.wrappedTimeStamp))
                                     .font(.footnote)
@@ -45,12 +54,15 @@ struct MarkerListView: View {
                             // Hide/Show Slider with no labvel
 //                            Text(markerEntity.wrappedDesc.prefix(100))
                             Text(getDisplayDesc(markerEntity.wrappedDesc))
-                                .font(.footnote)
-                        } // HStack
+                                .font(.caption2) // Large->Small .footnote, .caption, .caption2
+                        } // VStack(aligment: .leading)
                     }
                 } // ForEach
                 .onDelete(perform: deleteMarkerEntities)
             } // List
+//            .transition(.scale)
+//            .id(UUID())
+//            .transition(AnyTransition.opacity.animation(.spring()))
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
