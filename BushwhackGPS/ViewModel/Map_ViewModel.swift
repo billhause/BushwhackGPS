@@ -351,22 +351,21 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     
     func updateExistingMarker(theMarker: MarkerEntity, lat: Double, lon: Double, title: String, body: String, iconName: String, color: Color) {
         theMarker.wrappedTitle = title
-        theMarker.desc = body
-        theMarker.iconName = iconName
+        theMarker.wrappedDesc = body
+        theMarker.wrappedIconName = iconName
         
-        // TODO: wdhx Replace these colors with the wrappedColor MarkerEndity exteneded calculated var - Should eliminate this function entirely
-        
-        // Extract the RGB color values and save them in the Entity
-        var rgbRed: CGFloat = 0
-        var rgbBlue: CGFloat = 0
-        var rgbGreen: CGFloat = 0
-        var rgbAlpha: CGFloat = 0
-        let myUIColor = UIColor(color)
-        myUIColor.getRed(&rgbRed, green: &rgbGreen, blue: &rgbBlue, alpha: &rgbAlpha)
-        theMarker.colorRed = rgbRed
-        theMarker.colorBlue = rgbBlue
-        theMarker.colorGreen = rgbGreen
-        theMarker.colorAlpha = rgbAlpha // should always be 1.0 for display on map
+        theMarker.wrappedColor = color
+//        // Extract the RGB color values and save them in the Entity
+//        var rgbRed: CGFloat = 0
+//        var rgbBlue: CGFloat = 0
+//        var rgbGreen: CGFloat = 0
+//        var rgbAlpha: CGFloat = 0
+//        let myUIColor = UIColor(color)
+//        myUIColor.getRed(&rgbRed, green: &rgbGreen, blue: &rgbBlue, alpha: &rgbAlpha)
+//        theMarker.colorRed = rgbRed
+//        theMarker.colorBlue = rgbBlue
+//        theMarker.colorGreen = rgbGreen
+//        theMarker.colorAlpha = rgbAlpha // should always be 1.0 for display on map
         
         MarkerEntity.saveAll()
         
@@ -858,7 +857,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         
     func requestReview() {
         // Comment out the next line to turn on Review Request wdhx
-        if !MyLog.NO_LOG {return} // Don't request reviews unless we're live and Logging is turned off.
+//        if !MyLog.NO_LOG {return} // Don't request reviews unless we're live and Logging is turned off.
         
         if AppSettingsEntity.getAppSettingsEntity().usageCount > AppSettingsEntity.REVIEW_THRESHOLD {
         // NOTE: If not connected to Internet, then requestReview will lock the interface
