@@ -31,18 +31,13 @@ struct ExistingMarkerEditView: View {
     
     @ObservedObject var theMap_ViewModel: Map_ViewModel
     
+    
+    
     @State private var showingDeleteJournalConfirm = false // Flag for Confirm Dialog
     @State private var deleteThisMarker = false // Set to true if user clicks delete
     @State private var bShowPhotoLibrary = false // toggle picker view
     @State private var tempUIImage = UIImage() // Temp Image Holder
     
-    @State var mMarkerID: Int64 = 0
-    @State var titleText: String = ""
-    @State var bodyText: String = ""
-    @State var iconSymbolName: String = "multiply.circle" //"xmark.square.fill"
-    @State var lat: Double = 100.0
-    @State var lon: Double = -100.0
-    @State var iconColor: Color = Color(.sRGB, red: 1.0, green: 0.0, blue: 0.0) // Red by default - Satalite and Map
     @State var dateTimeDetailText = "" // Used to display the time with seconds
     @State var mMarkerEntity: MarkerEntity // non-nil if we are editing an existing marker
             
@@ -108,13 +103,15 @@ struct ExistingMarkerEditView: View {
             ScrollView {
                 
             // Journal Entry Title and Body
-            TextDataInput(title: "Title", userInput: $titleText)
+            //TextDataInput(title: "Title", userInput: $titleText)
+                TextDataInput(title: "Title", userInput: $mMarkerEntity.wrappedTitle)
                 .padding(EdgeInsets(top: 0.0, leading: 0.0, bottom: 10, trailing: 0.0))
 
             // Icon Picker and Color Picker
             HStack {
                 Text("Map Icon:")
-                Picker("mapIcon", selection: $iconSymbolName) {
+                //Picker("mapIcon", selection: $iconSymbolName) {
+                Picker("mapIcon", selection: $mMarkerEntity.wrappedIconName) {
                     ForEach(theMap_ViewModel.getMarkerIconList(), id: \.self) {
                         Label("", systemImage: $0)
                     }
@@ -125,14 +122,16 @@ struct ExistingMarkerEditView: View {
                     Text("Icon Color")
 //                    Text("(Darker is Better)").font(.footnote)
                 }
-                ColorPicker("Icon Color", selection: $iconColor, supportsOpacity: false)
+//                ColorPicker("Icon Color", selection: $iconColor, supportsOpacity: false)
+                ColorPicker("Icon Color", selection: $mMarkerEntity.wrappedColor, supportsOpacity: false)
                     .labelsHidden() // don't show the label.  Use the Text lable instead
 
             } // HStack
 
                 
             // Journel Entry Description
-            TextDataInputMultiLine(title: "Description", userInput: $bodyText)
+            //TextDataInputMultiLine(title: "Description", userInput: $bodyText)
+                TextDataInputMultiLine(title: "Description", userInput: $mMarkerEntity.wrappedDesc)
 
             // Delete Journal Entry
             HStack {
@@ -172,11 +171,13 @@ struct ExistingMarkerEditView: View {
                 
                 // LAT/LON Display
                 HStack {
-                    Text("Latitude: \(lat)")
+                    Text("Latitude: \(mMarkerEntity.lat)")
+//                    Text("Latitude: \(lat)")
                     Spacer()
                 }
                 HStack {
-                    Text("Longitude: \(lon)")
+//                    Text("Longitude: \(lon)")
+                    Text("Longitude: \(mMarkerEntity.lon)")
                     Spacer()
                 }
             } // Group
@@ -262,7 +263,6 @@ struct ExistingMarkerEditView: View {
         // This could happen when the users deletes the marker and
         // then it's still showing on the map and they tap the Info
         // icon in the pop-up bubble
-//        let theMarkerAnnotation = annotationView.annotation as! MarkerAnnotation
         if mMarkerEntity.managedObjectContext != nil {
             // All Is Well
             MyLog.debug("GOOD - The Marker Entity is NOT nil")
@@ -274,34 +274,22 @@ struct ExistingMarkerEditView: View {
             return // We can't show the edit view with a nil Marker Entity
         }
 
-        
-
-        
-        // We are editing an existing Marker Entity
-        // Initialize the fields based on the MarkerEntity we are editig
-        mMarkerID = mMarkerEntity.id
-        titleText = mMarkerEntity.wrappedTitle
-        bodyText = mMarkerEntity.wrappedDesc
-        iconSymbolName = mMarkerEntity.wrappedIconName
-        lat = mMarkerEntity.lat
-        lon = mMarkerEntity.lon
-        iconColor = Color(.sRGB, red: mMarkerEntity.colorRed, green: mMarkerEntity.colorGreen, blue: mMarkerEntity.colorBlue)
-        
         // Use creation date as the default title
         dateTimeDetailText = Utility.getShortDateTimeString(theDate: mMarkerEntity.wrappedTimeStamp)
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateStyle = .short
-//        dateFormatter.timeStyle = .medium
-//        dateTimeDetailText = dateFormatter.string(from: mMarkerEntity.wrappedTimeStamp)
+        
+        theMap_ViewModel.setMarkerIDForRefresh(markerID: mMarkerEntity.id)
+        MarkerEntity.saveAll()
     }
     
     func handleOnDisappear() {
         Haptic.shared.impact(style: .heavy)
         
+        
         if deleteThisMarker == false {
-            theMap_ViewModel.updateExistingMarker(theMarker: mMarkerEntity, lat: self.lat, lon: self.lon, title: titleText, body: bodyText, iconName: iconSymbolName, color: iconColor)
+            theMap_ViewModel.setMarkerIDForRefresh(markerID: mMarkerEntity.id)
+            MarkerEntity.saveAll()
         } else {
-            theMap_ViewModel.setMarkerIDForDeletion(markerID: mMarkerID)
+            theMap_ViewModel.setMarkerIDForDeletion(markerID: mMarkerEntity.id)
         }
     }
     

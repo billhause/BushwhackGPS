@@ -349,37 +349,20 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     // ^^^ MARKER ID REFRESH ^^^
     // ^^^^^^^^^^^^^^^^^^^^^^^^^
     
-    func updateExistingMarker(theMarker: MarkerEntity, lat: Double, lon: Double, title: String, body: String, iconName: String, color: Color) {
-        theMarker.wrappedTitle = title
-        theMarker.wrappedDesc = body
-        theMarker.wrappedIconName = iconName
-        
-        theMarker.wrappedColor = color
-//        // Extract the RGB color values and save them in the Entity
-//        var rgbRed: CGFloat = 0
-//        var rgbBlue: CGFloat = 0
-//        var rgbGreen: CGFloat = 0
-//        var rgbAlpha: CGFloat = 0
-//        let myUIColor = UIColor(color)
-//        myUIColor.getRed(&rgbRed, green: &rgbGreen, blue: &rgbBlue, alpha: &rgbAlpha)
-//        theMarker.colorRed = rgbRed
-//        theMarker.colorBlue = rgbBlue
-//        theMarker.colorGreen = rgbGreen
-//        theMarker.colorAlpha = rgbAlpha // should always be 1.0 for display on map
-        
-        MarkerEntity.saveAll()
-        
-        setMarkerIDForRefresh(markerID: theMarker.id) // Must tell the map to remove and re-add the MarkerAnnotationView to refresh the icon
-        
-    }
-
+    
     
     // Add a new marker to the current location using specified values
     func addNewMarker(lat: Double, lon: Double, title: String, body: String, iconName: String, color: Color) { 
         
         // Create a new marker and save it
         let newMarkerEntity = MarkerEntity.createMarkerEntity(lat: lat, lon: lon)
-        updateExistingMarker(theMarker: newMarkerEntity, lat: lat, lon: lon, title: title, body: body, iconName: iconName, color: color)
+        newMarkerEntity.wrappedTitle = title
+        newMarkerEntity.wrappedDesc = body
+        newMarkerEntity.wrappedIconName = iconName
+        newMarkerEntity.wrappedColor = color
+        MarkerEntity.saveAll()
+        setMarkerIDForRefresh(markerID: newMarkerEntity.id)
+//        updateExistingMarker(theMarker: newMarkerEntity, lat: lat, lon: lon, title: title, body: body, iconName: iconName, color: color)
         
         // Update model with the waiting MarkerAnnotation
         theMapModel.waitingMKMarkerAnnotation = MarkerAnnotation(theMarkerEntity: newMarkerEntity)
