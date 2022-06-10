@@ -43,6 +43,8 @@
 		288BB0E92797993E005F3D0C /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288BB0E82797993E005F3D0C /* Reachability.swift */; };
 		288BCB38279B721E008FC368 /* AlertMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288BCB37279B721E008FC368 /* AlertMessage.swift */; };
 		288BCB3A279E25D8008FC368 /* DotEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288BCB39279E25D8008FC368 /* DotEntity.swift */; };
+		288F9A972853A466005FBD45 /* NewMarkerEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288F9A962853A466005FBD45 /* NewMarkerEditView.swift */; };
+		288F9A992853A584005FBD45 /* UtilityViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288F9A982853A584005FBD45 /* UtilityViews.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -103,6 +105,8 @@
 		288BCB37279B721E008FC368 /* AlertMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertMessage.swift; sourceTree = "<group>"; };
 		288BCB39279E25D8008FC368 /* DotEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DotEntity.swift; sourceTree = "<group>"; };
 		288BCB3B27A19E21008FC368 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		288F9A962853A466005FBD45 /* NewMarkerEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewMarkerEditView.swift; sourceTree = "<group>"; };
+		288F9A982853A584005FBD45 /* UtilityViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityViews.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -205,9 +209,11 @@
 				2820C3C927C823D300122B7C /* NewMarkerView.swift */,
 				2842005827E283F400E0749E /* TripListView.swift */,
 				2842005C27E3B59A00E0749E /* TripDetailsView.swift */,
+				288F9A962853A466005FBD45 /* NewMarkerEditView.swift */,
 				2865292527F26F2400112093 /* DashboardView.swift */,
 				2865292D27FF8EC600112093 /* ImagePicker.swift */,
 				2865292F2801C46200112093 /* SettingsView.swift */,
+				288F9A982853A584005FBD45 /* UtilityViews.swift */,
 				2818BCA1284585B900BE45DC /* MarkerListView.swift */,
 				2818BCA32846EE1100BE45DC /* MarkerDetailsView.swift */,
 			);
@@ -392,7 +398,9 @@
 				288BCB38279B721E008FC368 /* AlertMessage.swift in Sources */,
 				28817BB02790F15C004B7C4B /* AppSettingsEntity.swift in Sources */,
 				2865292827F33EEA00112093 /* DashboardEntity.swift in Sources */,
+				288F9A972853A466005FBD45 /* NewMarkerEditView.swift in Sources */,
 				2820C3CA27C823D300122B7C /* NewMarkerView.swift in Sources */,
+				288F9A992853A584005FBD45 /* UtilityViews.swift in Sources */,
 				2865292E27FF8EC600112093 /* ImagePicker.swift in Sources */,
 				28817BAE2790AB21004B7C4B /* ID_GeneratorEntity.swift in Sources */,
 				28817B88278E490E004B7C4B /* BushwhackGPS.xcdatamodeld in Sources */,
