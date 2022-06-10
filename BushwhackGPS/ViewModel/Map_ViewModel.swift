@@ -350,6 +350,13 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     // ^^^^^^^^^^^^^^^^^^^^^^^^^
     
     
+    // This should replace addNewMarker() below
+    func addNewMarkerEntity(theMarkerEntity: MarkerEntity) {
+        MarkerEntity.saveAll()
+        theMapModel.waitingMKMarkerAnnotation = MarkerAnnotation(theMarkerEntity: theMarkerEntity)
+        mNewMarkerAnnotationWaiting = true // This will be set to false after the marker is requested
+    }
+    
     
     // Add a new marker to the current location using specified values
     func addNewMarker(lat: Double, lon: Double, title: String, body: String, iconName: String, color: Color) { 
@@ -558,6 +565,15 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         if UIImage(systemName: "list.triangle") != nil { return "list.triangle" }
         if UIImage(systemName: "text.justify") != nil { return "text.justify" }
         if UIImage(systemName: "line.3.horizontal") != nil { return "line.3.horizontal" }
+        return "triangle" // default that is always there on all devices
+    }
+
+    
+    // Sometimes the device will not have the first choice symbol so check first
+    // Return a default that is always present
+    func getDefaultMarkerImageName() -> String {
+        // Check symbols in order of preference
+        if UIImage(systemName: "multiply.circle") != nil { return "multiply.circle" }
         return "triangle" // default that is always there on all devices
     }
 

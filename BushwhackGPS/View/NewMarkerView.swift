@@ -31,7 +31,9 @@ struct NewMarkerView: View {
                 Text("Wait for better Location Accuracy and try again")
                     .padding()
             } else {
-                NewMarkerEditView(theMap_VM: theMap_ViewModel)
+                // NewMarkerEditView(theMap_VM: theMap_ViewModel)
+//                if let location = theMap_ViewModel.getCurrentLocation()?.coordinate {
+                NewMarkerEditView2(theMap_VM: theMap_ViewModel)
             }
         }
     }
