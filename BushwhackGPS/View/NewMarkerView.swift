@@ -138,6 +138,11 @@ struct NewMarkerEditView: View {
     
     func HandleOnDisappear() {
         Haptic.shared.impact(style: .heavy)
+
+        if titleText.isEmpty {
+            titleText = "Unnamed"
+        }
+        
         theMap_ViewModel.addNewMarker(lat: self.lat, lon: self.lon, title: titleText, body: bodyText, iconName: iconSymbolName, color: iconColor)
     }
     

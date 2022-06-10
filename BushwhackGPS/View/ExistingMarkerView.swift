@@ -31,15 +31,16 @@ struct ExistingMarkerEditView: View {
     
     @ObservedObject var theMap_ViewModel: Map_ViewModel
     
-    
-    
+    // TODO: Try changing mMarkerEntity to @ObservedObject instead of @State and remove the underscore from _mMarkerEntity
+    //@State var mMarkerEntity: MarkerEntity // non-nil if we are editing an existing marker
+    @ObservedObject var mMarkerEntity: MarkerEntity // non-nil if we are editing an existing marker
+
     @State private var showingDeleteJournalConfirm = false // Flag for Confirm Dialog
     @State private var deleteThisMarker = false // Set to true if user clicks delete
     @State private var bShowPhotoLibrary = false // toggle picker view
     @State private var tempUIImage = UIImage() // Temp Image Holder
     
     @State var dateTimeDetailText = "" // Used to display the time with seconds
-    @State var mMarkerEntity: MarkerEntity // non-nil if we are editing an existing marker
             
     // Constants
     let LEFT_PADDING = 10.0 // Padding on the left side of various controls
@@ -47,10 +48,11 @@ struct ExistingMarkerEditView: View {
     // Used when editing an EXISTING MarkerEntity and not creating a new one
     init(theMap_VM: Map_ViewModel, markerEntity: MarkerEntity) {
         theMap_ViewModel = theMap_VM
+        mMarkerEntity = markerEntity
         
         // NOTE: PropertyWrapper Structs must be accessed using the underbar '_' version of the struct
         // Put an '_' in front of the variable names to access them directly.
-        _mMarkerEntity = State(initialValue: markerEntity) // Variable 'self.mMarkerEntity' used before being initialized
+//        _mMarkerEntity = State(initialValue: markerEntity) // Variable 'self.mMarkerEntity' used before being initialized
         
         // Must Setup the Predecate for the Fetch Request in the init()
         //    See Stanford Lesson 12 at 1:02:20
@@ -286,6 +288,10 @@ struct ExistingMarkerEditView: View {
         
         
         if deleteThisMarker == false {
+            if mMarkerEntity.wrappedTitle == "" { // wdhx
+                mMarkerEntity.wrappedTitle = "Unnamed" // Must have a name or the pop-up won't work
+            }
+
             theMap_ViewModel.setMarkerIDForRefresh(markerID: mMarkerEntity.id)
             MarkerEntity.saveAll()
         } else {

@@ -22,7 +22,8 @@ struct MarkerDetailsView: View {
     
     @ObservedObject var theMap_ViewModel: Map_ViewModel
 
-    @State var mMarkerEntity: MarkerEntity // non-nil if we are editing an existing marker
+    @ObservedObject var mMarkerEntity: MarkerEntity // non-nil if we are editing an existing marker
+//    @State var mMarkerEntity: MarkerEntity // non-nil if we are editing an existing marker
     @State private var tempUIImage = UIImage() // Temp Image Holder
     @State private var bShowPhotoLibrary = false // toggle picker view
 
@@ -32,10 +33,11 @@ struct MarkerDetailsView: View {
     // Used when editing an EXISTING MarkerEntity and not creating a new one
     init(theMap_VM: Map_ViewModel, markerEntity: MarkerEntity) {
         theMap_ViewModel = theMap_VM
+        mMarkerEntity = markerEntity
         
         // NOTE: PropertyWrapper Structs must be accessed using the underbar '_' version of the struct
         // Put an '_' in front of the variable names to access them directly.
-        _mMarkerEntity = State(initialValue: markerEntity) // Variable 'self.mMarkerEntity' used before being initialized
+//        _mMarkerEntity = State(initialValue: markerEntity) // Variable 'self.mMarkerEntity' used before being initialized
         
         // LOAD THE IMAGES
         // Must Setup the Predecate for the Fetch Request in the init()
@@ -203,6 +205,9 @@ struct MarkerDetailsView: View {
     // Handlers
     
     func handleOnDisappear() {
+        if mMarkerEntity.wrappedTitle == "" { // wdhx
+            mMarkerEntity.wrappedTitle = "Unnamed" // Must have a name or the pop-up won't work
+        }
         theMap_ViewModel.setMarkerIDForRefresh(markerID: mMarkerEntity.id) // refresh the map
         MarkerEntity.saveAll()
     }
