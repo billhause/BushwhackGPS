@@ -10,22 +10,12 @@ import CoreData
 import CoreLocation
 
 struct MarkerDetailsView: View {
-    // Constants
-    let BUTTON_CORNER_RADIUS  = 10.0
-    let BUTTON_HEIGHT         = 30.0
-    let BUTTON_FONT_SIZE      = 15.0
-    let MIN_PHOTO_LIST_HEIGHT = 500.0
 
-    // NOTE: We can't initialize the @FetchRequest predicate because the MarkerEntity is passed
-    // in to the init().  Therefore we need to construct the FetchRequest in the init()
-    @FetchRequest var imageEntities: FetchedResults<ImageEntity>
     
     @ObservedObject var theMap_ViewModel: Map_ViewModel
 
     @ObservedObject var mMarkerEntity: MarkerEntity // non-nil if we are editing an existing marker
 //    @State var mMarkerEntity: MarkerEntity // non-nil if we are editing an existing marker
-    @State private var tempUIImage = UIImage() // Temp Image Holder
-    @State private var bShowPhotoLibrary = false // toggle picker view
 
 
 
@@ -39,23 +29,21 @@ struct MarkerDetailsView: View {
         // Put an '_' in front of the variable names to access them directly.
 //        _mMarkerEntity = State(initialValue: markerEntity) // Variable 'self.mMarkerEntity' used before being initialized
         
-        // LOAD THE IMAGES
-        // Must Setup the Predecate for the Fetch Request in the init()
-        //    See Stanford Lesson 12 at 1:02:20
-        //    https://www.youtube.com/watch?v=yOhyOpXvaec
-        let request = NSFetchRequest<ImageEntity>(entityName: "ImageEntity")
-        request.predicate = NSPredicate(format: "marker = %@", markerEntity)
-        request.sortDescriptors = [NSSortDescriptor(key: "timeStamp", ascending: false)] // Put newest at top
-        _imageEntities = FetchRequest(fetchRequest: request) // Use '_' version to access wrapped variable
+//        // LOAD THE IMAGES
+//        // Must Setup the Predecate for the Fetch Request in the init()
+//        //    See Stanford Lesson 12 at 1:02:20
+//        //    https://www.youtube.com/watch?v=yOhyOpXvaec
+//        let request = NSFetchRequest<ImageEntity>(entityName: "ImageEntity")
+//        request.predicate = NSPredicate(format: "marker = %@", markerEntity)
+//        request.sortDescriptors = [NSSortDescriptor(key: "timeStamp", ascending: false)] // Put newest at top
+//        _imageEntities = FetchRequest(fetchRequest: request) // Use '_' version to access wrapped variable
     }
 
     
     // TODO: Factor out the common views from ExistingMarkerView, MarkerDetailsView and NewMarkerView
     
     var body: some View {
-        
-// wdhx       Next Step: Flesh out the MarkerDetailsView based on the ExistingMarkerEditView struct
-        
+                
         VStack(alignment: .leading) {
             HStack {
                 Spacer()
@@ -128,48 +116,8 @@ struct MarkerDetailsView: View {
                     }
                 } // Group
                 
-                // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-                // vvvvvvvvvvvvvvv  PHOTOS  vvvvvvvvvvvvvvvv
-                Button(action: {
-                    self.bShowPhotoLibrary = true
-                }) {
-                    // Add Photo Button View
-                    HStack {
-                        Spacer()
-                        HStack {
-                            Image(systemName: "photo") // Label Image Name
-                                .font(.system(size: BUTTON_FONT_SIZE))
-                            Text("Add Photo") // Label Text
-                                .font(.headline)
-                        }
-                        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: BUTTON_HEIGHT, alignment: .center)
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(BUTTON_CORNER_RADIUS)
-    //                    .padding()
-                        Spacer()
-                    } // HStack
-                    .sheet(isPresented: $bShowPhotoLibrary, onDismiss: handleAddPhotoButton) {
-                        ImagePicker(sourceType: .photoLibrary, selectedImage: $tempUIImage)
-                    }
-                } // Add Photo Button
-                .padding(SwiftUI.EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
-
-                // Photo List
-                List {
-                    ForEach(imageEntities) {theImageEntity in
-                        Image(uiImage: theImageEntity.getUIImage())
-                            .resizable()
-                            .scaledToFill()
-                            .frame(minWidth: 0, maxWidth: .infinity)
-                            .edgesIgnoringSafeArea(.all)
-                    } // ForEach
-                    .onDelete(perform: deleteItems)
-                } // List
-                .frame(minWidth: 0, maxWidth: .infinity, minHeight: MIN_PHOTO_LIST_HEIGHT, maxHeight: .infinity, alignment: .center)
+                MarkerPhotosView(theMap_VM: theMap_ViewModel, markerEntity: mMarkerEntity)
                 
-                // ^^^^^^^^^^^^^^^^^ PHOTOS ^^^^^^^^^^^^^^^^^^
-                // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
             } // ScrollView
 
             
@@ -217,14 +165,101 @@ struct MarkerDetailsView: View {
     func handleOnAppear() {
     }
 
-    func handleAddPhotoButton() { // called with the Add Photo button is tapped
-        MyLog.debug("ExistingMarkerView.handleAddPhotoButton() tapped")
+
+    
+} // MarkerDetailsView struct
+
+struct MarkerDetailsView_Previews: PreviewProvider {
+    static var previews: some View {
+        MarkerDetailsView(theMap_VM: Map_ViewModel(), markerEntity: MarkerEntity())
+    }
+}
+
+
+
+//
+// ========= UTILITY VIEWS =========
+//
+
+
+// MARKER PHOTOS VIEW
+struct MarkerPhotosView: View {
+    // Constants
+    let BUTTON_CORNER_RADIUS  = 10.0
+    let BUTTON_HEIGHT         = 30.0
+    let BUTTON_FONT_SIZE      = 15.0
+    let MIN_PHOTO_LIST_HEIGHT = 500.0
+
+    @State private var tempUIImage = UIImage() // Temp Image Holder
+    @State private var bShowPhotoLibrary = false // toggle picker view
+    
+    @ObservedObject var theMap_ViewModel: Map_ViewModel
+    @ObservedObject var mMarkerEntity: MarkerEntity // non-nil if we are editing an existing marker
+
+    // NOTE: We can't initialize the @FetchRequest predicate because the MarkerEntity is passed
+    // in to the init().  Therefore we need to construct the FetchRequest in the init()
+    @FetchRequest var imageEntities: FetchedResults<ImageEntity>
+
+    
+    // Used when editing an EXISTING MarkerEntity and not creating a new one
+    init(theMap_VM: Map_ViewModel, markerEntity: MarkerEntity) {
+        theMap_ViewModel = theMap_VM
+        mMarkerEntity = markerEntity
         
-        // Create a new ImageEntity for this MarkerEntity
-        let newImageEntity = ImageEntity.createImageEntity(theMarkerEntity: mMarkerEntity)
+        // NOTE: PropertyWrapper Structs must be accessed using the underbar '_' version of the struct
+        // Put an '_' in front of the variable names to access them directly.
+//        _mMarkerEntity = State(initialValue: markerEntity) // Variable 'self.mMarkerEntity' used before being initialized
         
-        // Set the ImageEntity imageData and save
-        newImageEntity.setImageAndSave(tempUIImage)
+        // LOAD THE IMAGES
+        // Must Setup the Predecate for the Fetch Request in the init()
+        //    See Stanford Lesson 12 at 1:02:20
+        //    https://www.youtube.com/watch?v=yOhyOpXvaec
+        let request = NSFetchRequest<ImageEntity>(entityName: "ImageEntity")
+        request.predicate = NSPredicate(format: "marker = %@", markerEntity)
+        request.sortDescriptors = [NSSortDescriptor(key: "timeStamp", ascending: false)] // Put newest at top
+        _imageEntities = FetchRequest(fetchRequest: request) // Use '_' version to access wrapped variable
+    }
+
+    
+    var body: some View {
+        Button(action: {
+            self.bShowPhotoLibrary = true
+        }) {
+            // Add Photo Button View
+            HStack {
+                Spacer()
+                HStack {
+                    Image(systemName: "photo") // Label Image Name
+                        .font(.system(size: BUTTON_FONT_SIZE))
+                    Text("Add Photo") // Label Text
+                        .font(.headline)
+                }
+                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: BUTTON_HEIGHT, alignment: .center)
+                .background(Color.blue)
+                .foregroundColor(.white)
+                .cornerRadius(BUTTON_CORNER_RADIUS)
+//                    .padding()
+                Spacer()
+            } // HStack
+            .sheet(isPresented: $bShowPhotoLibrary, onDismiss: handleAddPhotoButton) {
+                ImagePicker(sourceType: .photoLibrary, selectedImage: $tempUIImage)
+            }
+        } // Add Photo Button
+        .padding(SwiftUI.EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
+
+        // Photo List
+        List {
+            ForEach(imageEntities) {theImageEntity in
+                Image(uiImage: theImageEntity.getUIImage())
+                    .resizable()
+                    .scaledToFill()
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .edgesIgnoringSafeArea(.all)
+            } // ForEach
+            .onDelete(perform: deleteItems)
+        } // List
+        .frame(minWidth: 0, maxWidth: .infinity, minHeight: MIN_PHOTO_LIST_HEIGHT, maxHeight: .infinity, alignment: .center)
+
     }
     
     private func deleteItems(offsets: IndexSet) {
@@ -243,12 +278,16 @@ struct MarkerDetailsView: View {
             }
         }
     }
-
     
-} // MarkerDetailsView struct
-
-struct MarkerDetailsView_Previews: PreviewProvider {
-    static var previews: some View {
-        MarkerDetailsView(theMap_VM: Map_ViewModel(), markerEntity: MarkerEntity())
+    func handleAddPhotoButton() { // called with the Add Photo button is tapped
+        MyLog.debug("ExistingMarkerView.handleAddPhotoButton() tapped")
+        
+        // Create a new ImageEntity for this MarkerEntity
+        let newImageEntity = ImageEntity.createImageEntity(theMarkerEntity: mMarkerEntity)
+        
+        // Set the ImageEntity imageData and save
+        newImageEntity.setImageAndSave(tempUIImage)
     }
+    
+
 }

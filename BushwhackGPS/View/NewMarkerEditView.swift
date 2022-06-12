@@ -12,7 +12,7 @@ import CoreLocation
 
 // It's safe to assume we have an Accurate Location for this view because we
 // already checked in the parrent view
-struct NewMarkerEditView: View {
+struct NewMarkerEditView_DELETE_THIS: View {
     @ObservedObject var theMap_ViewModel: Map_ViewModel
     
     @State var titleText: String = ""
@@ -125,7 +125,7 @@ struct NewMarkerEditView: View {
 
 struct MarkerEditView_Previews: PreviewProvider {
     static var previews: some View {
-        NewMarkerEditView(theMap_VM: Map_ViewModel()).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        NewMarkerEditView_DELETE_THIS(theMap_VM: Map_ViewModel()).environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }
 
