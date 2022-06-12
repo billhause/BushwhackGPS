@@ -10,19 +10,20 @@ import SwiftUI
 import CoreLocation
 import CoreData
 
+Next delete old commented out code
 
 // It's safe to assume we have an Accurate Location for this view because we
 // already checked in the parrent view
 struct ExistingMarkerEditView: View {
-    // Constants
-    let BUTTON_CORNER_RADIUS  = 10.0
-    let BUTTON_HEIGHT         = 30.0
-    let BUTTON_FONT_SIZE      = 15.0
-    let MIN_PHOTO_LIST_HEIGHT = 500.0
+//    // Constants
+//    let BUTTON_CORNER_RADIUS  = 10.0
+//    let BUTTON_HEIGHT         = 30.0
+//    let BUTTON_FONT_SIZE      = 15.0
+//    let MIN_PHOTO_LIST_HEIGHT = 500.0
 
     // NOTE: We can't initialize the @FetchRequest predicate because the MarkerEntity is passed
     // in to the init().  Therefore we need to construct the FetchRequest in the init()
-    @FetchRequest var imageEntities: FetchedResults<ImageEntity>
+//    @FetchRequest var imageEntities: FetchedResults<ImageEntity>
     
 //    @FetchRequest(
 //        sortDescriptors: [NSSortDescriptor(keyPath: \ImageEntity.timeStamp, ascending: true)],
@@ -37,8 +38,8 @@ struct ExistingMarkerEditView: View {
 
     @State private var showingDeleteJournalConfirm = false // Flag for Confirm Dialog
     @State private var deleteThisMarker = false // Set to true if user clicks delete
-    @State private var bShowPhotoLibrary = false // toggle picker view
-    @State private var tempUIImage = UIImage() // Temp Image Holder
+//    @State private var bShowPhotoLibrary = false // toggle picker view
+//    @State private var tempUIImage = UIImage() // Temp Image Holder
     
     @State var dateTimeDetailText = "" // Used to display the time with seconds
             
@@ -57,10 +58,10 @@ struct ExistingMarkerEditView: View {
         // Must Setup the Predecate for the Fetch Request in the init()
         //    See Stanford Lesson 12 at 1:02:20
         //    https://www.youtube.com/watch?v=yOhyOpXvaec
-        let request = NSFetchRequest<ImageEntity>(entityName: "ImageEntity")
-        request.predicate = NSPredicate(format: "marker = %@", markerEntity)
-        request.sortDescriptors = [NSSortDescriptor(key: "timeStamp", ascending: false)] // Put newest at top
-        _imageEntities = FetchRequest(fetchRequest: request) // Use '_' version to access wrapped variable
+//        let request = NSFetchRequest<ImageEntity>(entityName: "ImageEntity")
+//        request.predicate = NSPredicate(format: "marker = %@", markerEntity)
+//        request.sortDescriptors = [NSSortDescriptor(key: "timeStamp", ascending: false)] // Put newest at top
+//        _imageEntities = FetchRequest(fetchRequest: request) // Use '_' version to access wrapped variable
     }
         
     var body: some View {
@@ -104,125 +105,126 @@ struct ExistingMarkerEditView: View {
 
             ScrollView {
                 
-            // Journal Entry Title and Body
-            //TextDataInput(title: "Title", userInput: $titleText)
-                TextDataInput(title: "Title", userInput: $mMarkerEntity.wrappedTitle)
-                .padding(EdgeInsets(top: 0.0, leading: 0.0, bottom: 10, trailing: 0.0))
+                // Journal Entry Title and Body
+                //TextDataInput(title: "Title", userInput: $titleText)
+                    TextDataInput(title: "Title", userInput: $mMarkerEntity.wrappedTitle)
+                    .padding(EdgeInsets(top: 0.0, leading: 0.0, bottom: 10, trailing: 0.0))
 
-            // Icon Picker and Color Picker
-            HStack {
-                Text("Map Icon:")
-                //Picker("mapIcon", selection: $iconSymbolName) {
-                Picker("mapIcon", selection: $mMarkerEntity.wrappedIconName) {
-                    ForEach(theMap_ViewModel.getMarkerIconList(), id: \.self) {
-                        Label("", systemImage: $0)
+                // Icon Picker and Color Picker
+                HStack {
+                    Text("Map Icon:")
+                    //Picker("mapIcon", selection: $iconSymbolName) {
+                    Picker("mapIcon", selection: $mMarkerEntity.wrappedIconName) {
+                        ForEach(theMap_ViewModel.getMarkerIconList(), id: \.self) {
+                            Label("", systemImage: $0)
+                        }
+                    } //.pickerStyle(MenuPickerStyle()) //.pickerStyle(SegmentedPickerStyle()) //.pickerStyle(WheelPickerStyle())
+                    Spacer()
+                    // Color Picker
+                    VStack(alignment: .leading) {
+                        Text("Icon Color")
+    //                    Text("(Darker is Better)").font(.footnote)
                     }
-                } //.pickerStyle(MenuPickerStyle()) //.pickerStyle(SegmentedPickerStyle()) //.pickerStyle(WheelPickerStyle())
-                Spacer()
-                // Color Picker
-                VStack(alignment: .leading) {
-                    Text("Icon Color")
-//                    Text("(Darker is Better)").font(.footnote)
-                }
-//                ColorPicker("Icon Color", selection: $iconColor, supportsOpacity: false)
-                ColorPicker("Icon Color", selection: $mMarkerEntity.wrappedColor, supportsOpacity: false)
-                    .labelsHidden() // don't show the label.  Use the Text lable instead
+    //                ColorPicker("Icon Color", selection: $iconColor, supportsOpacity: false)
+                    ColorPicker("Icon Color", selection: $mMarkerEntity.wrappedColor, supportsOpacity: false)
+                        .labelsHidden() // don't show the label.  Use the Text lable instead
 
-            } // HStack
-
-                
-            // Journel Entry Description
-            //TextDataInputMultiLine(title: "Description", userInput: $bodyText)
-                TextDataInputMultiLine(title: "Description", userInput: $mMarkerEntity.wrappedDesc)
-
-            // Delete Journal Entry
-            HStack {
-                Spacer()
-                Button("Delete Journal Entry") {
-                    showingDeleteJournalConfirm = true // Flag to cause dialog to display
-                }
-                .alert(isPresented: $showingDeleteJournalConfirm) {
-                    Alert(
-                        title: Text("Are you sure you want to delete this journal entry?"),
-                        message: Text("This cannot be undone."),
-                        primaryButton: .destructive(Text("Delete")) {
-                            // Set Flag that tells the dialog to close
-                            EditExistingMarkerController.shared.showEditMarkerDialog = false
-                            
-                            // Set flag to delete the Marker in HandleOnDisappear() below
-                            deleteThisMarker = true
-                        },
-                        secondaryButton: .cancel()
-                    )
-                }
-                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: 30, alignment: .center)
-                .background(Color.red)
-                .foregroundColor(.white)
-                .cornerRadius(10)
-                Spacer()
-            }
-            .padding(SwiftUI.EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
-
-
-            Group {
-                // Date/Time Display
-                HStack {
-                    Text("Time Stamp: \(dateTimeDetailText)") // Time with seconds
-                    Spacer()
-                }
-                
-                // LAT/LON Display
-                HStack {
-                    Text("Latitude: \(mMarkerEntity.lat)")
-//                    Text("Latitude: \(lat)")
-                    Spacer()
-                }
-                HStack {
-//                    Text("Longitude: \(lon)")
-                    Text("Longitude: \(mMarkerEntity.lon)")
-                    Spacer()
-                }
-            } // Group
-            
-            
-            // Add Photo Button
-            Button(action: {
-                self.bShowPhotoLibrary = true
-            }) {
-                // Button View
-                HStack {
-                    Spacer()
-                    HStack {
-                        Image(systemName: "photo") // Label Image Name
-                            .font(.system(size: BUTTON_FONT_SIZE))
-                        Text("Add Photo") // Label Text
-                            .font(.headline)
-                    }
-                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: BUTTON_HEIGHT, alignment: .center)
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(BUTTON_CORNER_RADIUS)
-//                    .padding()
-                    Spacer()
                 } // HStack
-                .sheet(isPresented: $bShowPhotoLibrary, onDismiss: handleAddPhotoButton) {
-                    ImagePicker(sourceType: .photoLibrary, selectedImage: $tempUIImage)
-                }
-            } // Button
-            .padding(SwiftUI.EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
 
-            // Photo List
-            List {
-                ForEach(imageEntities) {theImageEntity in
-                    Image(uiImage: theImageEntity.getUIImage())
-                        .resizable()
-                        .scaledToFill()
-                        .frame(minWidth: 0, maxWidth: .infinity)
-                        .edgesIgnoringSafeArea(.all)
-                } // ForEach
-                .onDelete(perform: deleteItems)
-            } // List
-            .frame(minWidth: 0, maxWidth: .infinity, minHeight: MIN_PHOTO_LIST_HEIGHT, maxHeight: .infinity, alignment: .center)
+                    
+                // Journel Entry Description
+                //TextDataInputMultiLine(title: "Description", userInput: $bodyText)
+                    TextDataInputMultiLine(title: "Description", userInput: $mMarkerEntity.wrappedDesc)
+
+                // Delete Journal Entry
+                HStack {
+                    Spacer()
+                    Button("Delete Journal Entry") {
+                        showingDeleteJournalConfirm = true // Flag to cause dialog to display
+                    }
+                    .alert(isPresented: $showingDeleteJournalConfirm) {
+                        Alert(
+                            title: Text("Are you sure you want to delete this journal entry?"),
+                            message: Text("This cannot be undone."),
+                            primaryButton: .destructive(Text("Delete")) {
+                                // Set Flag that tells the dialog to close
+                                EditExistingMarkerController.shared.showEditMarkerDialog = false
+                                
+                                // Set flag to delete the Marker in HandleOnDisappear() below
+                                deleteThisMarker = true
+                            },
+                            secondaryButton: .cancel()
+                        )
+                    }
+                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: 30, alignment: .center)
+                    .background(Color.red)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+                    Spacer()
+                }
+                .padding(SwiftUI.EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
+
+
+                Group {
+                    // Date/Time Display
+                    HStack {
+                        Text("Time Stamp: \(dateTimeDetailText)") // Time with seconds
+                        Spacer()
+                    }
+                    
+                    // LAT/LON Display
+                    HStack {
+                        Text("Latitude: \(mMarkerEntity.lat)")
+    //                    Text("Latitude: \(lat)")
+                        Spacer()
+                    }
+                    HStack {
+    //                    Text("Longitude: \(lon)")
+                        Text("Longitude: \(mMarkerEntity.lon)")
+                        Spacer()
+                    }
+                } // Group
+                
+                MarkerPhotosView(theMap_VM: theMap_ViewModel, markerEntity: mMarkerEntity)
+            
+//            // Add Photo Button
+//            Button(action: {
+//                self.bShowPhotoLibrary = true
+//            }) {
+//                // Button View
+//                HStack {
+//                    Spacer()
+//                    HStack {
+//                        Image(systemName: "photo") // Label Image Name
+//                            .font(.system(size: BUTTON_FONT_SIZE))
+//                        Text("Add Photo") // Label Text
+//                            .font(.headline)
+//                    }
+//                    .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: BUTTON_HEIGHT, alignment: .center)
+//                    .background(Color.blue)
+//                    .foregroundColor(.white)
+//                    .cornerRadius(BUTTON_CORNER_RADIUS)
+////                    .padding()
+//                    Spacer()
+//                } // HStack
+//                .sheet(isPresented: $bShowPhotoLibrary, onDismiss: handleAddPhotoButton) {
+//                    ImagePicker(sourceType: .photoLibrary, selectedImage: $tempUIImage)
+//                }
+//            } // Button
+//            .padding(SwiftUI.EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
+//
+//            // Photo List
+//            List {
+//                ForEach(imageEntities) {theImageEntity in
+//                    Image(uiImage: theImageEntity.getUIImage())
+//                        .resizable()
+//                        .scaledToFill()
+//                        .frame(minWidth: 0, maxWidth: .infinity)
+//                        .edgesIgnoringSafeArea(.all)
+//                } // ForEach
+//                .onDelete(perform: deleteItems)
+//            } // List
+//            .frame(minWidth: 0, maxWidth: .infinity, minHeight: MIN_PHOTO_LIST_HEIGHT, maxHeight: .infinity, alignment: .center)
 
             } // Scroll View
 
@@ -233,22 +235,22 @@ struct ExistingMarkerEditView: View {
         .onDisappear { handleOnDisappear() }
     }
 
-    private func deleteItems(offsets: IndexSet) {
-        MyLog.debug("ExistingMarkerView.deleteItems() Called \(offsets)")
-        let viewContext = PersistenceController.shared.container.viewContext
-        withAnimation {
-            offsets.map { imageEntities[$0] }.forEach(viewContext.delete)
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
-        }
-    }
+//    private func deleteItems(offsets: IndexSet) {
+//        MyLog.debug("ExistingMarkerView.deleteItems() Called \(offsets)")
+//        let viewContext = PersistenceController.shared.container.viewContext
+//        withAnimation {
+//            offsets.map { imageEntities[$0] }.forEach(viewContext.delete)
+//
+//            do {
+//                try viewContext.save()
+//            } catch {
+//                // Replace this implementation with code to handle the error appropriately.
+//                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+//                let nsError = error as NSError
+//                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+//            }
+//        }
+//    }
 
     
     // This will be called when ever the view apears
@@ -299,15 +301,15 @@ struct ExistingMarkerEditView: View {
         }
     }
     
-    func handleAddPhotoButton() { // called with the Add Photo button is tapped
-        MyLog.debug("ExistingMarkerView.handleAddPhotoButton() tapped")
-        
-        // Create a new ImageEntity for this MarkerEntity
-        let newImageEntity = ImageEntity.createImageEntity(theMarkerEntity: mMarkerEntity)
-        
-        // Set the ImageEntity imageData and save
-        newImageEntity.setImageAndSave(tempUIImage)
-    }
+//    func handleAddPhotoButton() { // called with the Add Photo button is tapped
+//        MyLog.debug("ExistingMarkerView.handleAddPhotoButton() tapped")
+//
+//        // Create a new ImageEntity for this MarkerEntity
+//        let newImageEntity = ImageEntity.createImageEntity(theMarkerEntity: mMarkerEntity)
+//
+//        // Set the ImageEntity imageData and save
+//        newImageEntity.setImageAndSave(tempUIImage)
+//    }
     
     func handleMapDirectionsButton() {
         let lat = mMarkerEntity.lat
