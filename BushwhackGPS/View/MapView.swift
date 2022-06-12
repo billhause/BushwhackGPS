@@ -518,10 +518,6 @@ struct MapView: UIViewRepresentable {
             return nil // We didn't handle this Annotation so return nil to use the default annotation icon.
         }
         
-//        // DELETE THIS AFTER TESTING IS DONE
-//        @objc func testButtonHandler(_ sender:UIButton!) {
-//            MyLog.debug("wdh testButtonHandler() called \(sender)")
-//        }
         
         
         // MARK: Optional - Managing Annotation Views

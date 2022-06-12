@@ -16,12 +16,6 @@ struct NewMarkerEditView2: View {
     @ObservedObject var theMap_ViewModel: Map_ViewModel
     @StateObject var mMarkerEntity: MarkerEntity // Created in the init for this view
     
-//    @State var titleText: String = ""
-//    @State var bodyText: String = ""
-//    @State var iconSymbolName: String = "multiply.circle" //"xmark.square.fill"
-//    @State var lat: Double = 100.0
-//    @State var lon: Double = -100.0
-//    @State var iconColor: Color = Color(.sRGB, red: 1.0, green: 0.0, blue: 0.0) // Red by default - Satalite and Map
     var dateTimeDetailText: String // Used to display the time with seconds
             
     // Constants
@@ -47,6 +41,7 @@ struct NewMarkerEditView2: View {
 
     }
     
+//TODO:    Next Flesh this out to have the photo button
     
     var body: some View {
         VStack {
@@ -112,14 +107,6 @@ struct NewMarkerEditView2: View {
         mMarkerEntity.lon = lon
         mMarkerEntity.wrappedIconName = theMap_ViewModel.getDefaultMarkerImageName()
         
-        // Set default Title
-        // Use creation date as the default title
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateStyle = .short
-//        dateFormatter.timeStyle = .short // .medium
-//        mMarkerEntity.wrappedTitle = dateFormatter.string(from: Date())
-//        dateFormatter.timeStyle = .medium
-//        dateTimeDetailText = dateFormatter.string(from: Date())
     }
     
     func HandleOnDisappear() {

@@ -128,8 +128,8 @@ struct MarkerDetailsView: View {
                     }
                 } // Group
                 
-
-                // PHOTOS
+                // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+                // vvvvvvvvvvvvvvv  PHOTOS  vvvvvvvvvvvvvvvv
                 Button(action: {
                     self.bShowPhotoLibrary = true
                 }) {
@@ -167,7 +167,9 @@ struct MarkerDetailsView: View {
                     .onDelete(perform: deleteItems)
                 } // List
                 .frame(minWidth: 0, maxWidth: .infinity, minHeight: MIN_PHOTO_LIST_HEIGHT, maxHeight: .infinity, alignment: .center)
-
+                
+                // ^^^^^^^^^^^^^^^^^ PHOTOS ^^^^^^^^^^^^^^^^^^
+                // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
             } // ScrollView
 
             
