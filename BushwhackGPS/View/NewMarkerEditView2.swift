@@ -41,34 +41,39 @@ struct NewMarkerEditView2: View {
 
     }
     
-//TODO:    Next Flesh this out to have the photo button
     
     var body: some View {
         VStack {
             
-            // Journal Entry Title and Body
-            TextDataInput(title: "Location Name", userInput: $mMarkerEntity.wrappedTitle)
-                .padding(EdgeInsets(top: 0.0, leading: 0.0, bottom: 10, trailing: 0.0))
-            TextDataInputMultiLine(title: "Description", userInput: $mMarkerEntity.wrappedDesc)
+            TitleIconColorDescription( theMap_ViewModel: theMap_ViewModel,
+                                       title: $mMarkerEntity.wrappedTitle,
+                                       iconName: $mMarkerEntity.wrappedIconName,
+                                       iconColor: $mMarkerEntity.wrappedColor,
+                                       description: $mMarkerEntity.wrappedDesc)
 
-            // Icon Picker and Color Picker
-            HStack {
-                Text("Map Icon:")
-                Picker("mapIcon", selection: $mMarkerEntity.wrappedIconName) {
-                    ForEach(theMap_ViewModel.getMarkerIconList(), id: \.self) {
-                        Label("", systemImage: $0)
-                    }
-                } //.pickerStyle(MenuPickerStyle()) //.pickerStyle(SegmentedPickerStyle()) //.pickerStyle(WheelPickerStyle())
-                Spacer()
-                
-                // Color Picker
-                VStack(alignment: .leading) {
-                    Text("Icon Color")
-//                    Text("(Darker is Better)").font(.footnote)
-                }
-                ColorPicker("Icon Color", selection: $mMarkerEntity.wrappedColor, supportsOpacity: false)
-                    .labelsHidden() // don't show the label.  Use the Text lable instead
-            } // HStack
+// TODO: Remove the commented code below
+//            // Journal Entry Title and Body
+//            TextDataInput(title: "Location Name", userInput: $mMarkerEntity.wrappedTitle)
+//                .padding(EdgeInsets(top: 0.0, leading: 0.0, bottom: 10, trailing: 0.0))
+//            TextDataInputMultiLine(title: "Description", userInput: $mMarkerEntity.wrappedDesc)
+//
+//            // Icon Picker and Color Picker
+//            HStack {
+//                Text("Map Icon:")
+//                Picker("mapIcon", selection: $mMarkerEntity.wrappedIconName) {
+//                    ForEach(theMap_ViewModel.getMarkerIconList(), id: \.self) {
+//                        Label("", systemImage: $0)
+//                    }
+//                } //.pickerStyle(MenuPickerStyle()) //.pickerStyle(SegmentedPickerStyle()) //.pickerStyle(WheelPickerStyle())
+//                Spacer()
+//
+//                // Color Picker
+//                VStack(alignment: .leading) {
+//                    Text("Icon Color")
+//                }
+//                ColorPicker("Icon Color", selection: $mMarkerEntity.wrappedColor, supportsOpacity: false)
+//                    .labelsHidden() // don't show the label.  Use the Text lable instead
+//            } // HStack
 
             // Date/Time Display
             HStack {

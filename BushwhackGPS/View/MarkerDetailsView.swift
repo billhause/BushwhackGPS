@@ -24,19 +24,6 @@ struct MarkerDetailsView: View {
     init(theMap_VM: Map_ViewModel, markerEntity: MarkerEntity) {
         theMap_ViewModel = theMap_VM
         mMarkerEntity = markerEntity
-        
-        // NOTE: PropertyWrapper Structs must be accessed using the underbar '_' version of the struct
-        // Put an '_' in front of the variable names to access them directly.
-//        _mMarkerEntity = State(initialValue: markerEntity) // Variable 'self.mMarkerEntity' used before being initialized
-        
-//        // LOAD THE IMAGES
-//        // Must Setup the Predecate for the Fetch Request in the init()
-//        //    See Stanford Lesson 12 at 1:02:20
-//        //    https://www.youtube.com/watch?v=yOhyOpXvaec
-//        let request = NSFetchRequest<ImageEntity>(entityName: "ImageEntity")
-//        request.predicate = NSPredicate(format: "marker = %@", markerEntity)
-//        request.sortDescriptors = [NSSortDescriptor(key: "timeStamp", ascending: false)] // Put newest at top
-//        _imageEntities = FetchRequest(fetchRequest: request) // Use '_' version to access wrapped variable
     }
 
     
@@ -73,34 +60,41 @@ struct MarkerDetailsView: View {
             // We must scroll to avoid overwriting the nav controls at the
             // top and because this is a tall view with a list of photos
             ScrollView {
-                // TITLE
-                TextDataInput(title: "Title", userInput: $mMarkerEntity.wrappedTitle)
                 
+                TitleIconColorDescription( theMap_ViewModel: theMap_ViewModel,
+                                           title: $mMarkerEntity.wrappedTitle,
+                                           iconName: $mMarkerEntity.wrappedIconName,
+                                           iconColor: $mMarkerEntity.wrappedColor,
+                                           description: $mMarkerEntity.wrappedDesc)
                 
-                // Icon Picker and Color Picker
-                HStack {
-                    Text("Map Icon:")
-                    Picker("mapIcon", selection: $mMarkerEntity.wrappedIconName) {
-                        ForEach(theMap_ViewModel.getMarkerIconList(), id: \.self) {
-                            Label("", systemImage: $0)
-                        }
-                    }
-                    Spacer()
-                    Text("Icon Color")
-                    ColorPicker("Icon Color", selection: $mMarkerEntity.wrappedColor, supportsOpacity: false)
-                        .labelsHidden() // Don't show the label, use the Text Label instead
-                } // HStack - Icon Picker and Color Picker
-                
-                
-                // DESCRIPTION
-                TextDataInputMultiLine(title: "Description", userInput: $mMarkerEntity.wrappedDesc)
-                
+// TODO:   Remove the commented code below
+//                // TITLE
+//                TextDataInput(title: "Title", userInput: $mMarkerEntity.wrappedTitle)
+//
+//
+//                // Icon Picker and Color Picker
+//                HStack {
+//                    Text("Map Icon:")
+//                    Picker("mapIcon", selection: $mMarkerEntity.wrappedIconName) {
+//                        ForEach(theMap_ViewModel.getMarkerIconList(), id: \.self) {
+//                            Label("", systemImage: $0)
+//                        }
+//                    }
+//                    Spacer()
+//                    Text("Icon Color")
+//                    ColorPicker("Icon Color", selection: $mMarkerEntity.wrappedColor, supportsOpacity: false)
+//                        .labelsHidden() // Don't show the label, use the Text Label instead
+//                } // HStack - Icon Picker and Color Picker
+//
+//
+//                // DESCRIPTION
+//                TextDataInputMultiLine(title: "Description", userInput: $mMarkerEntity.wrappedDesc)
+//
                 
                 // TIME STAMP, LATITUDE, LONGITUDE
                 Group {
                     // Date/Time Display
                     HStack {
-    //                    Text("Time Stamp: \(mMarkerEntity.wrappedTimeStamp)") // Time with seconds
                         Text("Time Stamp: \(Utility.getShortDateTimeString(theDate: mMarkerEntity.wrappedTimeStamp))") // Time with seconds
                         Spacer()
                     }
@@ -181,8 +175,73 @@ struct MarkerDetailsView_Previews: PreviewProvider {
 // ========= UTILITY VIEWS =========
 //
 
+// vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+// vvvvvvvvvv                       vvvvvvvvvv
+// vvvvvvvvvv  Title, Icon, Color   vvvvvvvvvv
+// vvvvvvvvvv  Description          vvvvvvvvvv
+// vvvvvvvvvv                       vvvvvvvvvv
+// vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
-// MARKER PHOTOS VIEW
+struct TitleIconColorDescription: View {
+    @ObservedObject var theMap_ViewModel: Map_ViewModel
+
+    @Binding var mTitle: String
+    @Binding var mIconName: String
+    @Binding var mIconColor: Color
+    @Binding var mDescription: String
+    
+    init(theMap_ViewModel: Map_ViewModel,
+         title: Binding<String>,
+         iconName: Binding<String>,
+         iconColor: Binding<Color>,
+         description: Binding<String>) {
+        
+        self.theMap_ViewModel = theMap_ViewModel
+        _mTitle = title
+        _mIconName = iconName
+        _mIconColor = iconColor
+        _mDescription = description
+    }
+    
+    var body: some View {
+        // TITLE
+        TextDataInput(title: "Title", userInput: $mTitle)
+        
+        
+        // Icon Picker and Color Picker
+        HStack {
+            Text("Map Icon:")
+            Picker("mapIcon", selection: $mIconName) {
+                ForEach(theMap_ViewModel.getMarkerIconList(), id: \.self) {
+                    Label("", systemImage: $0)
+                }
+            }
+            Spacer()
+            Text("Icon Color")
+            ColorPicker("Icon Color", selection: $mIconColor, supportsOpacity: false)
+                .labelsHidden() // Don't show the label, use the Text Label instead
+        } // HStack - Icon Picker and Color Picker
+        
+        
+        // DESCRIPTION
+        TextDataInputMultiLine(title: "Description", userInput: $mDescription)
+        
+    }
+    
+    
+} // struct TitleIconColorDescription
+
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+// ^^^^^^^^^^  Title, Icon,         ^^^^^^^^^^
+// ^^^^^^^^^^  Color, Description   ^^^^^^^^^^
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+// vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+// vvvvvvvvvv MARKER PHOTOS VIEW vvvvvvvvvv
+// vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+
 struct MarkerPhotosView: View {
     // Constants
     let BUTTON_CORNER_RADIUS  = 10.0
@@ -238,7 +297,7 @@ struct MarkerPhotosView: View {
                 .background(Color.blue)
                 .foregroundColor(.white)
                 .cornerRadius(BUTTON_CORNER_RADIUS)
-//                    .padding()
+
                 Spacer()
             } // HStack
             .sheet(isPresented: $bShowPhotoLibrary, onDismiss: handleAddPhotoButton) {
@@ -289,5 +348,8 @@ struct MarkerPhotosView: View {
         newImageEntity.setImageAndSave(tempUIImage)
     }
     
+} // MarkerPhotosView struct
 
-}
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+// ^^^^^^^^^^ MARKER PHOTOS VIEW ^^^^^^^^^^
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
