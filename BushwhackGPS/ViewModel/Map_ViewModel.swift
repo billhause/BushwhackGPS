@@ -351,30 +351,32 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     
     
     // This should replace addNewMarker() below
+    // Add the new marker to the map
     func addNewMarkerEntity(theMarkerEntity: MarkerEntity) {
         MarkerEntity.saveAll()
+        setMarkerIDForRefresh(markerID: theMarkerEntity.id)
         theMapModel.waitingMKMarkerAnnotation = MarkerAnnotation(theMarkerEntity: theMarkerEntity)
         mNewMarkerAnnotationWaiting = true // This will be set to false after the marker is requested
     }
     
     
-    // Add a new marker to the current location using specified values
-    func addNewMarker(lat: Double, lon: Double, title: String, body: String, iconName: String, color: Color) { 
-        
-        // Create a new marker and save it
-        let newMarkerEntity = MarkerEntity.createMarkerEntity(lat: lat, lon: lon)
-        newMarkerEntity.wrappedTitle = title
-        newMarkerEntity.wrappedDesc = body
-        newMarkerEntity.wrappedIconName = iconName
-        newMarkerEntity.wrappedColor = color
-        MarkerEntity.saveAll()
-        setMarkerIDForRefresh(markerID: newMarkerEntity.id)
-//        updateExistingMarker(theMarker: newMarkerEntity, lat: lat, lon: lon, title: title, body: body, iconName: iconName, color: color)
-        
-        // Update model with the waiting MarkerAnnotation
-        theMapModel.waitingMKMarkerAnnotation = MarkerAnnotation(theMarkerEntity: newMarkerEntity)
-        mNewMarkerAnnotationWaiting = true // This will be set to false after the marker is requested
-    }
+//    // Add a new marker to the current location using specified values
+//    func addNewMarker(lat: Double, lon: Double, title: String, body: String, iconName: String, color: Color) {
+//
+//        // Create a new marker and save it
+//        let newMarkerEntity = MarkerEntity.createMarkerEntity(lat: lat, lon: lon)
+//        newMarkerEntity.wrappedTitle = title
+//        newMarkerEntity.wrappedDesc = body
+//        newMarkerEntity.wrappedIconName = iconName
+//        newMarkerEntity.wrappedColor = color
+//        MarkerEntity.saveAll()
+//        setMarkerIDForRefresh(markerID: newMarkerEntity.id)
+////        updateExistingMarker(theMarker: newMarkerEntity, lat: lat, lon: lon, title: title, body: body, iconName: iconName, color: color)
+//
+//        // Update model with the waiting MarkerAnnotation
+//        theMapModel.waitingMKMarkerAnnotation = MarkerAnnotation(theMarkerEntity: newMarkerEntity)
+//        mNewMarkerAnnotationWaiting = true // This will be set to false after the marker is requested
+//    }
 
     
     // Location Accuracy Status Values
@@ -1381,13 +1383,13 @@ class MarkerAnnotation: NSObject, MKAnnotation {
     
     var subtitle: String? { //computed Property
         get {
-            return mMarkerEntity.desc
+            return mMarkerEntity.wrappedDesc
         }
     }
     
     var symbolName: String {
         get {
-            return mMarkerEntity.iconName!
+            return mMarkerEntity.wrappedIconName
         }
     }
 

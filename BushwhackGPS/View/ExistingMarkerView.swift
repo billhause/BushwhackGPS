@@ -80,35 +80,6 @@ struct ExistingMarkerEditView: View {
                                            iconName: $mMarkerEntity.wrappedIconName,
                                            iconColor: $mMarkerEntity.wrappedColor,
                                            description: $mMarkerEntity.wrappedDesc)
-// TODO: Remove the commented out code below
-//
-//                // Journal Entry Title and Body
-//                //TextDataInput(title: "Title", userInput: $titleText)
-//                    TextDataInput(title: "Title", userInput: $mMarkerEntity.wrappedTitle)
-//                    .padding(EdgeInsets(top: 0.0, leading: 0.0, bottom: 10, trailing: 0.0))
-//
-//                // Icon Picker and Color Picker
-//                HStack {
-//                    Text("Map Icon:")
-//                    //Picker("mapIcon", selection: $iconSymbolName) {
-//                    Picker("mapIcon", selection: $mMarkerEntity.wrappedIconName) {
-//                        ForEach(theMap_ViewModel.getMarkerIconList(), id: \.self) {
-//                            Label("", systemImage: $0)
-//                        }
-//                    } //.pickerStyle(MenuPickerStyle()) //.pickerStyle(SegmentedPickerStyle()) //.pickerStyle(WheelPickerStyle())
-//                    Spacer()
-//                    // Color Picker
-//                    VStack(alignment: .leading) {
-//                        Text("Icon Color")
-//                    }
-//                    ColorPicker("Icon Color", selection: $mMarkerEntity.wrappedColor, supportsOpacity: false)
-//                        .labelsHidden() // don't show the label.  Use the Text lable instead
-//
-//                } // HStack
-//
-//
-//                // Journel Entry Description
-//                    TextDataInputMultiLine(title: "Description", userInput: $mMarkerEntity.wrappedDesc)
 
                 // Delete Journal Entry
                 HStack {
@@ -138,25 +109,10 @@ struct ExistingMarkerEditView: View {
                 }
                 .padding(SwiftUI.EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
 
+                // TIME STAMP, LATITUDE, LONGITUDE
+                TimestampLatLon(theMarkerEntity: mMarkerEntity)
 
-                Group {
-                    // Date/Time Display
-                    HStack {
-                        Text("Time Stamp: \(dateTimeDetailText)") // Time with seconds
-                        Spacer()
-                    }
-                    
-                    // LAT/LON Display
-                    HStack {
-                        Text("Latitude: \(mMarkerEntity.lat)")
-                        Spacer()
-                    }
-                    HStack {
-                        Text("Longitude: \(mMarkerEntity.lon)")
-                        Spacer()
-                    }
-                } // Group
-                
+                // PHOTO LIST VIEW
                 MarkerPhotosView(theMap_VM: theMap_ViewModel, markerEntity: mMarkerEntity)
             
             } // Scroll View

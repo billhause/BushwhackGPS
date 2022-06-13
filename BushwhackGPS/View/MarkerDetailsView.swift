@@ -15,7 +15,6 @@ struct MarkerDetailsView: View {
     @ObservedObject var theMap_ViewModel: Map_ViewModel
 
     @ObservedObject var mMarkerEntity: MarkerEntity // non-nil if we are editing an existing marker
-//    @State var mMarkerEntity: MarkerEntity // non-nil if we are editing an existing marker
 
 
 
@@ -27,7 +26,6 @@ struct MarkerDetailsView: View {
     }
 
     
-    // TODO: Factor out the common views from ExistingMarkerView, MarkerDetailsView and NewMarkerView
     
     var body: some View {
                 
@@ -67,49 +65,10 @@ struct MarkerDetailsView: View {
                                            iconColor: $mMarkerEntity.wrappedColor,
                                            description: $mMarkerEntity.wrappedDesc)
                 
-// TODO:   Remove the commented code below
-//                // TITLE
-//                TextDataInput(title: "Title", userInput: $mMarkerEntity.wrappedTitle)
-//
-//
-//                // Icon Picker and Color Picker
-//                HStack {
-//                    Text("Map Icon:")
-//                    Picker("mapIcon", selection: $mMarkerEntity.wrappedIconName) {
-//                        ForEach(theMap_ViewModel.getMarkerIconList(), id: \.self) {
-//                            Label("", systemImage: $0)
-//                        }
-//                    }
-//                    Spacer()
-//                    Text("Icon Color")
-//                    ColorPicker("Icon Color", selection: $mMarkerEntity.wrappedColor, supportsOpacity: false)
-//                        .labelsHidden() // Don't show the label, use the Text Label instead
-//                } // HStack - Icon Picker and Color Picker
-//
-//
-//                // DESCRIPTION
-//                TextDataInputMultiLine(title: "Description", userInput: $mMarkerEntity.wrappedDesc)
-//
-                
                 // TIME STAMP, LATITUDE, LONGITUDE
-                Group {
-                    // Date/Time Display
-                    HStack {
-                        Text("Time Stamp: \(Utility.getShortDateTimeString(theDate: mMarkerEntity.wrappedTimeStamp))") // Time with seconds
-                        Spacer()
-                    }
-                    
-                    // LAT/LON Display
-                    HStack {
-                        Text("Latitude: \(mMarkerEntity.lat)")
-                        Spacer()
-                    }
-                    HStack {
-                        Text("Longitude: \(mMarkerEntity.lon)")
-                        Spacer()
-                    }
-                } // Group
-                
+                TimestampLatLon(theMarkerEntity: mMarkerEntity)
+
+                // PHOTO LIST
                 MarkerPhotosView(theMap_VM: theMap_ViewModel, markerEntity: mMarkerEntity)
                 
             } // ScrollView
@@ -165,7 +124,7 @@ struct MarkerDetailsView: View {
 
 struct MarkerDetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        MarkerDetailsView(theMap_VM: Map_ViewModel(), markerEntity: MarkerEntity())
+        MarkerDetailsView(theMap_VM: Map_ViewModel(), markerEntity: MarkerEntity.createMarkerEntity(lat: 100,lon: 100))
     }
 }
 
@@ -174,6 +133,54 @@ struct MarkerDetailsView_Previews: PreviewProvider {
 //
 // ========= UTILITY VIEWS =========
 //
+
+
+
+// vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+// vvvvvvvvvv                       vvvvvvvvvv
+// vvvvvvvvvv  Timestamp, Lat, Lon  vvvvvvvvvv
+// vvvvvvvvvv                       vvvvvvvvvv
+// vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+
+struct TimestampLatLon: View {
+    @ObservedObject var mMarkerEntity: MarkerEntity
+    
+    init(theMarkerEntity: MarkerEntity) {
+        mMarkerEntity = theMarkerEntity
+    }
+    
+    var body: some View {
+        // TIME STAMP, LATITUDE, LONGITUDE
+
+        // Date/Time Display
+        HStack {
+            Text("Time Stamp: \(Utility.getShortDateTimeString(theDate: mMarkerEntity.wrappedTimeStamp))") // Time with seconds
+            Spacer()
+        }
+        
+        // LAT/LON Display
+        HStack {
+            Text("Latitude: \(mMarkerEntity.lat)")
+            Spacer()
+        }
+        HStack {
+            Text("Longitude: \(mMarkerEntity.lon)")
+            Spacer()
+        }
+
+    }
+    
+    
+} // struct TitleIconColorDescription
+
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+// ^^^^^^^^^^  Timestamp, Lat, Lon  ^^^^^^^^^^
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+
+
 
 // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 // vvvvvvvvvv                       vvvvvvvvvv
