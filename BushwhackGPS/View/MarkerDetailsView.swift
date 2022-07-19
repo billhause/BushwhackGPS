@@ -108,7 +108,7 @@ struct MarkerDetailsView: View {
     // Handlers
     
     func handleOnDisappear() {
-        if mMarkerEntity.wrappedTitle == "" { // wdhx
+        if mMarkerEntity.wrappedTitle == "" { 
             mMarkerEntity.wrappedTitle = "Unnamed" // Must have a name or the pop-up won't work
         }
         theMap_ViewModel.setMarkerIDForRefresh(markerID: mMarkerEntity.id) // refresh the map

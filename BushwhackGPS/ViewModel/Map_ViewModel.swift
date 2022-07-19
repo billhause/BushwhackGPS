@@ -299,9 +299,9 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     
     private var mLastKnownLocation: CLLocationCoordinate2D?
     // This will ALWAYS return a location even if it's not current
-    func getLastKnownLocation() -> CLLocationCoordinate2D { // wdhx
+    func getLastKnownLocation() -> CLLocationCoordinate2D {
         
-        // Update to the latest location if we have one. wdhx added 6/5/2022
+        // Update to the latest location if we have one.
         if let currentLocation = getCurrentLocation() {
             mLastKnownLocation = currentLocation.coordinate
         }
@@ -858,7 +858,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         
     func requestReview() {
         // Comment out the next line to turn on Review Request wdhx
-//        if !MyLog.NO_LOG {return} // Don't request reviews unless we're live and Logging is turned off.
+        if !MyLog.NO_LOG {return} // Don't request reviews unless we're live and Logging is turned off.
         
         if AppSettingsEntity.getAppSettingsEntity().usageCount > AppSettingsEntity.REVIEW_THRESHOLD {
         // NOTE: If not connected to Internet, then requestReview will lock the interface
@@ -1042,7 +1042,31 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
             
             return false // the dot's date is will not be shown by any TripEntity
         }
-        return filteredDotEntities
+        
+        // Keep the total dots displayed on the map below an upper limit to prevent slugish map display wdhx
+        let MAP_DOT_COUNT_LIMIT: Int = 3000 // Maximum dots allowed to be displayed on the map.
+        let prune_ratio: Int  = (filteredDotEntities.count / MAP_DOT_COUNT_LIMIT) + 1
+//        MyLog.debug("prune_ratio = \(prune_ratio)")
+//        MyLog.debug("filteredDotEntitys.count = \(filteredDotEntities.count)") // wdhx
+        let final_filteredDotEntities = filteredDotEntities.filter {
+            if filteredDotEntities.count < MAP_DOT_COUNT_LIMIT {
+                return true // show all dots if the count is less than the limit
+            }
+            if prune_ratio == 0 {
+                return true // avoid divide by 0 on next line - SHOULD NEVER GET HERE
+            }
+            
+            // Only show every 'prune_ratio'ith dot  Eg. if prune_ratio is 3 then show every third dot
+            if Int($0.id) % prune_ratio == 0 {
+                return true
+            } else {
+                return false
+            }
+            
+        }
+//        MyLog.debug("final_filteredDotEntitys.count = \(final_filteredDotEntities.count)") // wdhx
+//        return filteredDotEntities
+        return final_filteredDotEntities
     }
     
     // Return an array of all MarkerAnnotation objects ready to be added to the map

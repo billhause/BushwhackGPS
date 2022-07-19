@@ -124,7 +124,7 @@ extension MarkerEntity: Comparable {
                 title = "Unnamed" // Must have a non blank name or the pop-up won't work
             }
             if title!.isEmpty {
-                title = "" // wdhx
+                title = "" 
             }
             return title!
         }

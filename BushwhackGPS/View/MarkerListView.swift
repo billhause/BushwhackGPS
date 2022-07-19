@@ -13,7 +13,6 @@ struct MarkerListView: View {
     
     @ObservedObject var mAppSettingsEntity: AppSettingsEntity // Tracks the marker sort order
     
-// wdhx    change aniation to something interesting
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \MarkerEntity.sortOrder, ascending: false)],
         animation: Animation.default) // .default, .none,
@@ -77,7 +76,7 @@ struct MarkerListView: View {
                         }
                         .pickerStyle(.segmented)
                         .onChange(of: mAppSettingsEntity.wrappedMarkerListSortOrder) { tag in
-                            theMap_ViewModel.sortMarkerEntities(by: tag) // wdhx
+                            theMap_ViewModel.sortMarkerEntities(by: tag)
                             Haptic.shared.impact(style: .heavy)
                         }
                     }
@@ -122,7 +121,7 @@ struct MarkerListView: View {
         // Must always resort before displaying because we might be
         // sorting by distance and be in a new location
         let sortType = AppSettingsEntity.getAppSettingsEntity().wrappedMarkerListSortOrder
-        theMap_ViewModel.sortMarkerEntities(by: sortType) // wdhx
+        theMap_ViewModel.sortMarkerEntities(by: sortType) 
     }
     
     func HandleOnDisappear() {

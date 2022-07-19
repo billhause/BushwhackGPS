@@ -99,8 +99,13 @@ class BushwhackGPSTests: XCTestCase {
         // The map pop-up bubbles will not work if the wrappedTitle is an empty string ""
         me.title = nil
         XCTAssertEqual(me.wrappedTitle, "Unnamed")
+        
+        // NOTE: a blank non-nil title is ok now because the DetailsView adds 'Unnamed'
+        // in handleOnDisappear.  This is necessary so that the Title doesn't change to "Unnamed"
+        // while the user is trying to edit the title and temporarily backspaces for it to be blank
+        
         me.title = ""
-        XCTAssertEqual(me.wrappedTitle, "Unnamed")
+        XCTAssertEqual(me.wrappedTitle, "")
 
         
         MarkerEntity.deleteMarkerEntity(me) // remove the test marker from the database

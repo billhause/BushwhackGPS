@@ -162,7 +162,7 @@ struct ExistingMarkerEditView: View {
         
         
         if deleteThisMarker == false {
-            if mMarkerEntity.wrappedTitle == "" { // wdhx
+            if mMarkerEntity.wrappedTitle == "" { 
                 mMarkerEntity.wrappedTitle = "Unnamed" // Must have a name or the pop-up won't work
             }
 
