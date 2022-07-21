@@ -38,7 +38,10 @@ extension TripEntity: Comparable {
     public var wrappedEndTime: Date {
         get {
             if endTime == nil {
-                return Date()
+                // Set end time to be 1 hour from now and return it.
+                MyLog.debug("wrappedEndTime is nil wdh")
+                endTime = Date().addingTimeInterval(3600) // current time plus 3600 seconds
+//                return Date()
             }
             return endTime!
         }

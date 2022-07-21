@@ -952,6 +952,12 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     typealias tripDistanceSpeedAndElapsedTime = (distance: String, speed: String, elapsedTime: String, fuelCost: String)
     
     // Return the Speed, Distance and Elapsed time for the specified TripEntity
+    var cashedDistanceString = "wdh FindMe1"
+    var cashedSpeedString = "wdh FindMe2"
+    var cashedElapsedTime = "wdh FindMe4"
+    var cashedFuelCost = "wdh FindMe4"
+    var cashedTripStartTime = Date()
+    var cashedTripEndTime = Date()
     func getTripDistanceSpeedElapsedTimeAndFuelCost(theTrip: TripEntity) -> tripDistanceSpeedAndElapsedTime {
         var distance: Double = 0.0
         var elapsedTime: Int64 = 0
@@ -960,6 +966,14 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         var dotsEndTime = tripStartTime // init to 0 elapsed time
         var prevLat = 181.0
         var prevLon = 181.0
+        
+        
+        // CHECK CASH if trip start time and end time have not changed then return the cashed values
+//        MyLog.debug("tripStartTime=\(tripStartTime), cashedTripStartTime=\(cashedTripStartTime), tripEndTime=\(tripEndTime), cashedTripEndTime: \(cashedTripEndTime)")
+        if (tripStartTime == cashedTripStartTime) && (tripEndTime == cashedTripEndTime) {
+            return (distance: cashedDistanceString, speed: cashedSpeedString, elapsedTime: cashedElapsedTime, fuelCost: cashedFuelCost)
+        }
+        
         
         // Find the total distance and the time of the final dot
         let dotEntities = DotEntity.getAllDotEntities()
@@ -989,6 +1003,15 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         let elapsedTimeString = Utility.getDisplayableElapsedTime(seconds: elapsedTime)
         
         let fuelCostString = getDisplayableTripFuelCost(distanceInMeters: distance)
+        MyLog.debug("Distance: " + distanceString)
+        
+        // Update Cash Values before returning
+        cashedDistanceString = distanceString
+        cashedSpeedString = speedString
+        cashedElapsedTime = elapsedTimeString
+        cashedFuelCost = fuelCostString
+        cashedTripStartTime = tripStartTime
+        cashedTripEndTime = tripEndTime
         
         return (distance: distanceString, speed: speedString, elapsedTime: elapsedTimeString, fuelCost: fuelCostString)
     }
@@ -1044,7 +1067,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         }
         
         // Keep the total dots displayed on the map below an upper limit to prevent slugish map display wdhx
-        let MAP_DOT_COUNT_LIMIT: Int = 3000 // Maximum dots allowed to be displayed on the map.
+        let MAP_DOT_COUNT_LIMIT: Int = 2000 // Maximum dots allowed to be displayed on the map.
         let prune_ratio: Int  = (filteredDotEntities.count / MAP_DOT_COUNT_LIMIT) + 1
 //        MyLog.debug("prune_ratio = \(prune_ratio)")
 //        MyLog.debug("filteredDotEntitys.count = \(filteredDotEntities.count)") // wdhx
@@ -1053,6 +1076,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
                 return true // show all dots if the count is less than the limit
             }
             if prune_ratio == 0 {
+                MyLog.debug("Should never get here in getFilteredDotEntities()")
                 return true // avoid divide by 0 on next line - SHOULD NEVER GET HERE
             }
             
@@ -1064,7 +1088,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
             }
             
         }
-//        MyLog.debug("final_filteredDotEntitys.count = \(final_filteredDotEntities.count)") // wdhx
+        MyLog.debug("final_filteredDotEntitys.count = \(final_filteredDotEntities.count)") // wdhx
 //        return filteredDotEntities
         return final_filteredDotEntities
     }
