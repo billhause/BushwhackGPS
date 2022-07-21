@@ -858,7 +858,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         
     func requestReview() {
         // Comment out the next line to turn on Review Request wdhx
-        if !MyLog.NO_LOG {return} // Don't request reviews unless we're live and Logging is turned off.
+//        if !MyLog.NO_LOG {return} // Don't request reviews unless we're live and Logging is turned off.
         
         if AppSettingsEntity.getAppSettingsEntity().usageCount > AppSettingsEntity.REVIEW_THRESHOLD {
         // NOTE: If not connected to Internet, then requestReview will lock the interface
