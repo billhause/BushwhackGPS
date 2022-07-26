@@ -316,11 +316,18 @@ struct MarkerPhotosView: View {
         // Photo List
         List {
             ForEach(imageEntities) {theImageEntity in
-                Image(uiImage: theImageEntity.getUIImage())
-                    .resizable()
-                    .scaledToFill()
+                
+                PhotoDetailView(image: theImageEntity.getUIImage())
+                    .scaledToFit()
                     .frame(minWidth: 0, maxWidth: .infinity)
                     .edgesIgnoringSafeArea(.all)
+                
+//                Image(uiImage: theImageEntity.getUIImage())
+//                    .resizable()
+//                    .scaledToFill()
+//                    .frame(minWidth: 0, maxWidth: .infinity)
+//                    .edgesIgnoringSafeArea(.all)
+                    
             } // ForEach
             .onDelete(perform: deleteItems)
         } // List
@@ -360,3 +367,26 @@ struct MarkerPhotosView: View {
 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // ^^^^^^^^^^ MARKER PHOTOS VIEW ^^^^^^^^^^
 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+// vvvvv
+import PDFKit
+
+struct PhotoDetailView: UIViewRepresentable {
+    let image: UIImage
+
+    func makeUIView(context: Context) -> PDFView {
+        let view = PDFView()
+        view.document = PDFDocument()
+        guard let page = PDFPage(image: image) else { return view }
+        view.document?.insert(page, at: 0)
+        view.autoScales = true
+        return view
+    }
+
+    func updateUIView(_ uiView: PDFView, context: Context) {
+        // empty
+    }
+}
+
