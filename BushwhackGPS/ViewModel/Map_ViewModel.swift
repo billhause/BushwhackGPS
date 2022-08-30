@@ -300,7 +300,6 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     private var mLastKnownLocation: CLLocationCoordinate2D?
     // This will ALWAYS return a location even if it's not current
     func getLastKnownLocation() -> CLLocationCoordinate2D {
-        
         // Update to the latest location if we have one.
         if let currentLocation = getCurrentLocation() {
             mLastKnownLocation = currentLocation.coordinate
@@ -686,6 +685,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
 
     // REQUIRED - Called EVERY TIME the location data is updated
     // The MOST RECENT location is the last one in the array
+//    var mLastKnownSpeed: Double = 1.1 // Last Known Speed in Meters / Second
     func locationManager(_ locationManager: CLLocationManager, didUpdateLocations: [CLLocation]) {
 //        MyLog.debug("--- locationManager Update Location wdh ---")
 
@@ -697,7 +697,9 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
 
         // Update last known location
         mLastKnownLocation = currentLocation.coordinate
-        
+//        mLastKnownSpeed = speed
+//        MyLog.debug("mLastKnownSpeed Updated to: \(mLastKnownSpeed)")
+
         
         // === ADD MAP DOT ===
         // Since we can't add the dot annotation directly to the MapView, we must add it to
@@ -948,6 +950,29 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     func getCurrentHeading() -> Double {
         return theMapModel.currentHeading
     }
+    
+//    func getLastKnownSpeed() -> Double {
+//        // The mLastKnownSpeed var gets updated every time the location is updated
+//        // by the callback: func locationManager(_ locationManager, didUpdateLocations)
+//        // So this is pretty current.
+//
+//        // Update the speed to the current speed if possible, otherwise, use the previous mLastKnownSpeed
+//        let currentLocation = getCurrentLocation()
+//        if currentLocation != nil {
+//            mLastKnownSpeed = currentLocation!.speed
+//            MyLog.debug("mLastKnownSpeed Updated to: \(mLastKnownSpeed)")
+//        }
+//
+//        return mLastKnownSpeed
+//    }
+//
+//    // Use the utility func to convert speed to a displayable string
+//    func getDisplayableSpeed() -> String {
+//        MyLog.debug("getDisplayableSpeed() called")
+//        return Utility.getDisplayableSpeed(useMetricUnits: AppSettingsEntity.getAppSettingsEntity().metricUnits,
+//                                           meters: getLastKnownSpeed(),
+//                                           seconds: 1)
+//    }
     
     typealias tripDistanceSpeedAndElapsedTime = (distance: String, speed: String, elapsedTime: String, fuelCost: String)
     

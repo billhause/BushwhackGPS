@@ -134,6 +134,15 @@ extension DashboardEntity {
                                            meters: distance,
                                            seconds: Int64(elapsedSeconds))
     }
+
+//    public func displayableSpeed() -> String {
+//        return Utility.getDisplayableSpeed(useMetricUnits: AppSettingsEntity.getAppSettingsEntity().metricUnits,
+//                                           meters: 1,
+//                                           seconds: 1)
+//    }
+
+    
+    
     
     // return start time to display
     public func displayableStartTime() -> String {
@@ -151,7 +160,7 @@ extension DashboardEntity {
         return Utility.getDisplayableElapsedTime(seconds: Int64(elapsedSeconds))
     }
     
-    public func displayableTripFuelCost() -> String {
+    public func displayableTripFuelCost_DELETE_THIS_NOW() -> String {
         let gasPrice = AppSettingsEntity.getAppSettingsEntity().gasPrice
         let mpg = AppSettingsEntity.getAppSettingsEntity().mpg
         var adjustedDistance = distance // distance in meters
