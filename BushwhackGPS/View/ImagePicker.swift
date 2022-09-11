@@ -36,7 +36,8 @@ struct ImagePicker: UIViewControllerRepresentable {
     
     func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {
         // let us update the view controller when some SwiftUI state changes
-        print("ImagePicker.updateUIViewController() Called wdh")
+        MyLog.debug("ImagePicker.updateUIViewController() Called wdh")
+//        print("ImagePicker.updateUIViewController() Called wdh")
     }
     
     func makeCoordinator() -> Coordinator {
@@ -53,8 +54,9 @@ struct ImagePicker: UIViewControllerRepresentable {
         }
         
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
-            // called when an imager is selected
-            print("Coordinator.imagePickerController(didFinishPickingMediaWithInfo) called wdh")
+            // called when an image is selected
+            MyLog.debug("Coordinator.imagePickerController(didFinishPickingMediaWithInfo) called wdh")
+//            print("Coordinator.imagePickerController(didFinishPickingMediaWithInfo) called wdh")
             if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage { // Typecast to UIImage
                 // If image is not nil, then do this
                 parent.selectedImage = image // save the selected image in the parent 'ImagePicker' selectedImage var

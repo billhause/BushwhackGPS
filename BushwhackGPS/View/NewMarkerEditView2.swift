@@ -25,7 +25,7 @@ struct NewMarkerEditView2: View {
     init(theMap_VM: Map_ViewModel) {
         theMap_ViewModel = theMap_VM
 
-        // note PropertyWrapper Objects must be accessed using the underbar '_' versiopn of the object
+        // note PropertyWrapper Objects must be accessed using the underbar '_' version of the object
         // Put an '_' in front of the variable names to access them directly
         // Must use the StateObject() to initialize in the init method
         _mMarkerEntity = StateObject(wrappedValue: MarkerEntity.createMarkerEntity(lat: 100, lon: 100))

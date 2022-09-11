@@ -316,18 +316,22 @@ struct MarkerPhotosView: View {
         // Photo List
         List {
             ForEach(imageEntities) {theImageEntity in
+                NavigationLink(destination: PhotoDetailView(image: theImageEntity.getUIImage())
+                    .scaledToFill()
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .edgesIgnoringSafeArea(.all)) {
+                        
+//                    PhotoDetailView(image: theImageEntity.getUIImage())
+//                        .scaledToFit()
+//                        .frame(minWidth: 0, maxWidth: .infinity)
+//                        .edgesIgnoringSafeArea(.all)
                 
-                PhotoDetailView(image: theImageEntity.getUIImage())
-                    .scaledToFit()
+                Image(uiImage: theImageEntity.getUIImage())
+                    .resizable()
+                    .scaledToFill()
                     .frame(minWidth: 0, maxWidth: .infinity)
                     .edgesIgnoringSafeArea(.all)
-                
-//                Image(uiImage: theImageEntity.getUIImage())
-//                    .resizable()
-//                    .scaledToFill()
-//                    .frame(minWidth: 0, maxWidth: .infinity)
-//                    .edgesIgnoringSafeArea(.all)
-                    
+                } // NavigationLink
             } // ForEach
             .onDelete(perform: deleteItems)
         } // List
