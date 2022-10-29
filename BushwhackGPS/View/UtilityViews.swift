@@ -45,7 +45,8 @@ struct TextDataInput: View {
     var body: some View {
         HStack {
             Text("\(title):")
-        TextField("\(title)", text: $userInput)                .textFieldStyle(RoundedBorderTextFieldStyle())
+        TextField("\(title)", text: $userInput)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
         }
     }
 }

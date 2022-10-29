@@ -40,7 +40,7 @@ struct ExistingMarkerEditView: View {
             HStack {
 
                 // vvv Share Button vvv
-                Button(action: handleShareButton) {
+                Button(action: handleShareButton) { // wdhx
                     let exportImageName = theMap_ViewModel.getExportImageName()
                     Label("Send a Copy", systemImage: exportImageName)
                         .foregroundColor(.accentColor)
@@ -51,7 +51,7 @@ struct ExistingMarkerEditView: View {
                 Spacer()
                 
                 // vvv Apple Map Navigation Button vvv
-                Button(action: handleMapDirectionsButton) {
+                Button(action: handleMapDirectionsButton) { // wdhx
                     let mapDirectionsImageName = theMap_ViewModel.getNavigationImageName()
                     Label("Get Directions", systemImage: mapDirectionsImageName)
                         .foregroundColor(.accentColor)
@@ -61,7 +61,7 @@ struct ExistingMarkerEditView: View {
                 
                 Spacer()
                 
-                Button("Done") {
+                Button("Done") { // wdhx
                     EditExistingMarkerController.shared.showEditMarkerDialog = false // Flag that tells the dialog to close
                 }
             }
@@ -84,7 +84,7 @@ struct ExistingMarkerEditView: View {
                 // Delete Journal Entry
                 HStack {
                     Spacer()
-                    Button("Delete Journal Entry") {
+                    Button("Delete Journal Entry") { // wdhx
                         showingDeleteJournalConfirm = true // Flag to cause dialog to display
                     }
                     .alert(isPresented: $showingDeleteJournalConfirm) {

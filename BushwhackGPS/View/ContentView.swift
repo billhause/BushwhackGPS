@@ -30,7 +30,7 @@ struct ContentView: View {
 
                 // vvvvvvv ALERT MESSAGE Modal Dialog vvvvvvvvv
                     .alert(theAlert.theMessage, isPresented: $theAlert.showAlert) {
-                        Button("OK wdh", role: .cancel) { }
+                        Button("OK wdh", role: .cancel) { } // wdhx
                     }
                 // ^^^^^^^^^ ALERT MESSAGE ^^^^^^^^^^^^^
                 
@@ -49,7 +49,7 @@ struct ContentView: View {
                 }
 
                 ToolbarItem(placement: ToolbarItemPlacement.navigationBarTrailing) {
-                    Button(action: updateParkingSpot) {
+                    Button(action: updateParkingSpot) { // wdhx
                         let theColor = UIColor(red: 0.0, green: 0.5, blue: 0.0, alpha: 1.0)
                         let parkingImageName = theMap_ViewModel.getParkingLocationImageName()
                         Label("Save Spot", systemImage: parkingImageName)
@@ -84,7 +84,7 @@ struct ContentView: View {
                             .labelStyle(VerticalLabelStyle())
 
                         Spacer()
-                        Button(action: toggleMapLayers) {
+                        Button(action: toggleMapLayers) { // wdhx
                             let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
                             let mapLayersImageName = theMap_ViewModel.getMapLayerImageName()
                             Label("Map Layers", systemImage: mapLayersImageName)
@@ -103,7 +103,7 @@ struct ContentView: View {
                         }
                             .labelStyle(VerticalLabelStyle())
                         Spacer()
-                        Button(action: toggleMapNorth) {
+                        Button(action: toggleMapNorth) { // wdhx
                             let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
                             let compassImageName = theMap_ViewModel.getCompassImageName()
                             Label("Lock North", systemImage: compassImageName)
@@ -111,7 +111,7 @@ struct ContentView: View {
                         }
                             .labelStyle(VerticalLabelStyle())
                         Spacer()
-                        Button(action: orientMap) {
+                        Button(action: orientMap) { // wdhx
                             let theColor = UIColor(red: 0.0, green: 0.5, blue: 1.0, alpha: 1.0)
                             let imageString = theMap_ViewModel.getOrientMapImageName()
                             Label("Follow", systemImage: imageString)

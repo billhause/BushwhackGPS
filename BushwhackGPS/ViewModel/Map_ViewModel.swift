@@ -1091,11 +1091,11 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
             return false // the dot's date is will not be shown by any TripEntity
         }
         
-        // Keep the total dots displayed on the map below an upper limit to prevent slugish map display wdhx
+        // Keep the total dots displayed on the map below an upper limit to prevent slugish map display
         let MAP_DOT_COUNT_LIMIT: Int = 2000 // Maximum dots allowed to be displayed on the map.
         let prune_ratio: Int  = (filteredDotEntities.count / MAP_DOT_COUNT_LIMIT) + 1
 //        MyLog.debug("prune_ratio = \(prune_ratio)")
-//        MyLog.debug("filteredDotEntitys.count = \(filteredDotEntities.count)") // wdhx
+//        MyLog.debug("filteredDotEntitys.count = \(filteredDotEntities.count)")
         let final_filteredDotEntities = filteredDotEntities.filter {
             if filteredDotEntities.count < MAP_DOT_COUNT_LIMIT {
                 return true // show all dots if the count is less than the limit
@@ -1113,7 +1113,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
             }
             
         }
-        MyLog.debug("final_filteredDotEntitys.count = \(final_filteredDotEntities.count)") // wdhx
+        MyLog.debug("final_filteredDotEntitys.count = \(final_filteredDotEntities.count)")
 //        return filteredDotEntities
         return final_filteredDotEntities
     }

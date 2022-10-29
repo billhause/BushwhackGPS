@@ -62,7 +62,7 @@ struct TripListView: View {
                     EditButton()
                 }
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: addTripEntity) {
+                    Button(action: addTripEntity) { // wdhx
                         Label("New Trip", systemImage: "plus")
                             .labelStyle(TitleOnlyLabelStyle())  // Shows the Text, not the systemImage
                     }

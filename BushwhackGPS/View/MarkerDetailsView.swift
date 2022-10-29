@@ -33,7 +33,7 @@ struct MarkerDetailsView: View {
             HStack {
                 Spacer()
                 // vvv Share Button vvv
-                Button(action: handleShareButton) {
+                Button(action: handleShareButton) { // wdhx
                     let exportImageName = theMap_ViewModel.getExportImageName()
                     Label("Send a Copy", systemImage: exportImageName)
                         .foregroundColor(.accentColor)
@@ -44,7 +44,7 @@ struct MarkerDetailsView: View {
                 Spacer()
                 
                 // vvv Apple Map Navigation Button vvv
-                Button(action: handleMapDirectionsButton) {
+                Button(action: handleMapDirectionsButton) { // wdhx
                     let mapDirectionsImageName = theMap_ViewModel.getNavigationImageName()
                     Label("Get Directions", systemImage: mapDirectionsImageName)
                         .foregroundColor(.accentColor)
@@ -288,7 +288,7 @@ struct MarkerPhotosView: View {
 
     
     var body: some View {
-        Button(action: {
+        Button(action: { // wdhx
             self.bShowPhotoLibrary = true
         }) {
             // Add Photo Button View

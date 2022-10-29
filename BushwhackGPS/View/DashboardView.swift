@@ -50,7 +50,7 @@ struct DashboardView: View {
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 1, trailing: 0))
 
             HStack {
-                Button("Dashboard Reset") {
+                Button("Dashboard Reset") { // wdhx
                     showingDashboardResetConfirm = true // show the confirm dialog
                 } // VStack
                 .alert(isPresented: $showingDashboardResetConfirm) {
@@ -65,7 +65,7 @@ struct DashboardView: View {
                 }
 
                 Spacer()
-                Button("Save As Trip") {
+                Button("Save As Trip") { // wdhx
                     showingSaveAsTripConfirm = true // show the confirm dialog
                 }
                 .alert(isPresented: $showingSaveAsTripConfirm) {
