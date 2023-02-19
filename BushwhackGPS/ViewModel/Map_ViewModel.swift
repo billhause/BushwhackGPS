@@ -12,7 +12,9 @@ import CoreLocation
 import StoreKit // SKStoreReviewController is in this Framework
 import Network
 
+
 // MARK: Constants
+let FOR_RELEASE = false // Set to true for release
 let THRESHOLD_DISTANCE = 10.0 // Minimum Number of meteres that you must move to get a new dot added to the map
 let THRESHOLD_TIME_PERIOD = 10.0 // // Minimum Number of seconds that must pass to get a new dot added to the map
 let APP_DISPLAY_NAME = "GPS Journal"
@@ -859,8 +861,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
     
         
     func requestReview() {
-        // Comment out the next line to turn on Review Request wdhx
-//        if !MyLog.NO_LOG {return} // Don't request reviews unless we're live and Logging is turned off.
+        if !FOR_RELEASE {return} // Don't request reviews unless we're live
         
         if AppSettingsEntity.getAppSettingsEntity().usageCount > AppSettingsEntity.REVIEW_THRESHOLD {
         // NOTE: If not connected to Internet, then requestReview will lock the interface
