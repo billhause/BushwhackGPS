@@ -20,8 +20,13 @@ struct ExistingMarkerEditView: View {
     //@State var mMarkerEntity: MarkerEntity // non-nil if we are editing an existing marker
     @ObservedObject var mMarkerEntity: MarkerEntity // non-nil if we are editing an existing marker
 
+    // Delete Journal Entry
     @State private var showingDeleteJournalConfirm = false // Flag for Confirm Dialog
     @State private var deleteThisMarker = false // Set to true if user clicks delete
+    
+    // Update Location button - Similar logic to Delete Journal Entry code wdhx
+    @State private var showingUpdateLocationConfirm = false // Flag for confirm location change dialog
+    @State private var updateMarkerLocation = false // Set to true if user clicks 'Update'
     
     @State var dateTimeDetailText = "" // Used to display the time with seconds
             
@@ -40,7 +45,7 @@ struct ExistingMarkerEditView: View {
             HStack {
 
                 // vvv Share Button vvv
-                Button(action: handleShareButton) { // wdhx
+                Button(action: handleShareButton) {
                     let exportImageName = theMap_ViewModel.getExportImageName()
                     Label("Send a Copy", systemImage: exportImageName)
                         .foregroundColor(.accentColor)
@@ -51,7 +56,7 @@ struct ExistingMarkerEditView: View {
                 Spacer()
                 
                 // vvv Apple Map Navigation Button vvv
-                Button(action: handleMapDirectionsButton) { // wdhx
+                Button(action: handleMapDirectionsButton) {
                     let mapDirectionsImageName = theMap_ViewModel.getNavigationImageName()
                     Label("Get Directions", systemImage: mapDirectionsImageName)
                         .foregroundColor(.accentColor)
@@ -61,7 +66,8 @@ struct ExistingMarkerEditView: View {
                 
                 Spacer()
                 
-                Button("Done") { // wdhx
+                Button("Done") {
+                    // wdhx - Set this same flag when Edit Lat Lon is clicked to exit the dialog
                     EditExistingMarkerController.shared.showEditMarkerDialog = false // Flag that tells the dialog to close
                 }
             }
@@ -84,10 +90,10 @@ struct ExistingMarkerEditView: View {
                 // Delete Journal Entry
                 HStack {
                     Spacer()
-                    Button("Delete Journal Entry") { // wdhx
+                    Button("Delete Journal Entry") { 
                         showingDeleteJournalConfirm = true // Flag to cause dialog to display
                     }
-                    .alert(isPresented: $showingDeleteJournalConfirm) {
+                    .alert(isPresented: $showingDeleteJournalConfirm) { // wdhx
                         Alert(
                             title: Text("Are you sure you want to delete this journal entry?"),
                             message: Text("This cannot be undone."),
@@ -109,9 +115,46 @@ struct ExistingMarkerEditView: View {
                 }
                 .padding(SwiftUI.EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
 
-                // TIME STAMP, LATITUDE, LONGITUDE
-                TimestampLatLon(theMarkerEntity: mMarkerEntity)
+                // Date/Time Display
+                HStack {
+                    Text("Time Stamp: \(Utility.getShortDateTimeString(theDate: mMarkerEntity.wrappedTimeStamp))") // Time with seconds
+                    Spacer()
+                }
 
+                HStack {
+                    // TIME STAMP, LATITUDE, LONGITUDE wdhx
+                    LatLonDisplay(theMarkerEntity: mMarkerEntity)
+
+                    // Edit Lat Lon Location on Map
+                    HStack {
+//                        Spacer()
+                        Button("Edit Location on Map") {
+                            showingUpdateLocationConfirm = true // Flag to cause dialog to display
+                        }
+                        .alert(isPresented: $showingUpdateLocationConfirm) { // wdhx
+                            Alert(
+                                title: Text("On the map, tap the new location for this Marker"),
+                                message: Text("You can drag the map and zoom prior to tapping."),
+                                primaryButton: .destructive(Text("Change Location")) {
+                                    // Set Flag that tells the dialog to close
+                                    EditExistingMarkerController.shared.showEditMarkerDialog = false
+                                    
+                                    // Set flag to update the Marker location in HandleOnDisappear() below
+                                    updateMarkerLocation = true
+//                                    deleteThisMarker = true
+                                },
+                                secondaryButton: .cancel()
+                            )
+                        }
+                        .frame(minWidth: 0, maxWidth: 120, minHeight: 50, maxHeight: 50, alignment: .center)
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+//                        Spacer()
+                    } // HStack for Edit Map Location Button
+                    .padding(SwiftUI.EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                } // HStack for Lat/Lon and Edit Location buttons
+                
                 // PHOTO LIST VIEW
                 MarkerPhotosView(theMap_VM: theMap_ViewModel, markerEntity: mMarkerEntity)
             
@@ -160,7 +203,7 @@ struct ExistingMarkerEditView: View {
     func handleOnDisappear() {
         Haptic.shared.impact(style: .heavy)
         
-        
+        // Delete Marker If Necessary
         if deleteThisMarker == false {
             if mMarkerEntity.wrappedTitle == "" { 
                 mMarkerEntity.wrappedTitle = "Unnamed" // Must have a name or the pop-up won't work
@@ -171,13 +214,22 @@ struct ExistingMarkerEditView: View {
         } else {
             theMap_ViewModel.setMarkerIDForDeletion(markerID: mMarkerEntity.id)
         }
+        
+        // Update Marker Location if Necessary wdhx
+        if deleteThisMarker {return} // Don't bother if we're deleting the marker
+        if updateMarkerLocation == true {
+            theMap_ViewModel.setMarkerIDForLocationUpdate(markerID: mMarkerEntity.id)
+        }
+
+        
+        
     }
     
     func handleMapDirectionsButton() {
         let lat = mMarkerEntity.lat
         let lon = mMarkerEntity.lon
         Utility.appleMapDirections(lat: lat, lon: lon)
-        MyLog.debug("ExistingMarkerView: Opening Apple Map Directions for lat:\(lat), lon:\(lon)")
+        MyLog.debug("ExistingMarkerEditView: Opening Apple Map Directions for lat:\(lat), lon:\(lon)")
     }
     
     func handleShareButton() {

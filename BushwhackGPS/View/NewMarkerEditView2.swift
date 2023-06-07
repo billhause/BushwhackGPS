@@ -51,8 +51,14 @@ struct NewMarkerEditView2: View {
                                            iconColor: $mMarkerEntity.wrappedColor,
                                            description: $mMarkerEntity.wrappedDesc)
                 
+                // Date/Time Display
+                HStack {
+                    Text("Time Stamp: \(Utility.getShortDateTimeString(theDate: mMarkerEntity.wrappedTimeStamp))") // Time with seconds
+                    Spacer()
+                }
+
                 // TIME STAMP, LATITUDE, LONGITUDE
-                TimestampLatLon(theMarkerEntity: mMarkerEntity)
+                LatLonDisplay(theMarkerEntity: mMarkerEntity)
 
                 // PHOTO LIST
                 MarkerPhotosView(theMap_VM: theMap_ViewModel, markerEntity: mMarkerEntity)

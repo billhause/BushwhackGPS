@@ -285,7 +285,31 @@ struct MapView: UIViewRepresentable {
             // postion on map, CLLocationCoordinate2D
             let coordinate = self.parent.mMapView.convert(location, toCoordinateFrom: self.parent.mMapView)
             
-            MyLog.debug("LatLon Tapped: Lat: \(coordinate.latitude), Lon: \(coordinate.longitude)")
+            
+            // UPDATE LOCATION for a MarkerAnnotation from the map and it's MarkerEntity from Core Data
+            let markerIDForLocationUpdate = theMap_ViewModel.getMarkerIDForLocationUpdate() // will reset to 0 after being called
+            if markerIDForLocationUpdate != 0 {
+                MyLog.debug("*** Updating Location for Marker ID: \(markerIDForLocationUpdate)")
+                var theMapView = self.parent.mMapView
+                theMapView.annotations.forEach {
+                //theMapView.annotations.forEach {
+                    if ($0 is MarkerAnnotation) {
+                        let theMarkerAnnotation = $0 as! MarkerAnnotation
+                        if theMarkerAnnotation.id == markerIDForLocationUpdate {
+                            let theEntityToUpdateLocation = theMarkerAnnotation.mMarkerEntity
+                            theEntityToUpdateLocation.lat = coordinate.latitude
+                            theEntityToUpdateLocation.lon = coordinate.longitude
+                            MarkerEntity.saveAll()
+                            
+                            // Refresh the annotation on the map
+                            theMapView.removeAnnotation($0)
+                            theMapView.addAnnotation($0)
+                        }
+                    }
+                }
+            }
+            
+            MyLog.debug("LatLon Tapped: Lat: \(coordinate.latitude), Lon: \(coordinate.longitude)") // wdhx
 //            AlertMessage.shared.Alert("wdh LatLon Tapped: Lat: \(coordinate.latitude), Lon: \(coordinate.longitude)")
         }
 
@@ -294,7 +318,7 @@ struct MapView: UIViewRepresentable {
             MyLog.debug("panHandler Called in MapViewCoordinator class")
         }
         @objc func pinchHandler(_ sender: UIPinchGestureRecognizer) { // TouchDetect: detect pinch
-            MyLog.debug("pinchHandler Called in MapViewCoordinator class")
+            MyLog.debug("pinchHandler Called in MapViewCoordinator class") 
         }
 
         

@@ -14,7 +14,7 @@ import Network
 
 
 // MARK: Constants
-let FOR_RELEASE = false // Set to true for release
+let FOR_RELEASE = true // Set to true for release
 let THRESHOLD_DISTANCE = 10.0 // Minimum Number of meteres that you must move to get a new dot added to the map
 let THRESHOLD_TIME_PERIOD = 10.0 // // Minimum Number of seconds that must pass to get a new dot added to the map
 let APP_DISPLAY_NAME = "GPS Journal"
@@ -314,6 +314,21 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         }
         return getParkingSpotLocation()
     }
+
+    // vvv MARKER LOCATION UPDATE ON MAP vvv wdhx
+    // Trigger a MarkerAnnotation Location Update from the map next time its single tapped
+    private var mMarkerIDForLocationUpdate: Int64 = 0
+    func setMarkerIDForLocationUpdate(markerID: Int64) {
+        mMarkerIDForLocationUpdate = markerID
+    }
+    // Set back to 0 after being called
+    func getMarkerIDForLocationUpdate() ->Int64 {
+        let temp = mMarkerIDForLocationUpdate
+        mMarkerIDForLocationUpdate = 0
+        return temp
+    }
+    // ^^^ MARKER LOCATION UPDATE ON MAP ^^^
+    // ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     
     // vvv MARKER ID DELETION vvv

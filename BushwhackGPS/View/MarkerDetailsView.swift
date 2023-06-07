@@ -33,7 +33,7 @@ struct MarkerDetailsView: View {
             HStack {
                 Spacer()
                 // vvv Share Button vvv
-                Button(action: handleShareButton) { // wdhx
+                Button(action: handleShareButton) {
                     let exportImageName = theMap_ViewModel.getExportImageName()
                     Label("Send a Copy", systemImage: exportImageName)
                         .foregroundColor(.accentColor)
@@ -44,7 +44,7 @@ struct MarkerDetailsView: View {
                 Spacer()
                 
                 // vvv Apple Map Navigation Button vvv
-                Button(action: handleMapDirectionsButton) { // wdhx
+                Button(action: handleMapDirectionsButton) {
                     let mapDirectionsImageName = theMap_ViewModel.getNavigationImageName()
                     Label("Get Directions", systemImage: mapDirectionsImageName)
                         .foregroundColor(.accentColor)
@@ -64,9 +64,15 @@ struct MarkerDetailsView: View {
                                            iconName: $mMarkerEntity.wrappedIconName,
                                            iconColor: $mMarkerEntity.wrappedColor,
                                            description: $mMarkerEntity.wrappedDesc)
-                
+                                
+                // Date/Time Display
+                HStack {
+                    Text("Time Stamp: \(Utility.getShortDateTimeString(theDate: mMarkerEntity.wrappedTimeStamp))") // Time with seconds
+                    Spacer()
+                }
+
                 // TIME STAMP, LATITUDE, LONGITUDE
-                TimestampLatLon(theMarkerEntity: mMarkerEntity)
+                LatLonDisplay(theMarkerEntity: mMarkerEntity)
 
                 // PHOTO LIST
                 MarkerPhotosView(theMap_VM: theMap_ViewModel, markerEntity: mMarkerEntity)
@@ -142,7 +148,7 @@ struct MarkerDetailsView_Previews: PreviewProvider {
 // vvvvvvvvvv                       vvvvvvvvvv
 // vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 
-struct TimestampLatLon: View {
+struct LatLonDisplay: View {
     @ObservedObject var mMarkerEntity: MarkerEntity
     
     init(theMarkerEntity: MarkerEntity) {
@@ -152,20 +158,22 @@ struct TimestampLatLon: View {
     var body: some View {
         // TIME STAMP, LATITUDE, LONGITUDE
 
-        // Date/Time Display
-        HStack {
-            Text("Time Stamp: \(Utility.getShortDateTimeString(theDate: mMarkerEntity.wrappedTimeStamp))") // Time with seconds
-            Spacer()
-        }
+//        // Date/Time Display
+//        HStack {
+//            Text("Time Stamp: \(Utility.getShortDateTimeString(theDate: mMarkerEntity.wrappedTimeStamp))") // Time with seconds
+//            Spacer()
+//        }
         
         // LAT/LON Display
-        HStack {
-            Text("Latitude: \(mMarkerEntity.lat)")
-            Spacer()
-        }
-        HStack {
-            Text("Longitude: \(mMarkerEntity.lon)")
-            Spacer()
+        VStack {
+            HStack {
+                Text("Latitude: \(mMarkerEntity.lat)")
+                Spacer()
+            }
+            HStack {
+                Text("Longitude: \(mMarkerEntity.lon)")
+                Spacer()
+            }
         }
 
     }
@@ -288,7 +296,7 @@ struct MarkerPhotosView: View {
 
     
     var body: some View {
-        Button(action: { // wdhx
+        Button(action: {
             self.bShowPhotoLibrary = true
         }) {
             // Add Photo Button View
@@ -340,7 +348,7 @@ struct MarkerPhotosView: View {
     }
     
     private func deleteItems(offsets: IndexSet) {
-        MyLog.debug("ExistingMarkerView.deleteItems() Called \(offsets)")
+        MyLog.debug("ExistingMarkerEditView.deleteItems() Called \(offsets)")
         let viewContext = PersistenceController.shared.container.viewContext
         withAnimation {
             offsets.map { imageEntities[$0] }.forEach(viewContext.delete)
@@ -357,7 +365,7 @@ struct MarkerPhotosView: View {
     }
     
     func handleAddPhotoButton() { // called with the Add Photo button is tapped
-        MyLog.debug("ExistingMarkerView.handleAddPhotoButton() tapped")
+        MyLog.debug("ExistingMarkerEditView.handleAddPhotoButton() tapped")
         
         // Create a new ImageEntity for this MarkerEntity
         let newImageEntity = ImageEntity.createImageEntity(theMarkerEntity: mMarkerEntity)
