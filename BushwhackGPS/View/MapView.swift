@@ -290,7 +290,7 @@ struct MapView: UIViewRepresentable {
             let markerIDForLocationUpdate = theMap_ViewModel.getMarkerIDForLocationUpdate() // will reset to 0 after being called
             if markerIDForLocationUpdate != 0 {
                 MyLog.debug("*** Updating Location for Marker ID: \(markerIDForLocationUpdate)")
-                var theMapView = self.parent.mMapView
+                let theMapView = self.parent.mMapView
                 theMapView.annotations.forEach {
                 //theMapView.annotations.forEach {
                     if ($0 is MarkerAnnotation) {

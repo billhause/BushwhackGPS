@@ -14,7 +14,7 @@ import Network
 
 
 // MARK: Constants
-let FOR_RELEASE = true // Set to true for release
+let FOR_RELEASE = false // Set to true for release
 let THRESHOLD_DISTANCE = 10.0 // Minimum Number of meteres that you must move to get a new dot added to the map
 let THRESHOLD_TIME_PERIOD = 10.0 // // Minimum Number of seconds that must pass to get a new dot added to the map
 let APP_DISPLAY_NAME = "GPS Journal"
@@ -53,44 +53,58 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
 
     private var mMarkerIconList: [String] = []
     private var mMarkerIconNames = [
-        "doc.richtext",
-        "xmark.square.fill",
-        "multiply.circle",
-        "house.fill",
-        "house",
-        "building.2",
-        "heart.fill",
-        "star.fill",
-        "parkingsign.circle",
-        "car.fill",
-        "car.circle",
-        "bolt.car",
-        "fuelpump",
-        "cross",
-        "fork.knife.circle",
+        "car.fill",         // Important
+        "fork.knife.circle", // Important
+        "cart.fill", // Important
+        "multiply.circle",   // Important
+        "house.fill",       // Important
+        "building.2",       // Important
+        "bed.double", // Important
+        "heart.fill",       // Important
+        "star.fill",        // Important
+        "stethoscope.circle",
+        "fuelpump",         // Important
+        "bolt.car",         // Important
+        "dollarsign.square.fill", // Important
+        "airplane.circle",   // Important
+        "pawprint", // Important
+        "flag.fill", // Important
+        "sportscourt", // Important
         "cup.and.saucer.fill",
-        "bed.double",
+        "xmark.square.fill", // Important
+        "cross",
+        "figure.walk",
+        "doc.richtext",
+        "burst",
+        "burn",
+        "exclamationmark.octagon",
+        "sterlingsign.circle",
+        "questionmark.circle.fill",
+        "photo",
+        "triangle",
+        "square",
+        "camera.fill",
+        "person.2.fill",
+        // These are icons I wish I didn't add but must keep for backward compatibility
+        "parkingsign.circle",
         "banknote",
-        "airplane.circle",
         "bus",
+        "car.circle",
         "tram",
         "ferry.fill",
         "bicycle",
+        "house",            // Important
         "graduationcap.fill",
         "lock",
         "key",
         "powerplug",
-        "figure.walk",
         "figure.stand",
         "person.fill",
-        "person.2.fill",
         "person.3.fill",
         "peacesign",
         "hand.raised.fill",
         "hand.thumbsup",
         "hand.thumbsdown",
-        "burst",
-        "burn",
         "globe",
         "moon.fill",
         "sun.max.fill",
@@ -98,28 +112,17 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         "snowflake",
         "flame.fill",
         "exclamationmark.triangle.fill",
-        "exclamationmark.octagon",
-        "dollarsign.square.fill",
-        "sterlingsign.circle",
         "wifi.circle",
         "wifi",
-        "music.note", 
+        "music.note",
         "circle",
-        "triangle",
-        "square",
-        "flag.fill",
-        "camera.fill",
         "phone.fill",
         "cart.circle",
-        "cart.fill",
-        "stethoscope.circle",
         "cross.case",
         "cross.circle",
         "building",
         "face.smiling",
-        "photo",
         "binoculars.fill",
-        "questionmark.circle.fill",
         "exclamationmark.circle.fill",
         "paperplane.fill",
         "hand.raised.square.on.square",
@@ -129,9 +132,7 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         "case",
         "iphone.homebutton",
         "dot.radiowaves.left.and.right",
-        "pawprint",
         "pawprint.circle",
-        "sportscourt",
         "photo.on.rectangle.angled",
         "scope",
         "trash",
@@ -375,25 +376,6 @@ class Map_ViewModel: NSObject, ObservableObject, CLLocationManagerDelegate  {
         mNewMarkerAnnotationWaiting = true // This will be set to false after the marker is requested
     }
     
-    
-//    // Add a new marker to the current location using specified values
-//    func addNewMarker(lat: Double, lon: Double, title: String, body: String, iconName: String, color: Color) {
-//
-//        // Create a new marker and save it
-//        let newMarkerEntity = MarkerEntity.createMarkerEntity(lat: lat, lon: lon)
-//        newMarkerEntity.wrappedTitle = title
-//        newMarkerEntity.wrappedDesc = body
-//        newMarkerEntity.wrappedIconName = iconName
-//        newMarkerEntity.wrappedColor = color
-//        MarkerEntity.saveAll()
-//        setMarkerIDForRefresh(markerID: newMarkerEntity.id)
-////        updateExistingMarker(theMarker: newMarkerEntity, lat: lat, lon: lon, title: title, body: body, iconName: iconName, color: color)
-//
-//        // Update model with the waiting MarkerAnnotation
-//        theMapModel.waitingMKMarkerAnnotation = MarkerAnnotation(theMarkerEntity: newMarkerEntity)
-//        mNewMarkerAnnotationWaiting = true // This will be set to false after the marker is requested
-//    }
-
     
     // Location Accuracy Status Values
     // Used to determine if we can add a new Marker to the map
