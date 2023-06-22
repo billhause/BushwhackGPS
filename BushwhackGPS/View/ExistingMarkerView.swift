@@ -126,9 +126,8 @@ struct ExistingMarkerEditView: View {
                     LatLonDisplay(theMarkerEntity: mMarkerEntity)
 
                     // Edit Lat Lon Location on Map
-                    HStack {
-//                        Spacer()
-                        Button("Edit Location on Map") {
+                    HStack { // TODO: I don't think I need this HStack so try removing it
+                        Button("Change Location on Map") {
                             showingUpdateLocationConfirm = true // Flag to cause dialog to display
                         }
                         .alert(isPresented: $showingUpdateLocationConfirm) { // wdhx
@@ -141,16 +140,14 @@ struct ExistingMarkerEditView: View {
                                     
                                     // Set flag to update the Marker location in HandleOnDisappear() below
                                     updateMarkerLocation = true
-//                                    deleteThisMarker = true
                                 },
                                 secondaryButton: .cancel()
                             )
                         }
-                        .frame(minWidth: 0, maxWidth: 120, minHeight: 50, maxHeight: 50, alignment: .center)
+                        .frame(minWidth: 0, maxWidth: 140, minHeight: 50, maxHeight: 50, alignment: .center)
                         .background(Color.blue)
                         .foregroundColor(.white)
                         .cornerRadius(10)
-//                        Spacer()
                     } // HStack for Edit Map Location Button
                     .padding(SwiftUI.EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 } // HStack for Lat/Lon and Edit Location buttons

@@ -13,9 +13,15 @@ import CoreLocation
 // It's safe to assume we have an Accurate Location for this view because we
 // already checked in the parrent view
 struct NewMarkerEditView2: View {
+    @Environment(\.presentationMode) var presentationMode
+    
     @ObservedObject var theMap_ViewModel: Map_ViewModel
     @StateObject var mMarkerEntity: MarkerEntity // Created in the init for this view
-    
+
+    // Update Location button wdhx
+    @State private var showingUpdateLocationConfirm = false // Flag for confirm location change dialog
+    @State private var updateMarkerLocation = false // set to true if user clicks 'Update'
+
     var dateTimeDetailText: String // Used to display the time with seconds
             
     // Constants
@@ -56,16 +62,67 @@ struct NewMarkerEditView2: View {
                     Text("Time Stamp: \(Utility.getShortDateTimeString(theDate: mMarkerEntity.wrappedTimeStamp))") // Time with seconds
                     Spacer()
                 }
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                HStack {
+                    // TIME STAMP, LATITUDE, LONGITUDE wdhx
+                    LatLonDisplay(theMarkerEntity: mMarkerEntity)
 
-                // TIME STAMP, LATITUDE, LONGITUDE
-                LatLonDisplay(theMarkerEntity: mMarkerEntity)
+                    // Edit Lat Lon Location on Map
+                    HStack {
+                        Button("Change Location on Map") {
+                            MyLog.debug("Change Location BUtton Tapped in NewMarkerEditView2")
+                            showingUpdateLocationConfirm = true // Flag to cause dialog to display
+                        }
+                        .alert(isPresented: $showingUpdateLocationConfirm) { // wdhx
+                            Alert(
+                                title: Text("On the map, tap the new location for this Marker"),
+                                message: Text("You can drag the map and zoom prior to tapping."),
+                                primaryButton: .destructive(Text("Change Location")) {
+                                    // Set Flag that tells the dialog to close
+                                    EditExistingMarkerController.shared.showEditMarkerDialog = false
 
+                                    // Set flag to update the Marker location in HandleOnDisappear() below
+                                    updateMarkerLocation = true
+                                    
+                                    presentationMode.wrappedValue.dismiss() // Exit EditMarker dialog and go to map
+                                },
+                                secondaryButton: .cancel()
+                            )
+                        }
+                        .frame(minWidth: 0, maxWidth: 140, minHeight: 50, maxHeight: 50, alignment: .center)
+                        .background(Color.blue)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                    } // HStack for Edit Map Location Button
+                    .padding(SwiftUI.EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                } // HStack for Lat/Lon and Edit Location buttons
+
+                
+
+                
+                
+                
+                
+                
+                
+                
+                
                 // PHOTO LIST
                 MarkerPhotosView(theMap_VM: theMap_ViewModel, markerEntity: mMarkerEntity)
             } // ScrollView
         } // VStack - Outer Container
         .padding()
-//      .padding(EdgeInsets(top: 0.0, leading: LEFT_PADDING, bottom: 0, trailing: 10))
         .navigationTitle("Journal Entry") // Title at top of page
         .onAppear { HandleOnAppear() }
         .onDisappear { HandleOnDisappear() }
@@ -94,7 +151,11 @@ struct NewMarkerEditView2: View {
         }
         
         theMap_ViewModel.addNewMarkerEntity(theMarkerEntity: mMarkerEntity)
-//        theMap_ViewModel.addNewMarker(lat: self.lat, lon: self.lon, title: titleText, body: bodyText, iconName: iconSymbolName, color: iconColor)
+        
+        if updateMarkerLocation == true { // wdhx added
+            theMap_ViewModel.setMarkerIDForLocationUpdate(markerID: mMarkerEntity.id)
+        }
+
     }
     
     
